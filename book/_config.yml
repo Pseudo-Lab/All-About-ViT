@@ -1,12 +1,12 @@
 #######################################################################################
 # Book settings
-title : PseudoLab [Study Name]
+title : Vision Transformer의 모든 것
 author: PseudoLab
 logo: 'PseudoLab_logo.png'
 
 # Short description about the book
 description: >-
-  Basic Jupyter Book template for PseudoLab studies
+  build by all about vit crew
 
 #######################################################################################
 # Execution settings
@@ -25,7 +25,7 @@ notebook_interface            : "notebook"
 #######################################################################################
 # Launch button settings
 repository:
-  url                         : https://github.com/pseudo-lab/Jupyter-Book-Template
+  url                         : https://github.com/pseudo-lab/All-About-ViT
   path_to_book                : "book"
 
 latex:
