@@ -4,3 +4,5 @@ Inductive Bias가 무엇이고 Self-Attention은 어떻게 동작하는 것일�
 
 - [Inductive Bias](Inductive_Bias.md)
 - [Self-Attention](Self-Attention.md)
+- [Self-Attention Code](01_code.ipynb)
+- [Q&A](01_qa.md)
