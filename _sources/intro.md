@@ -15,3 +15,9 @@
 여기에서는 어떠한 대가도 바라지 않습니다. 여러분의 정보를 공유해주시고, 활발한 반응을 해주시면 운영진에게 큰 힘이 됩니다. 성장과 기회가 필요하신 분들께 자신의 열정과 능력을 펼칠 수 있도록 돕는 가짜연구소를 응원해주세요!
 
 홈페이지: pseudo-lab.com | Github: github.com/Pseudo-Lab | Facebook: facebook.com/groups/pseudolab | Linkedin: linkedin.com/company/pseudolab | e-mail: pseudolab.operator@gmail.com
+
+## Contributors
+
+[가짜연구소]
+
+김주영, 임중섭, 박민식, 이명오, 이준형, 정영상, 지승환, 김지훈
