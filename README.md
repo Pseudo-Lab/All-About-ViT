@@ -1,48 +1,35 @@
-# Jupyter Book template for PseudoLab studies
+# Vision Transformer의 모든 것
 
-This is a template for configuring Jupyter Book pages for PseudoLab studies. 
+- [Build Page](https://pseudo-lab.github.io/All-About-ViT)
+- [jupyterbook documentation](https://jupyterbook.org/en/stable/intro.html)
 
-1. make a new repo in PseudoLab Github with the study group name as repo name
+## jupyter book build
 
-   ```
-   Pseudo-Lab/2021-Kaggle-Study
-   ```
+- install
 
-2. clone the repo on your local computer
+```
+pip install -U jupyter-book
+```
 
-   ```
-   git clone https://github.com/Pseudo-Lab/2021-Kaggle-Study.git
-   ```
+- build
 
-3. clone this repo
+```
+jupyter-book build book/
+```
 
-   ```
-   git clone https://github.com/Pseudo-Lab/Jupyter-Book-Template
-   ```
 
-4. move `book` folder to the `2021-Kaggle-Study` folder which has been created at step 2. 
+## publish online
 
-5. change the contents in `book/docs` folder with the contents from your studies
+- push
 
-6. configure `_toc.yml` file
+```
+git add .
+git commit -m "added book!"
+git push
+```
 
-7. build the book using Jupyter Book command
+- publish
 
-   ```
-   jupyter-book build 2021-Kaggle-Study/book
-   ```
-
-8. sync your local and remote repositories
-
-   ```
-   cd 2021-Kaggle-Study
-   git add .
-   git commit -m "adding my first book!"
-   git push
-   ```
-
-9. Publish your Jupyter Book with Github Pages
-
-   ```
-   ghp-import -n -p -f book/_build/html -m "initial publishing"
-   ```
+```
+ghp-import -n -p -f book/_build/html -m "initial publishing"
+```

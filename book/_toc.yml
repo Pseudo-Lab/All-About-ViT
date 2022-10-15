@@ -1,4 +1,11 @@
-- file: intro
-  sections:
-    - file: docs/markdown-example
-      title: markdown 예시
+format: jb-book
+root: intro
+parts:
+- caption: Inductive Bias와 Self-Attention
+  numbered: False
+  chapters:
+  - file: docs/ch1/01_List
+    sections:
+    - file: docs/ch1/Inductive_Bias
+    - file: docs/ch1/Self-Attention
+  
