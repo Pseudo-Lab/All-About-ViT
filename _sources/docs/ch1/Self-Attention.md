@@ -19,9 +19,7 @@ self-attention은 Query(Q), Key(K), Value(V) 간의 관계를 추출한다. Q, K
 
 예를 들어 입력 단어가 $X_1$ = “Thinking”, $X_2$ = “Machines”라면 다음과 같이 $W_Q, W_K, W_V$가 곱해지면서 각각 ($q_1, k_1, v_1$), ($q_2, k_2, v_2$)가 만들어진다.
 
-<p align="center">
-  <img src=imgs/01_2.png>
-</p>
+![](imgs/01_2.png)
     
 ## 3. $\frac{QK^T}{\sqrt{d_k}}$
     
@@ -75,9 +73,7 @@ $softmax(animal(Q) · didn'^Tt(K))  · didn't(V)$
 
 그림으로 표현했을때 score가 크면 다음과 같이 맨 위처럼 선명하고 score가 낮을수록 아래에 있는 것처럼 희미해진다.
 
-<p align="center">
-  <img src=imgs/01_3.png>
-</p>
+![](imgs/01_3.png)
 
 마지막으로 각 V는 sum이 되어 각 Token의 의미에 해당하는 값을 얻게된다. 예를 들어 “The”에 해당하는 모든 V를 더하면 전체 문장에서 “The”의 의미를 가지는 벡터를 얻게 된다.
 
