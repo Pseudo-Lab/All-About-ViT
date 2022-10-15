@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Q&amp;A &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Self-Attention" href="01_code.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="01_code.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch1/01_qa.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch1/01_qa.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inductive-bias">
+   inductive bias 관련 질문
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   inductive bias에 따른 적용 여부
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#self-attention-q-k-v-q-k-v">
+   Self-attention에서 Q,K,V 벡터 관련 질문 (입력된 문장의 Q, K, V를 구하는 방법)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multi-head-attention-num-head-output">
+   multi-head attention을 진행할 때, num_head 값 만큼 병렬로 진행 하는데, 이 때, output 값에 대해서만 병렬로 처리하는 것인가요?
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Q&A</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inductive-bias">
+   inductive bias 관련 질문
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   inductive bias에 따른 적용 여부
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#self-attention-q-k-v-q-k-v">
+   Self-attention에서 Q,K,V 벡터 관련 질문 (입력된 문장의 Q, K, V를 구하는 방법)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multi-head-attention-num-head-output">
+   multi-head attention을 진행할 때, num_head 값 만큼 병렬로 진행 하는데, 이 때, output 값에 대해서만 병렬로 처리하는 것인가요?
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="q-a">
+<h1>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">#</a></h1>
+<section id="inductive-bias">
+<h2>inductive bias 관련 질문<a class="headerlink" href="#inductive-bias" title="Permalink to this headline">#</a></h2>
+<p>&#64;이준형<br />
+Q. inductive bias에서 약하다, 강하다라는 의미가 제대로 와닿지 않습니다.  그래서 inductive bias가 부족하다는것이 결국 좋은건지 안좋은건지 궁금합니다.</p>
+<blockquote>
+<div><p>&#64;임중섭 제가 이해하기론 inductive bias가 강하면 비교적 적은 데이터로 학습이 가능하지만, 학습이 빠르게 saturation 되어 데이터를 더 추가하더라도 학습이 진행되지 않고 Overfitting이 발생할 수 있다라고 이해했습니다. 반면에 Inductive bias가 없다면 추가적 가정을 대체하기 위해서 더 많은 데이터가 필요합니다. 하지만  학습이 쉽게 saturation되지 않고 Overfitting이 발생할 가능성이 낮다라고 이해했습니다. 따라서 각각의 장단점이 있다라고 생각합니다.</p>
+</div></blockquote>
+<blockquote>
+<div><p>&#64;김주영 음… 제가 이해한 inductive bias는 약간 다른데요. inductive bias가 강하다는 것은 학습 데이터 이외의 데이터에서도 좋은 성능을 보인다는 것이고 inductive bias가 약하다는 것은 학습 데이터에서만 좋은 성능을 보이고 이외의 데이터에서는 낮은 성능을 보인다는 것으로 이해했습니다.<br />
+그리고 Inductive Bias가 약하다는 것은 학습 데이터에만 좋은 성능을 보인다는 것인데 이것은 overfitting이 될 가능성이 높다는 것이고 Inductive Bias가 강하면 학습 이외의 데이터에서도 좋은 성능을 보일 수 있기 때문에 overfitting이 발생할 가능성이 낮을 것 같습니다.<br />
+Inductive Bias 강하다 → overfitting x
+Inductive Bias 약하다 → overfitting o</p>
+</div></blockquote>
+<blockquote>
+<div><p>&#64;이명오 저도 자세히는 모르지만 알고 있는 선에서 의견 나눠봅니다!<br />
+inductive bias란  모델의 일반화 성능을 높이기 위해 학습 시 사용하는 추가적인 가정이라고 할 수 있습니다. 이는 어떤 특정 유형의 가정이 아니라 모델 아키텍처를 수정하는 것(depth, width, resolution), 학습 시 사용하는 regularization, normalization뿐만 아니라 data augmentation 등도 해당됩니다. 결국 이러한 테크닉(?)을 사용하는 것은 모델이 데이터의 feature를 잘 추출하도록 representation power를 높여 train data뿐만 아니라 test data에 대해서도 좋은 예측을 할 수 있도록 일반화 성능을 높이는 것이 목적입니다.<br />
+이미지에서 멀리 떨어진 pixel들 보다는 인접한 pixel간에 가지고 정보가 좀 더 중요하다고 볼 수 있습니다. 이미 CNN은 이러한 local feature를 잘 추출할 수 있도록 설계되어 있습니다. 또한 rotation, translation에 invariance하다는 특징이 있습니다. 데이터가 rotation되더라도 큰 문제 없이 feature를 잘 뽑아내고 어떤 이미지인지 분류할 수 있으므로 inductive bias가 강합니다. 반대로 transformer는 global feature를 효과적으로 추출하지만 inductive bias가 CNN보다는 약합니다. 그래서 학습 데이터에 rotation 되거나 translation되어 있는 샘플들이 많이 있어야 합니다. 그래서 transformer는 large scale dataset이 필요하게 됩니다.<br />
+inductive bias가 약한 것, 강한 것 중에 어느 것이 더 좋다고 말하긴 어려워 보입니다. 저는 trade-off라고 생각이 드는데 내가 풀고자 하는 문제와 가지고 있는 데이터셋을 잘 분석해서 판단해야 한다고 봅니다. 데이터셋이 충분히 크다면 inductive bias가 약한 transformer를 사용해볼 수 있겠고 반대로 데이터셋이 충분하지 않다면 inductive bias가 강한 모델을 사용할 수 있다고 봅니다.</p>
+</div></blockquote>
+</section>
+<section id="id1">
+<h2>inductive bias에 따른 적용 여부<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p>&#64;정영상<br />
+Q. CNN이 이미지가 locality inductive bias를 고려하여 만들어진 모델이라면, 이미지에서 global한 정보가 더 필요한 경우는 주로 무엇이 있는지 궁금합니다.</p>
+<blockquote>
+<div><p>&#64;김주영 다음 사진을 예시로 보면 사진 안에 있는 물체를 볼때 local만 본다면 자동차로 인식할 수 있습니다. 하지만 배경, 산, 강, 호수, 바다 등을 모두 global하게 볼 수 있다면 보트라고 인식할 확률이 높아질 것 같습니다. global하게 본다는 것은 context를 본다고도 말하는 것으로 알고 있습니다.<br />
+<img alt="" src="../../_images/01_4.png" /></p>
+</div></blockquote>
+<blockquote>
+<div><p>&#64;정영상 이미지에 transformer를 사용하면, visual grounding같은 context 측면에서 해결할 수 있는 task들에 강점이 있을 것이라 봐도 괜찮을까요?</p>
+</div></blockquote>
+<blockquote>
+<div><p>&#64;김주영 네 visual grounding 뿐만 아니라 OCR과 같은 Text 인식 쪽에서도 좋은 성능을 보여주는 것으로 알고 있습니다. 그리고 context를 보는 것은 웬만한 모든 task에서 좋은 성능을 가져다주지 않을까요? 그렇기 때문에 transformer가 거의 모든 task에서 SOTA를 달성하였다고 알고 있습니다.</p>
+</div></blockquote>
+</section>
+<section id="self-attention-q-k-v-q-k-v">
+<h2>Self-attention에서 Q,K,V 벡터 관련 질문 (입력된 문장의 Q, K, V를 구하는 방법)<a class="headerlink" href="#self-attention-q-k-v-q-k-v" title="Permalink to this headline">#</a></h2>
+<p>&#64;임중섭</p>
+<ul class="simple">
+<li><p>모든 문장의 Q, K, V 벡터가 같다면 아래의 코드처럼 나타내면 되는 것인가요?</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">QKVExtraction</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">input_ch</span><span class="p">,</span> <span class="n">output_ch</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_ch</span><span class="p">,</span> <span class="n">output_ch</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_ch</span><span class="p">,</span> <span class="n">output_ch</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_ch</span><span class="p">,</span> <span class="n">output_ch</span><span class="p">)</span>
+	
+	<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
+		<span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">q</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>위 class를 한번 선언하고 입력되는 모든 값에 대해서 적용해주면 동일한 QKV 벡터를 사용하는 건가요?</p></li>
+</ul>
+<blockquote>
+<div><p>&#64;김주영 ViT에서는 말씀하신 것처럼 self.Q, self.K, self.V를 정의하고 forward에서 x를 넣으면 됩니다. 그런데 Q, K, V를 구하는데 class를 따로 선언할 필요는 없습니다.<br />
+그리고 작성해주신 코드처럼 self.Q, self.K, self.V 따로따로 정의해주셔도 되지만 다음과 같이 하나로 정의하고 이후에 나누어주는 방법도 있습니다.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">qkv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="n">out_features</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">qkv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1"># 3 x batch x num_heads x length x dim</span>
+<span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">qkv</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-head-attention-num-head-output">
+<h2>multi-head attention을 진행할 때, num_head 값 만큼 병렬로 진행 하는데, 이 때, output 값에 대해서만 병렬로 처리하는 것인가요?<a class="headerlink" href="#multi-head-attention-num-head-output" title="Permalink to this headline">#</a></h2>
+<p>&#64;임중섭<br />
+<img alt="" src="../../_images/01_5.png" /></p>
+<ul class="simple">
+<li><p>위 사진처럼 Q, K, V 벡터를 axis=1을 기준으로 concate하여 연산하는 방법을 말하는 것인지</p></li>
+</ul>
+<p><img alt="" src="../../_images/01_6.png" />
+<img alt="" src="../../_images/01_7.png" /></p>
+<ul class="simple">
+<li><p>아니면 이렇게 따로 따로  Q, K, V에 대해서 연산 한 후 결과 값 a에 대해서만 concate하여 가중치 행렬 <span class="math notranslate nohighlight">\(W^O\)</span>와 연산하는 것인지 궁금합니다</p></li>
+</ul>
+<blockquote>
+<div><p>&#64;김주영 실제로 코드가 어떻게 구현되어있는지 확인해보면 이해하기 편할 것 같은데요.
+예를 들어서 multi-head attention에 input되는 tensor는 다음과 같이 batch x  num_head x length x dim 이 됩니다.<br />
+<code class="docutils literal notranslate"><span class="pre">tensor</span> <span class="pre">=</span> <span class="pre">tensor.view(batch_size,</span> <span class="pre">length,</span> <span class="pre">self.n_head,</span> <span class="pre">d_tensor).transpose(1,</span> <span class="pre">2)</span></code><br />
+q, k, v 각각 위 처럼 head 수 만큼 reshape해주고 이 q, k, v가 attention에 들어갑니다.<br />
+<code class="docutils literal notranslate"><span class="pre">out,</span> <span class="pre">attention</span> <span class="pre">=</span> <span class="pre">self.attention(q,</span> <span class="pre">k,</span> <span class="pre">v)</span></code><br />
+질문 하신 내용에서는 Q, K, V 벡터를 axis=1을 기준으로 concat하여 연산한다고 말씀하신 것이 맞을 것 같습니다.</p>
+</div></blockquote>
+<blockquote>
+<div><p>&#64;김주영 ViT에서의 Q, K, V도 마찬가지로 batch x num_head x length x dim 으로 reshape을 해주는데 이때 length는 height x width + 1이 됩니다. +1을 해주는 이유는 cls token이 추가되기 때문에 더해줍니다.</p>
+</div></blockquote>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch1"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="01_code.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Self-Attention</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

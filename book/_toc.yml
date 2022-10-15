@@ -8,4 +8,5 @@ parts:
     sections:
     - file: docs/ch1/Inductive_Bias
     - file: docs/ch1/Self-Attention
-  
+    - file: docs/ch1/01_code
+    - file: docs/ch1/01_qa
