@@ -1,7 +1,5 @@
 # Self-Attention
 
-생성일: 2022년 10월 16일 오전 1:00
-
 ```
 The animal didn't cross the street because it was too tired
 ```
