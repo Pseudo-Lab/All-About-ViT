@@ -4,17 +4,13 @@ Inductive Bias는 주어지지 않은 입력의 출력을 예측하는 것이다
 
 ## FCN (Fully Connnected Network)의 Inductive Bias
 
-<p align="center">
-  <img src=imgs/01_0.png>
-</p>
+![](imgs/01_0.png)
 
 FCN은 각 layer의 element들이 모두 연결되어있다. (All-to-all) 이렇게 모든 element들이 모두 연결되어있으면 어떤 출력 요소던지 영향을 미칠 수 있기때문에 Inductive Bias가 약하다.
 
 ## CNN (Convolution Neural Network)
 
-<p align="center">
-  <img src=imgs/01_1.png>
-</p>
+![](imgs/01_1.png)
 
 CNN은 Convolution Filter를 사용하여 일부에만 연산을 수행한다. 이렇게 Convolution Filter를 사용함으로써 Entity간의 locality(서로 가까운 element 간에 존재)를 가정한다고 볼 수 있다. 다시 말해 어떤 특징을 가지는 요소들이 서로 모여있는지가 중요한 문제에서 좋은 성능을 보여준다.
 

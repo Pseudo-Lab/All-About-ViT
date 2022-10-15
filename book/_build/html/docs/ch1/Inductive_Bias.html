@@ -394,16 +394,12 @@ title="Print to PDF"
 <p>Inductive Bias는 주어지지 않은 입력의 출력을 예측하는 것이다. 즉, 일반화의 성능을 높이기 위해서 만약의 상황에 대한 <strong>추가적인 가정</strong>이다. 다시 말해 보지 못한 데이터에 대해서도 귀납적 추론이 가능하도록하는 알고리즘이 가지고 있는 가정들의 집합을 Inductive Bias라고 한다.</p>
 <section id="fcn-fully-connnected-network-inductive-bias">
 <h2>FCN (Fully Connnected Network)의 Inductive Bias<a class="headerlink" href="#fcn-fully-connnected-network-inductive-bias" title="Permalink to this headline">#</a></h2>
-<p align="center">
-  <img src=imgs/01_0.png>
-</p>
+<p><img alt="" src="../../_images/01_0.png" /></p>
 <p>FCN은 각 layer의 element들이 모두 연결되어있다. (All-to-all) 이렇게 모든 element들이 모두 연결되어있으면 어떤 출력 요소던지 영향을 미칠 수 있기때문에 Inductive Bias가 약하다.</p>
 </section>
 <section id="cnn-convolution-neural-network">
 <h2>CNN (Convolution Neural Network)<a class="headerlink" href="#cnn-convolution-neural-network" title="Permalink to this headline">#</a></h2>
-<p align="center">
-  <img src=imgs/01_1.png>
-</p>
+<p><img alt="" src="../../_images/01_1.png" /></p>
 <p>CNN은 Convolution Filter를 사용하여 일부에만 연산을 수행한다. 이렇게 Convolution Filter를 사용함으로써 Entity간의 locality(서로 가까운 element 간에 존재)를 가정한다고 볼 수 있다. 다시 말해 어떤 특징을 가지는 요소들이 서로 모여있는지가 중요한 문제에서 좋은 성능을 보여준다.</p>
 </section>
 <section id="cnn-vs-transformer">

@@ -428,9 +428,7 @@ title="Print to PDF"
 <h2>2. Q, K, V?<a class="headerlink" href="#q-k-v" title="Permalink to this headline">#</a></h2>
 <p>어떤 입력 단어 벡터 시퀀스에 어떤 trainable한 행렬  <span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span> 이 곱해지면서 Q, K, V가 만들어진다.</p>
 <p>예를 들어 입력 단어가 <span class="math notranslate nohighlight">\(X_1\)</span> = “Thinking”, <span class="math notranslate nohighlight">\(X_2\)</span> = “Machines”라면 다음과 같이 <span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span>가 곱해지면서 각각 (<span class="math notranslate nohighlight">\(q_1, k_1, v_1\)</span>), (<span class="math notranslate nohighlight">\(q_2, k_2, v_2\)</span>)가 만들어진다.</p>
-<p align="center">
-  <img src=imgs/01_2.png>
-</p>
+<p><img alt="" src="../../_images/01_2.png" /></p>
 </section>
 <section id="frac-qk-t-sqrt-d-k">
 <h2>3. <span class="math notranslate nohighlight">\(\frac{QK^T}{\sqrt{d_k}}\)</span><a class="headerlink" href="#frac-qk-t-sqrt-d-k" title="Permalink to this headline">#</a></h2>
@@ -478,9 +476,7 @@ title="Print to PDF"
 </div></blockquote>
 <p>이렇게 각 score가 V와 곱해지면서 Q와 K의 연관성이 V에 반영된다. 쉽게 말해 Q와의 연관성이 큰 K는 중요도가 클 것(score가 높음)이고 연관성이 작은 K는 중요도가 작을 것(score가 낮음)인데 이것이 V에 반영된다는 것이다.</p>
 <p>그림으로 표현했을때 score가 크면 다음과 같이 맨 위처럼 선명하고 score가 낮을수록 아래에 있는 것처럼 희미해진다.</p>
-<p align="center">
-  <img src=imgs/01_3.png>
-</p>
+<p><img alt="" src="../../_images/01_3.png" /></p>
 <p>마지막으로 각 V는 sum이 되어 각 Token의 의미에 해당하는 값을 얻게된다. 예를 들어 “The”에 해당하는 모든 V를 더하면 전체 문장에서 “The”의 의미를 가지는 벡터를 얻게 된다.</p>
 <p>[Reference]</p>
 <ul class="simple">
