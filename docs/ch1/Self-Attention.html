@@ -411,19 +411,15 @@ title="Print to PDF"
 <p>위 문장을 예시로 self-attention이 이루어지기 전 Tokenizing, Embedding이 수행된다.</p>
 <section id="id1">
 <h2>1. self-attention?<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>self-attention은 Query(Q), Key(K), Value(V) 간의 관계를 추출한다. Q, K, V는 입력 문장의 모든 벡터 값이며 모두 동일하다.
-</pre></div>
-</div>
+<p>self-attention은 Query(Q), Key(K), Value(V) 간의 관계를 추출한다. Q, K, V는 입력 문장의 모든 벡터 값이며 모두 동일하다.</p>
 </section>
 <section id="q-k-v">
 <h2>2. Q, K, V?<a class="headerlink" href="#q-k-v" title="Permalink to this headline">#</a></h2>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>어떤 입력 단어 벡터 시퀀스에 어떤 trainable한 행렬  $W_Q, W_K, W_V$ 이 곱해지면서 Q, K, V가 만들어진다.
-
-예를 들어 입력 단어가 $X_1$ = “Thinking”, $X_2$ = “Machines”라면 다음과 같이 $W_Q, W_K, W_V$가 곱해지면서 각각 ($q_1, k_1, v_1$), ($q_2, k_2, v_2$)가 만들어진다.
-
-![](imgs/01_2.png)
-</pre></div>
-</div>
+<p>어떤 입력 단어 벡터 시퀀스에 어떤 trainable한 행렬  <span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span> 이 곱해지면서 Q, K, V가 만들어진다.</p>
+<p>예를 들어 입력 단어가 <span class="math notranslate nohighlight">\(X_1\)</span> = “Thinking”, <span class="math notranslate nohighlight">\(X_2\)</span> = “Machines”라면 다음과 같이 <span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span>가 곱해지면서 각각 (<span class="math notranslate nohighlight">\(q_1, k_1, v_1\)</span>), (<span class="math notranslate nohighlight">\(q_2, k_2, v_2\)</span>)가 만들어진다.</p>
+<p align="center">
+  <img src=imgs/01_2.png>
+</p>
 </section>
 <section id="frac-qk-t-sqrt-d-k">
 <h2>3. <span class="math notranslate nohighlight">\(\frac{QK^T}{\sqrt{d_k}}\)</span><a class="headerlink" href="#frac-qk-t-sqrt-d-k" title="Permalink to this headline">#</a></h2>
@@ -471,21 +467,15 @@ title="Print to PDF"
 </div></blockquote>
 <p>이렇게 각 score가 V와 곱해지면서 Q와 K의 연관성이 V에 반영된다. 쉽게 말해 Q와의 연관성이 큰 K는 중요도가 클 것(score가 높음)이고 연관성이 작은 K는 중요도가 작을 것(score가 낮음)인데 이것이 V에 반영된다는 것이다.</p>
 <p>그림으로 표현했을때 score가 크면 다음과 같이 맨 위처럼 선명하고 score가 낮을수록 아래에 있는 것처럼 희미해진다.</p>
-<p><img alt="" src="../../_images/01_3.png" /></p>
+<p align="center">
+  <img src=imgs/01_3.png>
+</p>
 <p>마지막으로 각 V는 sum이 되어 각 Token의 의미에 해당하는 값을 얻게된다. 예를 들어 “The”에 해당하는 모든 V를 더하면 전체 문장에서 “The”의 의미를 가지는 벡터를 얻게 된다.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledDotProductAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ScaledDotProductAttention</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="n">score</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_dim</span>
-        <span class="n">attn</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">context</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">attn</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">context</span><span class="p">,</span> <span class="n">attn</span>
-</pre></div>
-</div>
+<p>[Reference]</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://nlpinkorean.github.io/illustrated-transformer/">https://nlpinkorean.github.io/illustrated-transformer/</a></p></li>
+<li><p><a class="reference external" href="https://github.com/rwightman/pytorch-image-models/blob/a520da9b495422bc773fb5dfe10819acb8bd7c5c/timm/models/vision_transformer.py#L183-L208">https://github.com/rwightman/pytorch-image-models/blob/a520da9b495422bc773fb5dfe10819acb8bd7c5c/timm/models/vision_transformer.py#L183-L208</a></p></li>
+</ul>
 </section>
 </section>
 
