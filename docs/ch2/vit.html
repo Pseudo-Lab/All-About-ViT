@@ -401,12 +401,12 @@ title="Print to PDF"
      Hybrid Architecture
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fine-tuning-and-higher-resolution">
+     2) Fine-tuning and higher Resolution
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fine-tuning-and-higher-resolution">
-   2) Fine-tuning and higher Resolution
-  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#experiments">
@@ -502,12 +502,12 @@ title="Print to PDF"
      Hybrid Architecture
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fine-tuning-and-higher-resolution">
+     2) Fine-tuning and higher Resolution
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fine-tuning-and-higher-resolution">
-   2) Fine-tuning and higher Resolution
-  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#experiments">
@@ -720,9 +720,8 @@ H=높이, W=길이, C=채널, P=패치 해상도, N=패치 개수(입력 시퀀�
 → 시퀀스 가장 앞에 붙였던 class token 만 따로 때서 classification head에 넣어줌. why? class token이 이미지 전체의 embedding을 표현하고 있음을 가정하기 때문.</p></li>
 </ul>
 </section>
-</section>
 <section id="fine-tuning-and-higher-resolution">
-<h2>2) Fine-tuning and higher Resolution<a class="headerlink" href="#fine-tuning-and-higher-resolution" title="Permalink to this headline">#</a></h2>
+<h3>2) Fine-tuning and higher Resolution<a class="headerlink" href="#fine-tuning-and-higher-resolution" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>일반적으로 ViT는 큰 dataset에 pre-train시키고 후속 과제에 fine-tuning 시킴.</p></li>
 <li><p>fine-tuning 과정에서 pretrain된 prediction head를 제거하고 0 initialized DxK feedforward layer를 부작함.(K는 fine-tuning 하는 dataset의 클래스 수)</p></li>
@@ -732,6 +731,7 @@ H=높이, W=길이, C=채널, P=패치 해상도, N=패치 개수(입력 시퀀�
 → 이를 극복하고자 원본 이미지의 위치를 기준으로 하는 2D interpolation이 pretrained position embedding에 적용 됨.</p></li>
 <li><p>위와 같은 해상도 조정과 patch extraction이 이미지의 2차원 구조에 대한 inductive bias가 수동으로 ViT에 주입되는 유일한 지점임.</p></li>
 </ul>
+</section>
 </section>
 <section id="experiments">
 <h2>4. Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">#</a></h2>
