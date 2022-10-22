@@ -84,11 +84,11 @@
     → 이 때, Position Embedding은 1D position embedding을 사용함, 2D는 성능 향상이 없었기 때문.
     - 위의 방법들로 구성된 최종 임베딩 벡터 시퀀스는 Encoder 의 입력이 됨.
         
-        ![imgs/Untitled%201.png](imgs/Untitled%201.png)
+        ![imgs/Untitled_1.png](imgs/Untitled_1.png)
         
-        ![imgs/Untitled%202.png](imgs/Untitled%202.png)
+        ![imgs/Untitled_2.png](imgs/Untitled_2.png)
         
-        ![Untitled](imgs/Untitled%203.png)
+        ![Untitled](imgs/Untitled_3.png)
         
         - Transformer의 입력은 시퀀스이기 때문에 분홍 부분이 낱개로 표현되어 있어도 1개로 보면됨.
         - 각 각의 분홍색 앞에 붙은 숫자가 적힘 보라색이 Position Embedding.
@@ -181,7 +181,7 @@
 
 ## 6. Model Variants
 
-![Untitled](imgs/Untitled%204.png)
+![Untitled](imgs/Untitled_4.png)
 
 - BERT의 구성요소를 base로 하였고, ViT-Base와 ViT-Large는 BERT와 완전 동일함.
 - 더 큰 규모의 모델인 ViT-Huge도 추가함.
@@ -195,7 +195,7 @@
 
 ## 7. Comparison to State Of The Art
 
-![Untitled](imgs/Untitled%205.png)
+![Untitled](imgs/Untitled_5.png)
 
 - ViT-H/14 와 ViT-L/16을 SOTA CNN 모델들과 비교해봄.
     1. Large ResNet
@@ -211,7 +211,7 @@
 - Dataset Size가 얼마나 큰 영향을 미치는 지를 보기 위해 2개의 실험을 함.
     1. ViT 모델을 점점 사이즈가 증가하는 Dataset으로 학습 시킴.
         
-        ![Untitled](imgs/Untitled%206.png)
+        ![Untitled](imgs/Untitled_6.png)
         
         - ImageNet → ImageNet 21K → JFT300M
         - 작은 데이터셋에서 성능을 끌어올리기 위해 Weight Decay, Dropout, label Smoothing(정규화)을 적용함.
@@ -221,7 +221,7 @@
         - ImageNet에선 BiT가 ViT보다 성능이 좋지만, JFT에선 ViT가 앞섬.
     2. Full JFT300M 데이터셋과 그 하위 데이터셋인 9M, 30M, 90M으로 학습 시킴.
         
-        ![Untitled](imgs/Untitled%207.png)
+        ![Untitled](imgs/Untitled_7.png)
         
         - 모든 setting에 대해서 같은 hyper-parameter를 사용하여 규제의 효과가 아니라 본질적인 모델의 성능 평가를 함.
         - 작은 데이터셋에선 ViT가 비슷한 크기의 BiT 보다 더 과적합됨.
@@ -234,7 +234,7 @@
 
 ## 9. Scaling Study
 
-![Untitled](imgs/Untitled%208.png)
+![Untitled](imgs/Untitled_8.png)
 
 - JFT300M에서 Transfer 성능을 평가하고 model performance VS Pretrain cost 를 비교 평가함.
 - BiT 모델 7개, Hybrid 모델 5개, ViT 모델 6개를 사용함.
@@ -248,9 +248,9 @@
 
 ## 10. Inspecting Vision Transformer
 
-![Untitled](imgs/Untitled%209.png)
+![Untitled](imgs/Untitled_9.png)
 
-![Untitled](imgs/Untitled%2010.png)
+![Untitled](imgs/Untitled_10.png)
 
 - ViT가 이미지를 어떻게 처리하는지 알기 위해 내부 representation들을 분석함.
 - ViT의 첫 번째 Layer는 Flatten된 Patch들을 저차원 공간에 Linearly-project(선형투영)함.
