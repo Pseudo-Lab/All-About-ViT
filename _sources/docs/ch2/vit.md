@@ -273,6 +273,7 @@
 - ViT의 연구 성과와 Carion의 연구([논문 링크](https://arxiv.org/pdf/2005.12872.pdf))가 결합되면 Detection과 Segmentation에도 적용할 수 있을 것 같다고 함.
 
 ---
+
 [Reference]  
 https://kmhana.tistory.com/27  
 https://visionhong.tistory.com/25  
