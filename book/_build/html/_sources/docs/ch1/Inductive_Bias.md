@@ -20,3 +20,7 @@ CNN은 Convolution Filter를 사용하여 일부에만 연산을 수행한다. �
 - Transformer: PE(Positional Embedding)와 self-attention을 사용해 모든 정보를 활용 (global 정보)
 
 위 내용을 바탕으로 Transformer는 CNN에 비해 Inductive Bias가 부족하다고 볼 수 있다!
+---
+
+Author by `김주영`  
+Edit by `김주영`

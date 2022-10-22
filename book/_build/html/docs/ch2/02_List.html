@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Inductive Bias &#8212; Vision Transformer의 모든 것</title>
+    <title>Vision Transformer &#8212; Vision Transformer의 모든 것</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -54,8 +54,6 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Self-Attention" href="Self-Attention.html" />
-    <link rel="prev" title="Inductive Bias와 Self-Attention" href="01_List.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -120,34 +118,34 @@ const thebe_selector_output = ".output, .cell_output"
   Inductive Bias와 Self-Attention
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="01_List.html">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
    Inductive Bias와 Self-Attention
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
      Inductive Bias
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Self-Attention.html">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
      Self-Attention
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="01_code.html">
+    <a class="reference internal" href="../ch1/01_code.html">
      Self-Attention Code
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="01_qa.html">
+    <a class="reference internal" href="../ch1/01_qa.html">
      Q&amp;A
     </a>
    </li>
@@ -243,7 +241,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch1/Inductive_Bias.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch2/02_List.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -271,7 +269,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../../_sources/docs/ch1/Inductive_Bias.md"
+        <a href="../../_sources/docs/ch2/02_List.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -308,90 +306,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fcn-fully-connnected-network-inductive-bias">
-   FCN (Fully Connnected Network)의 Inductive Bias
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cnn-convolution-neural-network">
-   CNN (Convolution Neural Network)
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cnn-vs-transformer">
-   CNN vs Transformer
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transformer-cnn-inductive-bias">
-   위 내용을 바탕으로 Transformer는 CNN에 비해 Inductive Bias가 부족하다고 볼 수 있다!
-  </a>
- </li>
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Inductive Bias</h1>
+                <h1>Vision Transformer</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fcn-fully-connnected-network-inductive-bias">
-   FCN (Fully Connnected Network)의 Inductive Bias
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cnn-convolution-neural-network">
-   CNN (Convolution Neural Network)
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cnn-vs-transformer">
-   CNN vs Transformer
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transformer-cnn-inductive-bias">
-   위 내용을 바탕으로 Transformer는 CNN에 비해 Inductive Bias가 부족하다고 볼 수 있다!
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -399,31 +330,14 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="inductive-bias">
-<h1>Inductive Bias<a class="headerlink" href="#inductive-bias" title="Permalink to this headline">#</a></h1>
-<p>Inductive Bias는 주어지지 않은 입력의 출력을 예측하는 것이다. 즉, 일반화의 성능을 높이기 위해서 만약의 상황에 대한 <strong>추가적인 가정</strong>이다. 다시 말해 보지 못한 데이터에 대해서도 귀납적 추론이 가능하도록하는 알고리즘이 가지고 있는 가정들의 집합을 Inductive Bias라고 한다.</p>
-<section id="fcn-fully-connnected-network-inductive-bias">
-<h2>FCN (Fully Connnected Network)의 Inductive Bias<a class="headerlink" href="#fcn-fully-connnected-network-inductive-bias" title="Permalink to this headline">#</a></h2>
-<p><img alt="" src="../../_images/01_0.png" /></p>
-<p>FCN은 각 layer의 element들이 모두 연결되어있다. (All-to-all) 이렇게 모든 element들이 모두 연결되어있으면 어떤 출력 요소던지 영향을 미칠 수 있기때문에 Inductive Bias가 약하다.</p>
-</section>
-<section id="cnn-convolution-neural-network">
-<h2>CNN (Convolution Neural Network)<a class="headerlink" href="#cnn-convolution-neural-network" title="Permalink to this headline">#</a></h2>
-<p><img alt="" src="../../_images/01_1.png" /></p>
-<p>CNN은 Convolution Filter를 사용하여 일부에만 연산을 수행한다. 이렇게 Convolution Filter를 사용함으로써 Entity간의 locality(서로 가까운 element 간에 존재)를 가정한다고 볼 수 있다. 다시 말해 어떤 특징을 가지는 요소들이 서로 모여있는지가 중요한 문제에서 좋은 성능을 보여준다.</p>
-</section>
-<section id="cnn-vs-transformer">
-<h2>CNN vs Transformer<a class="headerlink" href="#cnn-vs-transformer" title="Permalink to this headline">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="vision-transformer">
+<h1>Vision Transformer<a class="headerlink" href="#vision-transformer" title="Permalink to this headline">#</a></h1>
+<p>Vision Transformer 논문과 코드를 리뷰합니다.</p>
 <ul class="simple">
-<li><p>CNN: 이미지가 지역적으로 얻을 정보가 많다는 것을 가정 (local 정보)</p></li>
-<li><p>Transformer: PE(Positional Embedding)와 self-attention을 사용해 모든 정보를 활용 (global 정보)</p></li>
+<li><p><a class="reference internal" href="vit.html"><span class="doc std std-doc">Vision Transformer</span></a></p></li>
+<li><p><a class="reference internal" href="02_code.html"><span class="doc std std-doc">Vision Transformer Code</span></a></p></li>
+<li><p><a class="reference internal" href="02_qa.html"><span class="doc std std-doc">Q&amp;A</span></a></p></li>
 </ul>
-</section>
-<section id="transformer-cnn-inductive-bias">
-<h2>위 내용을 바탕으로 Transformer는 CNN에 비해 Inductive Bias가 부족하다고 볼 수 있다!<a class="headerlink" href="#transformer-cnn-inductive-bias" title="Permalink to this headline">#</a></h2>
-<p>Author by <code class="docutils literal notranslate"><span class="pre">김주영</span></code><br />
-Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
-</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -439,7 +353,7 @@ Edit by <code class="docutils literal notranslate"><span class="pre">김주영</
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./docs/ch1"
+            path: "./docs/ch2"
         },
         predefinedOutput: true
     }
@@ -453,20 +367,6 @@ Edit by <code class="docutils literal notranslate"><span class="pre">김주영</
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="01_List.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Inductive Bias와 Self-Attention</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="Self-Attention.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Self-Attention</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
 </div>
             </footer>
         </div>

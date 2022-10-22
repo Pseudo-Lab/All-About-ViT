@@ -10,3 +10,11 @@ parts:
     - file: docs/ch1/Self-Attention
     - file: docs/ch1/01_code
     - file: docs/ch1/01_qa
+- caption: Vision Transformer
+  numbered: False
+  chapters:
+  - file: docs/ch2/02_List
+    sections:
+    - file: docs/ch2/vit
+    - file: docs/ch2/02_code
+    - file: docs/ch2/02_qa

@@ -78,3 +78,8 @@ $softmax(animal(Q) · didn'^Tt(K))  · didn't(V)$
 [Reference]
 - https://nlpinkorean.github.io/illustrated-transformer/
 - https://github.com/rwightman/pytorch-image-models/blob/a520da9b495422bc773fb5dfe10819acb8bd7c5c/timm/models/vision_transformer.py#L183-L208
+
+---
+
+Author by `김주영`  
+Edit by `김주영`
