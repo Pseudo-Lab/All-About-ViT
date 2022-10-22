@@ -14,7 +14,7 @@ pip install -U jupyter-book
 - build
 
 ```
-jupyter-book build book/
+jupyter-book build book/ --all
 ```
 
 
