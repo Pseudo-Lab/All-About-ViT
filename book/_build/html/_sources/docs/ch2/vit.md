@@ -134,7 +134,7 @@
     → Encoder를 통과해서 나온 값에 Norm을 적용함.
     → 시퀀스 가장 앞에 붙였던 class token 만 따로 때서 classification head에 넣어줌. why? class token이 이미지 전체의 embedding을 표현하고 있음을 가정하기 때문.
 
-    ## 2) Fine-tuning and higher Resolution
+    ### 2) Fine-tuning and higher Resolution
 
     - 일반적으로 ViT는 큰 dataset에 pre-train시키고 후속 과제에 fine-tuning 시킴.
     - fine-tuning 과정에서 pretrain된 prediction head를 제거하고 0 initialized DxK feedforward layer를 부작함.(K는 fine-tuning 하는 dataset의 클래스 수)

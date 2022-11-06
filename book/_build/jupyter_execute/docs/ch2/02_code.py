@@ -190,3 +190,6 @@ class VIT(nn.Module) :
         
         return x
 
+
+# Author by `임중섭`  
+# Edit by `김주영`

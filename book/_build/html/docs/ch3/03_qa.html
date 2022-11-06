@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Q&amp;A &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Pyramid Vision Transformer Code" href="03_code.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Pyramid_Vision_Transformer.html">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch3/03_qa.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch3/03_qa.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#spatial-reduction-spatial">
+   spatial reduction으로 인한 spatial 정보 손실
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transformer-spatial-reduction-width">
+   Transformer에서 spatial reduction을 통한 width 조절
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pvt-multi-scale-feature-cnn">
+   PVT multi-scale feature 추출의 장점, CNN의 장점과 유사한지
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pvt-patch-size-cnn">
+   PVT patch size 조절과 CNN의 커널 사이즈 조절
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Q&A</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#spatial-reduction-spatial">
+   spatial reduction으로 인한 spatial 정보 손실
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transformer-spatial-reduction-width">
+   Transformer에서 spatial reduction을 통한 width 조절
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pvt-multi-scale-feature-cnn">
+   PVT multi-scale feature 추출의 장점, CNN의 장점과 유사한지
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pvt-patch-size-cnn">
+   PVT patch size 조절과 CNN의 커널 사이즈 조절
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="q-a">
+<h1>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">#</a></h1>
+<section id="spatial-reduction-spatial">
+<h2>spatial reduction으로 인한 spatial 정보 손실<a class="headerlink" href="#spatial-reduction-spatial" title="Permalink to this headline">#</a></h2>
+<p>PVT의 spatial reduction(SR) 계산하는 부분에서 HW를 reduction ratio로 나누고 채널에 reduction ratio을 곱해서 reshape을 함으로써 feature 크기를 줄여가는데 이 과정에서 spatial 정보 손실이 일어나지 않을까요??</p>
+<blockquote>
+<div><p>reduction을 위해서 정보 손실은 어느정도 감안해야하지만 SR 연산 자체가 key와 value에 대해서만 이루어진다는 점과 position embedding 값이 elementwise하게 들어간다는 점에서 완전한 정보 손실은 이루어지지 않는다고 생각합니다.</p>
+</div></blockquote>
+</section>
+<section id="transformer-spatial-reduction-width">
+<h2>Transformer에서 spatial reduction을 통한 width 조절<a class="headerlink" href="#transformer-spatial-reduction-width" title="Permalink to this headline">#</a></h2>
+<p>위의 지승환님이 말씀하신 것처럼 SR연산이 정보 손실에 큰 영향을 주지 않는다면 inceptionnet에서 width를 키우기 위해 1x1 conv를 사용하여 연산량을 줄인 것처럼 transformer에서도 SR연산을 통해서 연산량을 줄이고 WIDTH를 넓힐 수 있을까요? 그리고 transformer에서 Width를 넓힌다고 효과가 있을까요?</p>
+<blockquote>
+<div><p>사이즈를 줄이고 늘리는 부분은 마치 U-Net이 생각나게하는 부분이네요. U-Net같은 경우 앞단의 레이어(downsampling)에선 위치 정보를 얻고 뒷단 레이어(upsampling)에선 feature의 학습 성숙도?를 얻음으로써 성능을 얻었지만 transformer의 경우 승환님이 말씀하신 것처럼 pe가 추가되어 학습되는 부분이 있어서 불필요한 과정이라고 생각합니다. 추가해도 상당히 cost가 높아질 것 같습니다…</p>
+</div></blockquote>
+</section>
+<section id="pvt-multi-scale-feature-cnn">
+<h2>PVT multi-scale feature 추출의 장점, CNN의 장점과 유사한지<a class="headerlink" href="#pvt-multi-scale-feature-cnn" title="Permalink to this headline">#</a></h2>
+<p>PVT가 multi scale을 뽑음으로써 얻어지는 장점이 어떤 것이 있을까요? CNN처럼 초기 레이어는 receptive field가 좁은 영역만 보며 coarse한 특징을 뽑고 점차 레이어가 깊어질수록 receptive field가 커져 넓은 영역을 보게되어 fine한 특징을 뽑는 이런 장점을 그대로 유지한다고 볼 수 있을까요?</p>
+<blockquote>
+<div><p>PVT는 이미지 전체 픽셀에 대한 예측을 하는 dense prediction task에 적합하지 않은 ViT의 단점을 보완합니다. 여기서 필요한게 multi-scale feature map인 것 같네요.<br />
+그리고 PVT는 CNN의 coarse한 특징부터 fine한 특징을 뽑아내는 장점을 유지한다기 보다는, 넓은 receptive field를 뽑아내기 위해 레이어를 쌓는 작업을 해주는 것 대신, transformer 구조를 통해 레이어마다 global한 receptive field를 뽑아낸다는 장점이 있다 라고 하는 것이 맞지 않을까 싶습니다.<br />
+근데 다르게 생각해보면 ViT의 단점이 16*16 patch size로 인해 coarse한 결과만 얻을 수 있다는 것에 비해, PVT는 coarse한 결과에 fine한 결과까지 얻을 수 있다는 장점이 있으니 그런 의미에선 맞다고 할 수도 있겠네요.</p>
+</div></blockquote>
+</section>
+<section id="pvt-patch-size-cnn">
+<h2>PVT patch size 조절과 CNN의 커널 사이즈 조절<a class="headerlink" href="#pvt-patch-size-cnn" title="Permalink to this headline">#</a></h2>
+<p>기존 CNN은 receptive field를 확장하기 위해서 커널 크기를 변경하거나 레이어를 많이 쌓거나 다른 종류의 convolution을 사용하는 방식을 사용하는데, PVT에서는 spatial reduction을 통해 patch size를 줄여 계산량을 줄이고 pyramid 구조로 만들었습니다. 이렇게 patch size를 조절하는 행위를 커널을 조절하는 행위와 레이어 수를 늘리는 것에 빗대어 설명할 수 있을까요?</p>
+<blockquote>
+<div><p>cnn에서 위에서 설명주신 receptive field 확장을 위한 작업은 featuremap을 통한 연산이 global하지 않기때문에 이루어진다고 생각합니다. 그에반해 transformer는 global attention은 이루어지지만 단점으로 항상 같은 resolution의 patch들에 대한 연산만 가능하다는 점이 있고, 이를 보완하기위해 서로 다른 size의 patchsize를 만들고 이를 pyramid 구조로 쌓았다고 생각합니다. 원인과 해결방안이 반대된다고 이해하면 어떨까 생각합니다.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p>Author by <code class="docutils literal notranslate"><span class="pre">지승환</span></code><br />
+Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch3"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="03_code.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Pyramid Vision Transformer Code</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
