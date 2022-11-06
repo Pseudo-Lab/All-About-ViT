@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Pyramid Vision Transformer &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pyramid Vision Transformer Code" href="03_code.html" />
+    <link rel="prev" title="Pyramid Vision Transformer" href="03_List.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="03_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch3/Pyramid_Vision_Transformer.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch3/Pyramid_Vision_Transformer.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#method">
+   Method
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overall-architecture">
+     Overall Architecture
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pyramid-structure-for-transformer">
+     Pyramid Structure for Transformer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-encoder">
+     Transformer Encoder
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     요약 정리
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-details">
+   Model Details
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-details">
+   Task Details
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   Experiments
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ablation-study">
+   Ablation Study
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Pyramid Vision Transformer</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#method">
+   Method
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overall-architecture">
+     Overall Architecture
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pyramid-structure-for-transformer">
+     Pyramid Structure for Transformer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-encoder">
+     Transformer Encoder
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     요약 정리
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-details">
+   Model Details
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-details">
+   Task Details
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   Experiments
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ablation-study">
+   Ablation Study
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="pyramid-vision-transformer">
+<h1>Pyramid Vision Transformer<a class="headerlink" href="#pyramid-vision-transformer" title="Permalink to this headline">#</a></h1>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>최근 Vision Transformer(ViT)는 Image classification 분야에 transformer를 적용해 좋은 성과를 기록.</p></li>
+<li><p>하지만 Transformer 특유의 <strong>Columnar</strong>한 구조때문에 Dense Level의 task에 적용하기에는 한계가 있음.</p></li>
+<li><p><strong>Pyramid Vision Transformer</strong>는?</p>
+<ol class="simple">
+<li><p><strong>Porgressive shirinking pyramid</strong> 구조를 사용해 이미지의 다양한 resolution의 feature를 학습할 수 있음.</p></li>
+<li><p>고해상도 feature 학습을 위해 <strong>spatial reduction attention(SRA)</strong> 을 적용해 computational cost를 절약함.</p></li>
+<li><p>CNN의 inductive bias가 높다는 이점과 transformer의 global attention의 이점을 모두 취함.</p></li>
+<li><p>Dense Level의 vision task(object detection, segmentation)등에서도 좋은 성능을 보임.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>CNN Architecture는 vision 분야의 다양한 task에서 이미 대단한 성능을 보여줌.</p></li>
+<li><p>그러던 중 최근 Image Classification 분야에서 transformer를 적용한 ViT의 등장, 좋은 성능을 기록.</p></li>
+<li><p>하지만 ViT는 <strong>columnar structure</strong>라 patch 자체가 동일한 resolution을 갖게 되고 결국 fine한 level의 task의 적용에는 부합함.</p></li>
+<li><p>PyramidVisionTransformer(PvT)는</p>
+<ol class="simple">
+<li><p>이미지 patch를 작은 size로 만들어 high resolution의 이미지를 학습할 수 있음.</p></li>
+<li><p>서로 다른 patch size를 가지는 <strong>progressive shirinking pyramid 구조</strong>를 사용해 다양한 size의 feature를 학습할 수 있음.</p></li>
+<li><p><strong>spatial-reduction attention구조</strong>를 적용해 고해상도의 feature를 학습할 때 resource를 절약할 수 있음.</p></li>
+</ol>
+</li>
+<li><p>결국 PvT는</p>
+<ol class="simple">
+<li><p>CNN 구조에는 없는 <strong>global receptive field</strong>를 학습.(attention mechanism)</p></li>
+<li><p>Transformer 구조에는 없는 <strong>pyramid 형태의 학습</strong>으로 기존의 dense prediction task에 적용 가능.</p></li>
+<li><p><strong>Convolutional free</strong>한 구조로 다양한 task에 적용할 수 있음.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">#</a></h2>
+<section id="overall-architecture">
+<h3>Overall Architecture<a class="headerlink" href="#overall-architecture" title="Permalink to this headline">#</a></h3>
+<p><img alt="" src="../../_images/03_1.png" /></p>
+<ul>
+<li><p>서로 다른 scale factor를 갖는 4개의 stage로 구성</p></li>
+<li><p>각 stage는 Patch Embedding Layer와 Transformer Encoder Layer로 구성</p></li>
+<li><p>e.g. 1_st stage:</p>
+<ol class="simple">
+<li><p><span class="math notranslate nohighlight">\(H*W*3\)</span> shape의 이미지를 <span class="math notranslate nohighlight">\(\frac{HW}{4^{2}}\)</span>(patch size : 4 * 4 * 3) 개의 patch로 tokenize</p></li>
+<li><p>flatten + linear projection. <em>output size : <span class="math notranslate nohighlight">\(\frac{HW}{4^{2}}C_{1}\)</span></em></p></li>
+<li><p>elementwise sum by positional embedding</p></li>
+<li><p>transformer encoder. <em>output size : <span class="math notranslate nohighlight">\(\frac{HW}{4^{2}}C_{1}\)</span></em></p></li>
+</ol>
+</li>
+<li><p>stage별 output size</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>stage</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>output size</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{HW}{4^2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{HW}{8^2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{HW}{16^2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{HW}{32^2}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+<section id="pyramid-structure-for-transformer">
+<h3>Pyramid Structure for Transformer<a class="headerlink" href="#pyramid-structure-for-transformer" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>patch embedding layer에서 feature map의 scale을 조절.</p></li>
+<li><p>Layer를 깊게 쌓아 progressive shirinking strategy를 사용.</p></li>
+</ul>
+</section>
+<section id="transformer-encoder">
+<h3>Transformer Encoder<a class="headerlink" href="#transformer-encoder" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><em>Encoder Layer = Attention Layer + Feedforward Layer</em></p></li>
+<li><p>ViT와 다르게 patch의 resolution이 매우 작으므로(e.g. 4<em>4, 8</em>8) channel 수가 linear하게 증가, computational cost도 linear하게 증가</p></li>
+<li><p>이 점을 보완하기위해 Multi-Head Attention Layer를  Spatial-Reduction Attention Layer로 교체</p></li>
+<li><p><strong>SRA Layer</strong></p>
+<ul>
+<li><p>attention operation을 수행하기 전에 key와 value의 scale을 <span class="math notranslate nohighlight">\(\frac{1}{R}\)</span>배로 줄임.</p></li>
+<li><p>Output size : <span class="math notranslate nohighlight">\(\frac{H_{i}W_{i}}{R^{2}}C_{i}\)</span></p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../../_images/03_2.png" /></p>
+</section>
+<section id="id1">
+<h3>요약 정리<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p><img alt="" src="../../_images/03_3.png" /></p>
+</section>
+</section>
+<section id="model-details">
+<h2>Model Details<a class="headerlink" href="#model-details" title="Permalink to this headline">#</a></h2>
+<p><img alt="" src="../../_images/03_4.png" /></p>
+</section>
+<section id="task-details">
+<h2>Task Details<a class="headerlink" href="#task-details" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>classification의 경우, model의 top에 fully connected layer 추가</p></li>
+<li><p>pixel level prediction의 경우,</p>
+<ol class="simple">
+<li><p>ImageNet 데이터로 pretrained</p></li>
+<li><p>Pyramid 구조의 output feature map을 upsampling layer에 사용</p></li>
+</ol>
+</li>
+<li><p><strong>dense prediction task의 경우 input image의 size가 arbitrary하므로 position embedding을 bilinear interpolation해 사용</strong></p></li>
+</ul>
+</section>
+<section id="experiments">
+<h2>Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>In image classification</p>
+<ul class="simple">
+<li><p>비슷한 paramater의 모델 기준으로 CNN backbone(e.g. ResNet) &lt; PvT</p></li>
+<li><p><strong>FLOPS : 단위 시간도안 이루어지는 floating point 연산 수, a.k.a. inference 속도)</strong></p></li>
+</ul>
+<p><img alt="" src="../../_images/03_5.png" /></p>
+<ul class="simple">
+<li><p>비슷한 complexity의 transformer 모델에 비교해도 PvT가 약간의 성능 향상</p></li>
+<li><p>Dense Prediction task뿐 아니라, image classification분야에서도 pyramid 구조가 효과적임</p></li>
+</ul>
+</li>
+<li><p>Object Detection &amp; Instance Segmentation</p>
+<ul class="simple">
+<li><p>In object detection, <strong>PvT + RetinaNet &gt; ResNet + RetinaNet</strong></p></li>
+<li><p>In instance segmentation, <strong>PvT + Mask R-CNN &gt; TesNet + Mask R-CNN</strong></p></li>
+<li><p><strong>PvT-Large의 경우, ResNext보다 20% 적은 parameter로 더 좋은 성능을 기록</strong></p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../../_images/03_6.png" /></p>
+<ul class="simple">
+<li><p>Semantic Segmentation</p>
+<ul>
+<li><p><strong>PvT + Semantic FPN &gt; ResNet + Semantic FPN</strong></p></li>
+<li><p>PvT-Large의 경우 mIoU가 44.8 기록, 이는 ADE20K Dataset의 SOTA와 근접한 수치</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../../_images/03_7.png" /></p>
+<ul>
+<li><p>Dense Prediction Task에서도 CNN에 근접, 능가하는 성능을 보여줌</p></li>
+<li><p>Pure한 Transformer구조만 사용한다면?</p>
+<ol class="simple">
+<li><p>DETR(Detection with Transformer) in Object Detection</p>
+<ul class="simple">
+<li><p>Detection task를 위한 pure한 transformer network</p></li>
+</ul>
+</li>
+<li><p>Trans2Seg in Semantic segmentation</p>
+<ul class="simple">
+<li><p>Segmentation task를 위한 pure한 transformer network</p></li>
+</ul>
+</li>
+</ol>
+<ul class="simple">
+<li><p>Result</p>
+<ol class="simple">
+<li><p>PvT + DETR &gt; ResNet</p></li>
+<li><p>PvT + Trans2Seg &gt; Resnet</p></li>
+<li><p>Pure한 Transformer구조도 dense prediction task에서 잘 동작함!</p></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../../_images/03_8.png" /></p>
+</section>
+<section id="ablation-study">
+<h2>Ablation Study<a class="headerlink" href="#ablation-study" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>Q1. Pyramid Structure는 정말 효과가 있는가?</p>
+<p>Test.</p>
+<ul class="simple">
+<li><p>ViT에 작은 Size의 patch를 넣은 결과와 비교</p></li>
+<li><p>ViT-4 patch는 OOM, ViT-32 patch &lt; PvT-small</p></li>
+</ul>
+<p><img alt="" src="../../_images/03_9.png" /></p>
+<p>A. Pyramid Structure는 효과가 있다.</p>
+</li>
+<li><p>Q2. Deeper vs Wider</p>
+<p>Test.</p>
+<ul>
+<li><p>CNN architecture에서도 자주 등장하는 주제.</p></li>
+<li><p>PcT small network의 hidden dimension을 기존보다 1.4배 upscale</p>
+<p><img alt="" src="../../_images/03_10.png" /></p>
+</li>
+<li><p>Result : Wider PvT-small &lt; Deeper PvT-small</p>
+<p><img alt="" src="../../_images/03_11.png" /></p>
+</li>
+</ul>
+<p>A. Deeper &gt; Wider</p>
+</li>
+<li><p>Q3. Pretraining의 이점은 존재하는가?</p>
+<p>Test.</p>
+<ul>
+<li><p>Blue line : Without pretrained / Red line : With Pretrained</p></li>
+<li><p>Result : Blue &lt; Red</p>
+<p><img alt="" src="../../_images/03_12.png" /></p>
+</li>
+</ul>
+<p>A. Pretraining의 이점은 존재한다.</p>
+</li>
+<li><p>Q4. PvT vs Non Local CNN</p>
+<p>Test.</p>
+<ul class="simple">
+<li><p>CNN 대비 PvT의 장점은 global attention을 볼 수 있다는 점.</p></li>
+<li><p>그렇다면 CNN에 Global Filter를 넣으면?(e.g. GCNet)</p></li>
+</ul>
+<p>A. PvT &gt; Non Local CNN(ResNet + Gcr4)</p>
+<p><img alt="" src="../../_images/03_13.png" /></p>
+</li>
+<li><p>why?</p>
+<ol class="simple">
+<li><p>PvT의 경우 Global attention이 Network의 전반적으로 이루어지지만, ResNet + Gc r4의 경우, 특정 resolution(r4)에서만 연산이 이루어진다는점</p></li>
+<li><p>CNN의 경우 학습된 filter가 fix되어 global feature를 계산하지만, Transformer의 경우 input relation을 보고 global feature를 dynamic하게 계산한다는점</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Pure한</span> <span class="pre">transforer로</span> <span class="pre">dense</span> <span class="pre">prediction</span> <span class="pre">task에</span> <span class="pre">응용</span> <span class="pre">가능한</span> <span class="pre">PvT</span></code></p>
+<ul class="simple">
+<li><p>아직 transformer가 CNN Backbone으로 이루어진 SOTA를 넘어서기는 어렵지만, vision tak에서의 transformer모델 연구가 초창기인만큼 무궁무진한 가능성이 있다.</p></li>
+<li><p><strong>그 중 PvT는 Good starting point.</strong></p></li>
+</ul>
+<hr class="docutils" />
+<p>Author by <code class="docutils literal notranslate"><span class="pre">지승환</span></code><br />
+Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch3"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="03_List.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Pyramid Vision Transformer</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="03_code.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Pyramid Vision Transformer Code</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

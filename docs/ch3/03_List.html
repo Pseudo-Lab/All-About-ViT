@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Self-Attention &#8212; Vision Transformer의 모든 것</title>
+    <title>Pyramid Vision Transformer &#8212; Vision Transformer의 모든 것</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -51,13 +51,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Self-Attention Code" href="01_code.html" />
-    <link rel="prev" title="Inductive Bias" href="Inductive_Bias.html" />
+    <link rel="next" title="Pyramid Vision Transformer" href="Pyramid_Vision_Transformer.html" />
+    <link rel="prev" title="Q&amp;A" href="../ch2/02_qa.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -122,34 +120,34 @@ const thebe_selector_output = ".output, .cell_output"
   Inductive Bias와 Self-Attention
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="01_List.html">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
    Inductive Bias와 Self-Attention
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="Inductive_Bias.html">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
      Inductive Bias
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
      Self-Attention
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="01_code.html">
+    <a class="reference internal" href="../ch1/01_code.html">
      Self-Attention Code
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="01_qa.html">
+    <a class="reference internal" href="../ch1/01_qa.html">
      Q&amp;A
     </a>
    </li>
@@ -195,29 +193,29 @@ const thebe_selector_output = ".output, .cell_output"
   Pyramid Vision Transformer
  </span>
 </p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../ch3/03_List.html">
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
    Pyramid Vision Transformer
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
   <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
+    <a class="reference internal" href="Pyramid_Vision_Transformer.html">
      Pyramid Vision Transformer
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ch3/03_code.html">
+    <a class="reference internal" href="03_code.html">
      Pyramid Vision Transformer Code
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ch3/03_qa.html">
+    <a class="reference internal" href="03_qa.html">
      Q&amp;A
     </a>
    </li>
@@ -313,7 +311,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch1/Self-Attention.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch3/03_List.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -341,7 +339,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../../_sources/docs/ch1/Self-Attention.md"
+        <a href="../../_sources/docs/ch3/03_List.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -378,102 +376,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id1">
-   1. self-attention?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#q-k-v">
-   2. Q, K, V?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#frac-qk-t-sqrt-d-k">
-   3.
-   <span class="math notranslate nohighlight">
-    \(\frac{QK^T}{\sqrt{d_k}}\)
-   </span>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#softmax-frac-qk-t-sqrt-d-k-v">
-   4.
-   <span class="math notranslate nohighlight">
-    \(softmax(\frac{QK^T}{\sqrt{d_k}})V\)
-   </span>
-  </a>
- </li>
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Self-Attention</h1>
+                <h1>Pyramid Vision Transformer</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id1">
-   1. self-attention?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#q-k-v">
-   2. Q, K, V?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#frac-qk-t-sqrt-d-k">
-   3.
-   <span class="math notranslate nohighlight">
-    \(\frac{QK^T}{\sqrt{d_k}}\)
-   </span>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#softmax-frac-qk-t-sqrt-d-k-v">
-   4.
-   <span class="math notranslate nohighlight">
-    \(softmax(\frac{QK^T}{\sqrt{d_k}})V\)
-   </span>
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -481,79 +400,16 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="self-attention">
-<h1>Self-Attention<a class="headerlink" href="#self-attention" title="Permalink to this headline">#</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">animal</span> <span class="n">didn</span><span class="s1">&#39;t cross the street because it was too tired</span>
-</pre></div>
-</div>
-<p>위 문장을 예시로 self-attention이 이루어지기 전 Tokenizing, Embedding이 수행된다.</p>
-<section id="id1">
-<h2>1. self-attention?<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
-<p>self-attention은 Query(Q), Key(K), Value(V) 간의 관계를 추출한다. Q, K, V는 입력 문장의 모든 벡터 값이며 모두 동일하다.</p>
-</section>
-<section id="q-k-v">
-<h2>2. Q, K, V?<a class="headerlink" href="#q-k-v" title="Permalink to this headline">#</a></h2>
-<p>어떤 입력 단어 벡터 시퀀스에 어떤 trainable한 행렬  <span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span> 이 곱해지면서 Q, K, V가 만들어진다.</p>
-<p>예를 들어 입력 단어가 <span class="math notranslate nohighlight">\(X_1\)</span> = “Thinking”, <span class="math notranslate nohighlight">\(X_2\)</span> = “Machines”라면 다음과 같이 <span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span>가 곱해지면서 각각 (<span class="math notranslate nohighlight">\(q_1, k_1, v_1\)</span>), (<span class="math notranslate nohighlight">\(q_2, k_2, v_2\)</span>)가 만들어진다.</p>
-<p><img alt="" src="../../_images/01_2.png" /></p>
-</section>
-<section id="frac-qk-t-sqrt-d-k">
-<h2>3. <span class="math notranslate nohighlight">\(\frac{QK^T}{\sqrt{d_k}}\)</span><a class="headerlink" href="#frac-qk-t-sqrt-d-k" title="Permalink to this headline">#</a></h2>
-<p><span class="math notranslate nohighlight">\(QK^T\)</span>는 Q와 K간의 연관성을 계산하여 score를 출력한다. 위 문장을 예시로 다음과 같이 연산된다.</p>
-<blockquote>
-<div><p><span class="math notranslate nohighlight">\(The\)</span> · <span class="math notranslate nohighlight">\(The^T\)</span>
-<span class="math notranslate nohighlight">\(The · animal^T\)</span>
-<span class="math notranslate nohighlight">\(The · didn't^T\)</span>
-<span class="math notranslate nohighlight">\(The · cross^T\)</span>
-<span class="math notranslate nohighlight">\(The · the^T\)</span>
-<span class="math notranslate nohighlight">\(The · street^T\)</span>
-<span class="math notranslate nohighlight">\(The · because^T\)</span>
-<span class="math notranslate nohighlight">\(The · it^T\)</span>
-<span class="math notranslate nohighlight">\(The · was^T\)</span>
-<span class="math notranslate nohighlight">\(The · too^T\)</span>
-<span class="math notranslate nohighlight">\(The · tired^T\)</span>
-<span class="math notranslate nohighlight">\(animal · The^T\)</span>
-<span class="math notranslate nohighlight">\(animal · animal^T\)</span>
-<span class="math notranslate nohighlight">\(animal · didn't^T\)</span>
-…</p>
-</div></blockquote>
-<p>이처럼 “The”의 Q에 대한 각 전체 단어 K간의 연관성이 얼마나되는지 score를 계산하고 “animal”도 마찬가지로 계산하는 식으로 진행된다.</p>
-<p><span class="math notranslate nohighlight">\(\sqrt{d_k}\)</span>에서 <span class="math notranslate nohighlight">\(d_k\)</span>는 key 벡터 사이즈를 의미하여 이 값을 나누어주는 이유는 key 벡터의 차원이 늘어날수록 내적 연산시 값이 커지는 문제를 보완하기 위해서이다. 또한 더 안정적인 gradient를 가지기위해서라고 한다.</p>
-<p>이후 각 score들은 softmax를 거쳐 0~1 사이의 값으로 만든다.</p>
-</section>
-<section id="softmax-frac-qk-t-sqrt-d-k-v">
-<h2>4. <span class="math notranslate nohighlight">\(softmax(\frac{QK^T}{\sqrt{d_k}})V\)</span><a class="headerlink" href="#softmax-frac-qk-t-sqrt-d-k-v" title="Permalink to this headline">#</a></h2>
-<p>softmax까지 거친 score들은 또 V와 곱해진다.</p>
-<blockquote>
-<div><p><span class="math notranslate nohighlight">\(softmax(The(Q) · The^T(K))  · The(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · animal^T(K))  · animal(V\)</span>)
-<span class="math notranslate nohighlight">\(softmax(The(Q) · didn't^T(K))  · didn't(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · cross^T(K))  · cross(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · the^T(K))  · the(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · street^T(K))  · street(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · because^T(K))  · because(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · it^T(K))  · it(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · was^T(K))  · was(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · too^T(K))  · too(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(The(Q) · tired^T(K))  · tired(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(animal(Q) · The^T(K))  · The(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(animal(Q) · animal^T(K))  · animal(V)\)</span>
-<span class="math notranslate nohighlight">\(softmax(animal(Q) · didn'^Tt(K))  · didn't(V)\)</span>
-…</p>
-</div></blockquote>
-<p>이렇게 각 score가 V와 곱해지면서 Q와 K의 연관성이 V에 반영된다. 쉽게 말해 Q와의 연관성이 큰 K는 중요도가 클 것(score가 높음)이고 연관성이 작은 K는 중요도가 작을 것(score가 낮음)인데 이것이 V에 반영된다는 것이다.</p>
-<p>그림으로 표현했을때 score가 크면 다음과 같이 맨 위처럼 선명하고 score가 낮을수록 아래에 있는 것처럼 희미해진다.</p>
-<p><img alt="" src="../../_images/01_3.png" /></p>
-<p>마지막으로 각 V는 sum이 되어 각 Token의 의미에 해당하는 값을 얻게된다. 예를 들어 “The”에 해당하는 모든 V를 더하면 전체 문장에서 “The”의 의미를 가지는 벡터를 얻게 된다.</p>
-<p>[Reference]</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="pyramid-vision-transformer">
+<h1>Pyramid Vision Transformer<a class="headerlink" href="#pyramid-vision-transformer" title="Permalink to this headline">#</a></h1>
+<p>Pyramid Vision Transformer 논문과 코드를 리뷰합니다.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://nlpinkorean.github.io/illustrated-transformer/">https://nlpinkorean.github.io/illustrated-transformer/</a></p></li>
-<li><p><a class="reference external" href="https://github.com/rwightman/pytorch-image-models/blob/a520da9b495422bc773fb5dfe10819acb8bd7c5c/timm/models/vision_transformer.py#L183-L208">https://github.com/rwightman/pytorch-image-models/blob/a520da9b495422bc773fb5dfe10819acb8bd7c5c/timm/models/vision_transformer.py#L183-L208</a></p></li>
+<li><p><a class="reference internal" href="Pyramid_Vision_Transformer.html"><span class="doc std std-doc">Pyramid Vision Transformer</span></a></p></li>
+<li><p><a class="reference internal" href="03_code.html"><span class="doc std std-doc">Pyramid Vision Transformer Code</span></a></p></li>
+<li><p><a class="reference internal" href="03_qa.html"><span class="doc std std-doc">Q&amp;A</span></a></p></li>
 </ul>
-<hr class="docutils" />
-<p>Author by <code class="docutils literal notranslate"><span class="pre">김주영</span></code><br />
-Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
-</section>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -569,7 +425,7 @@ Edit by <code class="docutils literal notranslate"><span class="pre">김주영</
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./docs/ch1"
+            path: "./docs/ch3"
         },
         predefinedOutput: true
     }
@@ -583,17 +439,17 @@ Edit by <code class="docutils literal notranslate"><span class="pre">김주영</
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="Inductive_Bias.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../ch2/02_qa.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Inductive Bias</p>
+            <p class="prev-next-title">Q&amp;A</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="01_code.html" title="next page">
+    <a class='right-next' id="next-link" href="Pyramid_Vision_Transformer.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Self-Attention Code</p>
+        <p class="prev-next-title">Pyramid Vision Transformer</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
