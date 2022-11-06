@@ -26,3 +26,11 @@ parts:
     - file: docs/ch3/Pyramid_Vision_Transformer
     - file: docs/ch3/03_code
     - file: docs/ch3/03_qa
+- caption: DeiT
+  numbered: False
+  chapters:
+  - file: docs/ch4/04_List
+    sections:
+    - file: docs/ch4/DeiT
+    - file: docs/ch4/04_code
+    - file: docs/ch4/04_qa
