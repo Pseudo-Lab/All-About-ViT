@@ -54,8 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="DeiT" href="../ch4/04_List.html" />
-    <link rel="prev" title="Pyramid Vision Transformer Code" href="03_code.html" />
+    <link rel="prev" title="DeiT" href="04_code.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -193,29 +192,29 @@ const thebe_selector_output = ".output, .cell_output"
   Pyramid Vision Transformer
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="03_List.html">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch3/03_List.html">
    Pyramid Vision Transformer
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
   <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="Pyramid_Vision_Transformer.html">
+    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
      Pyramid Vision Transformer
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="03_code.html">
+    <a class="reference internal" href="../ch3/03_code.html">
      Pyramid Vision Transformer Code
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_qa.html">
      Q&amp;A
     </a>
    </li>
@@ -227,29 +226,29 @@ const thebe_selector_output = ".output, .cell_output"
   DeiT
  </span>
 </p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../ch4/04_List.html">
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="04_List.html">
    DeiT
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../ch4/DeiT.html">
+    <a class="reference internal" href="DeiT.html">
      DeiT: Training data-efficient image transformers &amp; distillation through attention
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ch4/04_code.html">
+    <a class="reference internal" href="04_code.html">
      DeiT
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch4/04_qa.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Q&amp;A
     </a>
    </li>
@@ -345,7 +344,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch3/03_qa.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch4/04_qa.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -373,7 +372,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../../_sources/docs/ch3/03_qa.md"
+        <a href="../../_sources/docs/ch4/04_qa.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -433,23 +432,18 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#spatial-reduction-spatial">
-   spatial reduction으로 인한 spatial 정보 손실
+  <a class="reference internal nav-link" href="#cnn-vs-transformer">
+   CNN vs Transformer
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transformer-spatial-reduction-width">
-   Transformer에서 spatial reduction을 통한 width 조절
+  <a class="reference internal nav-link" href="#no-distillation-vs-soft-distillation">
+   no distillation vs soft distillation 성능비교
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pvt-multi-scale-feature-cnn">
-   PVT multi-scale feature 추출의 장점, CNN의 장점과 유사한지
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pvt-patch-size-cnn">
-   PVT patch size 조절과 CNN의 커널 사이즈 조절
+  <a class="reference internal nav-link" href="#distillation-token">
+   distillation token
   </a>
  </li>
 </ul>
@@ -472,23 +466,18 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#spatial-reduction-spatial">
-   spatial reduction으로 인한 spatial 정보 손실
+  <a class="reference internal nav-link" href="#cnn-vs-transformer">
+   CNN vs Transformer
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transformer-spatial-reduction-width">
-   Transformer에서 spatial reduction을 통한 width 조절
+  <a class="reference internal nav-link" href="#no-distillation-vs-soft-distillation">
+   no distillation vs soft distillation 성능비교
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pvt-multi-scale-feature-cnn">
-   PVT multi-scale feature 추출의 장점, CNN의 장점과 유사한지
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pvt-patch-size-cnn">
-   PVT patch size 조절과 CNN의 커널 사이즈 조절
+  <a class="reference internal nav-link" href="#distillation-token">
+   distillation token
   </a>
  </li>
 </ul>
@@ -503,34 +492,34 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="q-a">
 <h1>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">#</a></h1>
-<section id="spatial-reduction-spatial">
-<h2>spatial reduction으로 인한 spatial 정보 손실<a class="headerlink" href="#spatial-reduction-spatial" title="Permalink to this headline">#</a></h2>
-<p>PVT의 spatial reduction(SR) 계산하는 부분에서 HW를 reduction ratio로 나누고 채널에 reduction ratio을 곱해서 reshape을 함으로써 feature 크기를 줄여가는데 이 과정에서 spatial 정보 손실이 일어나지 않을까요??</p>
+<section id="cnn-vs-transformer">
+<h2>CNN vs Transformer<a class="headerlink" href="#cnn-vs-transformer" title="Permalink to this headline">#</a></h2>
+<p>teacher 모델이 transformer 말고 cnn 기반 네트워크를 사용했을때의 성능이 우수하다고 나왔는데 이유는 무엇일까요? inductive bias가 CNN에는 포함되어 있다고 논문에는 쓰여있는데 결국 이는 cnn이 transformer보다 우수하다는 의미 아닌가요??</p>
+<p><img alt="" src="../../_images/04_14.png" /></p>
 <blockquote>
-<div><p>reduction을 위해서 정보 손실은 어느정도 감안해야하지만 SR 연산 자체가 key와 value에 대해서만 이루어진다는 점과 position embedding 값이 elementwise하게 들어간다는 점에서 완전한 정보 손실은 이루어지지 않는다고 생각합니다.</p>
+<div><p>여기서 CNN이 transformer보다 better하다는 것은  knowledge distillation에서 teacher모델로 CNN이 transformer보다 더 좋은 teacher임을 의미합니다. 좋은 teacher란 본인이 가지고 있는 좋은 inductive bias를 student에게 전달하여 student 모델이 높은 성능을 낼 수 있도록 하기 때문입니다. transformer는 상대적으로 CNN보다 inductive bias가 약하기 때문에 student에게 전달해줄 수 있는 inductive bias가 별로 없겠지만 CNN은 inductive bias가 좀 더 강하기 때문에 student에게 전달해줄 수 있는 inductive bias가 좀 더 많겠네요.  table 2의 결과처럼 이러한 특성 때문에 teacher 모델로 CNN(RegNet)을 썼을 때 성능이 더 좋은 걸 알 수 있습니다. 또한, student의 성능이 teacher의 성능을 뛰어넘는 결과가 나옵니다. 이는 적절한 inductive bias가 주입되면 student 모델의 성능을 더욱 개선할 수 있음을 보여줍니다.</p>
+</div></blockquote>
+<blockquote>
+<div><p>말씀하신대로  CNN이 transformer보다 더 우수한 것으로 볼 수 있지 않느냐 라는 질문에는 table 5를 봐주시면 될 것 같습니다. 논문에서는 서로 다른 모델의 성능을 비교하기 위해 throughtput과 accuracy간의 trade-off 관점에서 성능을 비교합니다.  DeiT-B⚗ , DeiT-B⚗ /1000 epochs와 비슷한 throughput을 갖는 CNN 모델로 RegNetY-16GF, EfficientNet-B4를 예시로 들 수 있는데 두 CNN보다 DeiT의 성능이 더 잘 나오는 것을 알 수 있습니다.</p>
 </div></blockquote>
 </section>
-<section id="transformer-spatial-reduction-width">
-<h2>Transformer에서 spatial reduction을 통한 width 조절<a class="headerlink" href="#transformer-spatial-reduction-width" title="Permalink to this headline">#</a></h2>
-<p>위의 지승환님이 말씀하신 것처럼 SR연산이 정보 손실에 큰 영향을 주지 않는다면 inceptionnet에서 width를 키우기 위해 1x1 conv를 사용하여 연산량을 줄인 것처럼 transformer에서도 SR연산을 통해서 연산량을 줄이고 WIDTH를 넓힐 수 있을까요? 그리고 transformer에서 Width를 넓힌다고 효과가 있을까요?</p>
+<section id="no-distillation-vs-soft-distillation">
+<h2>no distillation vs soft distillation 성능비교<a class="headerlink" href="#no-distillation-vs-soft-distillation" title="Permalink to this headline">#</a></h2>
+<p>distillation을 사용하지 않은 결과와 soft distillation을 사용한 결과의 차이가 거의 없는데 혹시 이유나 유추할 수 있는 부분이 논문에 나와있을까요? hard distillation에만 초점을 맞춘 것 같은데 궁금하네요.</p>
+<p><img alt="" src="../../_images/04_15.png" /></p>
 <blockquote>
-<div><p>사이즈를 줄이고 늘리는 부분은 마치 U-Net이 생각나게하는 부분이네요. U-Net같은 경우 앞단의 레이어(downsampling)에선 위치 정보를 얻고 뒷단 레이어(upsampling)에선 feature의 학습 성숙도?를 얻음으로써 성능을 얻었지만 transformer의 경우 승환님이 말씀하신 것처럼 pe가 추가되어 학습되는 부분이 있어서 불필요한 과정이라고 생각합니다. 추가해도 상당히 cost가 높아질 것 같습니다…</p>
+<div><p>질문을 보고 저도 왜 성능 차이가 없을까 궁금해서 찾아보는데 관련 내용이 안보이네요;; 아마 단지 실험 결과가 이렇다라는 것만 보여준 것이 아닐까 생각이 드네요.</p>
+</div></blockquote>
+<blockquote>
+<div><p>저도 이부분에 대해서 찾아봤지만 따로 설명이나 추가적인 자료는 찾지 못했습니다. 말씀하신대로 soft, hard distillation에 대한 성능 개선에만 집중하느라 크게 의미를 두지 않는 거 같습니다.</p>
 </div></blockquote>
 </section>
-<section id="pvt-multi-scale-feature-cnn">
-<h2>PVT multi-scale feature 추출의 장점, CNN의 장점과 유사한지<a class="headerlink" href="#pvt-multi-scale-feature-cnn" title="Permalink to this headline">#</a></h2>
-<p>PVT가 multi scale을 뽑음으로써 얻어지는 장점이 어떤 것이 있을까요? CNN처럼 초기 레이어는 receptive field가 좁은 영역만 보며 coarse한 특징을 뽑고 점차 레이어가 깊어질수록 receptive field가 커져 넓은 영역을 보게되어 fine한 특징을 뽑는 이런 장점을 그대로 유지한다고 볼 수 있을까요?</p>
+<section id="distillation-token">
+<h2>distillation token<a class="headerlink" href="#distillation-token" title="Permalink to this headline">#</a></h2>
+<p>8 Page 가장 위에 있는 문단 입니다. 여기서 Distillation Token이 모델에 어떤 것(??)을 추가 했기 때문에 2개의 class token을 사용하는 것보다 성능이 미세하게 좋다고 합니다. Class Token과 다르게 어떤 것이 추가 되었는지가 안나와있는데 혹시 아시는 분 있을까요?</p>
+<p><img alt="" src="../../_images/04_16.png" /></p>
 <blockquote>
-<div><p>PVT는 이미지 전체 픽셀에 대한 예측을 하는 dense prediction task에 적합하지 않은 ViT의 단점을 보완합니다. 여기서 필요한게 multi-scale feature map인 것 같네요.<br />
-그리고 PVT는 CNN의 coarse한 특징부터 fine한 특징을 뽑아내는 장점을 유지한다기 보다는, 넓은 receptive field를 뽑아내기 위해 레이어를 쌓는 작업을 해주는 것 대신, transformer 구조를 통해 레이어마다 global한 receptive field를 뽑아낸다는 장점이 있다 라고 하는 것이 맞지 않을까 싶습니다.<br />
-근데 다르게 생각해보면 ViT의 단점이 16*16 patch size로 인해 coarse한 결과만 얻을 수 있다는 것에 비해, PVT는 coarse한 결과에 fine한 결과까지 얻을 수 있다는 장점이 있으니 그런 의미에선 맞다고 할 수도 있겠네요.</p>
-</div></blockquote>
-</section>
-<section id="pvt-patch-size-cnn">
-<h2>PVT patch size 조절과 CNN의 커널 사이즈 조절<a class="headerlink" href="#pvt-patch-size-cnn" title="Permalink to this headline">#</a></h2>
-<p>기존 CNN은 receptive field를 확장하기 위해서 커널 크기를 변경하거나 레이어를 많이 쌓거나 다른 종류의 convolution을 사용하는 방식을 사용하는데, PVT에서는 spatial reduction을 통해 patch size를 줄여 계산량을 줄이고 pyramid 구조로 만들었습니다. 이렇게 patch size를 조절하는 행위를 커널을 조절하는 행위와 레이어 수를 늘리는 것에 빗대어 설명할 수 있을까요?</p>
-<blockquote>
-<div><p>cnn에서 위에서 설명주신 receptive field 확장을 위한 작업은 featuremap을 통한 연산이 global하지 않기때문에 이루어진다고 생각합니다. 그에반해 transformer는 global attention은 이루어지지만 단점으로 항상 같은 resolution의 patch들에 대한 연산만 가능하다는 점이 있고, 이를 보완하기위해 서로 다른 size의 patchsize를 만들고 이를 pyramid 구조로 쌓았다고 생각합니다. 원인과 해결방안이 반대된다고 이해하면 어떨까 생각합니다.</p>
+<div><p>distillation token이 ‘teacher model(CNN)이 가지고 있는 inductive bias를 student model에게 잘 전달했다’라고 보시면 될 거 같습니다.</p>
 </div></blockquote>
 <hr class="docutils" />
 <p>Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
@@ -550,7 +539,7 @@ title="Print to PDF"
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./docs/ch3"
+            path: "./docs/ch4"
         },
         predefinedOutput: true
     }
@@ -564,19 +553,12 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="03_code.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="04_code.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Pyramid Vision Transformer Code</p>
+            <p class="prev-next-title">DeiT</p>
         </div>
-    </a>
-    <a class='right-next' id="next-link" href="../ch4/04_List.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">DeiT</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>

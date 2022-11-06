@@ -1,0 +1,1077 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>DeiT: Training data-efficient image transformers &amp; distillation through attention &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DeiT" href="04_code.html" />
+    <link rel="prev" title="DeiT" href="04_List.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch3/03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  DeiT
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="04_List.html">
+   DeiT
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     DeiT: Training data-efficient image transformers &amp; distillation through attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="04_code.html">
+     DeiT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="04_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch4/DeiT.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch4/DeiT.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#related-work">
+   2. Related Work
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#knowledge-distillation">
+     Knowledge Distillation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vision-transformer-overview">
+   3. Vision transformer: overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#multi-head-self-attention-layer-msa">
+     Multi-head Self Attention layer (MSA)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-block-for-images">
+     Transformer block for images
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-class-token">
+     The class token
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fixing-the-positional-encoding-across-resolution">
+     Fixing the positional encoding across resolution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distillation-through-attention">
+   4. Distillation through attention
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#soft-distillation">
+     Soft distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hard-label-distillation">
+     Hard-label distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distillation-token">
+     Distillation token
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fine-tuning-with-distillation">
+     Fine-tuning with distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#classification-with-our-approach-joint-classifiers">
+     Classification with our approach: joint classifiers
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   5. Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-models">
+     5.1 Transformer models
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distillation">
+     5.2 Distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#convnets-teachers">
+     Convnets teachers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-of-distillation-methods">
+     Comparison of distillation methods
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#agreement-with-teacher-inductive-bias">
+     Agreement with teacher &amp; inductive bias?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-epochs">
+     Number of epochs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#efficiency-vs-accuracy-a-comparative-study-with-convets">
+     5.3 Efficiency vs accuracy: a comparative study with convets
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transfer-learning-performance-on-downstream-tasks">
+     5.4 Transfer learning: Performance on downstream tasks
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-details-ablation">
+   6. Training details &amp; ablation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-augmentation">
+     Data-Augmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#training-time">
+     Training time
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   7. Conclusion
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>DeiT: Training data-efficient image transformers & distillation through attention</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#related-work">
+   2. Related Work
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#knowledge-distillation">
+     Knowledge Distillation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vision-transformer-overview">
+   3. Vision transformer: overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#multi-head-self-attention-layer-msa">
+     Multi-head Self Attention layer (MSA)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-block-for-images">
+     Transformer block for images
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-class-token">
+     The class token
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fixing-the-positional-encoding-across-resolution">
+     Fixing the positional encoding across resolution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distillation-through-attention">
+   4. Distillation through attention
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#soft-distillation">
+     Soft distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hard-label-distillation">
+     Hard-label distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distillation-token">
+     Distillation token
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fine-tuning-with-distillation">
+     Fine-tuning with distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#classification-with-our-approach-joint-classifiers">
+     Classification with our approach: joint classifiers
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   5. Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-models">
+     5.1 Transformer models
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distillation">
+     5.2 Distillation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#convnets-teachers">
+     Convnets teachers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-of-distillation-methods">
+     Comparison of distillation methods
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#agreement-with-teacher-inductive-bias">
+     Agreement with teacher &amp; inductive bias?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-epochs">
+     Number of epochs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#efficiency-vs-accuracy-a-comparative-study-with-convets">
+     5.3 Efficiency vs accuracy: a comparative study with convets
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transfer-learning-performance-on-downstream-tasks">
+     5.4 Transfer learning: Performance on downstream tasks
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-details-ablation">
+   6. Training details &amp; ablation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-augmentation">
+     Data-Augmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#training-time">
+     Training time
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   7. Conclusion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="deit-training-data-efficient-image-transformers-distillation-through-attention">
+<h1>DeiT: Training data-efficient image transformers &amp; distillation through attention<a class="headerlink" href="#deit-training-data-efficient-image-transformers-distillation-through-attention" title="Permalink to this headline">#</a></h1>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>최근 attention에 기반한 뉴럴넷 모델들이 vision task에서 많이 활용되고 있으나 vision transformer로 high performance를 달성하기 위해서는 수억개의 데이터셋, 이를 위한 충분한 하드웨어 리소스가 필요하다는 limitation이 있습니다.</p></li>
+<li><p>본 논문에서는 ViT와 마찬가지로 convolution을 사용하지 않으면서 추가적인 데이터셋 없이 ImageNet 데이터셋만 사용하되, 3일 이내로 학습하여 top-1 accuracy 83.1%(single-crop)라는 높은 성능을 달성하였습니다. 이를 위해 저자들은 teacher-student strategy라는 knowledge distillation과 distillation token을 새롭게 제안하여 student 모델이 teacher 모델로부터 attention을 통해 효과적으로 학습될 수 있음을 보여주었습니다.</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>ViT가 image classification에서 SOTA를 달성했지만 이러한 성능을 달성하기 위해서는 JFT-300M 같은 매우 큰 데이터셋과 이를 빠른 시간에 학습시키기 위한 하드웨어가 필요하다는 단점이 있고 이는 ViT 논문에서도 “do not generalize well when trained on insufficient amounts of data”라고 말합니다.</p></li>
+<li><p>본 논문에서는 ViT 아키텍처를 그대로 사용하면서 ImageNet 데이터셋만 학습하여 single 8-GPU로 약 53시간 정도로 CNN과 competitive한 성능을 내게 됩니다.</p></li>
+<li><p>즉, token 기반의 teacher-student knowledge distillation을 통해 데이터를 효율적으로 학습하는 Data-efficient image Transformer (DeiT)를 제안합니다.</p></li>
+<li><p>본 논문의 contribution은 다음과 같습니다.</p>
+<ul>
+<li><p>convolution layer, external data를 사용하지 않고 imagenet SOTA를 달성하였습니다. 제안하는 DeiT-S, DeiT-Ti 모델은 ResNet-50, ResNet-18보다 파라미터 수가 적음에도 accuracy는 더 높은 결과를 보여줍니다.</p></li>
+<li><p>transformer에서 attention을 통해 다른 token들과 interaction할 수 있는 distillation token을 새롭게 제안하였습니다. 제안하는 distillation token 기반의 knowledge는 vanilla distillation 방식보다 outperform한 결과를 보여줍니다.</p></li>
+<li><p>제안하는 distillation에서는 teacher 모델로 transformer보다 CNN을 썼을 때 더 성능이 증가함을 보여줍니다.</p></li>
+<li><p>제안하는 모델을 Imagenet으로 pre-training하여 downstream task에서 실험해봤을 때도 competitive한 성능을 달성합니다.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="related-work">
+<h2>2. Related Work<a class="headerlink" href="#related-work" title="Permalink to this headline">#</a></h2>
+<section id="knowledge-distillation">
+<h3>Knowledge Distillation<a class="headerlink" href="#knowledge-distillation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>know distillation이란 사전에 학습된 large model의 지식을 현재 학습시키고자 하는 small 모델에 전달하는 학습 전략을 말합니다.</p></li>
+<li><p>knowledge distillation은 크게 두 part로 구성되어 있는데 아래 그림처럼 student model의 output과 GT 간의 difference를 loss로 계산하여 학습하는 part가 존재하고 teacher model output과 student model의 output 간의 difference를 loss로 계산하는 part가 존재합니다.</p></li>
+<li><p>teacher model output과의 loss를 계산하여 student 모델이 teacher model이 가지고 있는 knowledge 또한 학습할 수 있게 합니다. teacher model은 이미 사전학습된 모델을 사용하기 때문에 teacher model의 weight는 학습되지 않도록 freeze 합니다.</p>
+<p><img alt="" src="../../_images/04_0.png" /></p>
+<p>[Reference]<br />
+<a class="reference external" href="https://intellabs.github.io/distiller/knowledge_distillation.html">knowledge_distillation</a></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="vision-transformer-overview">
+<h2>3. Vision transformer: overview<a class="headerlink" href="#vision-transformer-overview" title="Permalink to this headline">#</a></h2>
+<section id="multi-head-self-attention-layer-msa">
+<h3>Multi-head Self Attention layer (MSA)<a class="headerlink" href="#multi-head-self-attention-layer-msa" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>attention 매커니즘은 학습가능한 key, value vector pair에 기반하여 주어진 Query vector와 Key vector 간의 내적을 통해 Query, Key 간의 연관성을 계산하고 이 결과를 scaling 하고 softmax를 취해 0~1 범위의 softmax score를 계산합니다.</p></li>
+<li><p>softmax score와 Value vector를 곱하여 attention을 계산합니다.</p></li>
+<li><p>Multi-head self-attention (MSA)는 위의 attention 과정을 head의 개수만큼 병렬처리 하여 patch들 간의 관계를 다양한 관점에서 바라봅니다.</p></li>
+</ul>
+</section>
+<section id="transformer-block-for-images">
+<h3>Transformer block for images<a class="headerlink" href="#transformer-block-for-images" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>ViT 구조를 그대로 차용하기 위해 MSA layer 위에 FFN만 추가합니다.</p>
+<ul>
+<li><p>FFN은 two linear layer, GeLu, skip connection, layer normalization으로 구성됨</p></li>
+</ul>
+</li>
+<li><p>transformer는 image를 여러 개의 고정된 크기의 patch로 분할하여 N개의 patch로 구성된 sequence로 입력 받습니다. 각 patch는 linear layer를 통해 768차원(3x16x16=768) vector가 됩니다. 추가로 sequence를 구성하는 patch들의 relative position 정보를 부여하기 위해 학습 가능한 positional embedding을 통해 위치정보를 부여한 뒤에 transformer block으로 입력됩니다.</p></li>
+</ul>
+</section>
+<section id="the-class-token">
+<h3>The class token<a class="headerlink" href="#the-class-token" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>class token은 학습 가능한 vector로써 transformer block으로 입력되기 전 sequence 맨 앞에 추가되어 입력됩니다. patch embedding을 통해 N개의 patch가 나왔다면 class token까지 하나 추가하여 sequence의 길이는 N+1이 되며 prediction에서는 class token만 사용합니다.</p></li>
+<li><p>class token을 추가함으로써 class token은 attention을 통해 각 patch token들과 interaction이 가능하게 됩니다.</p></li>
+</ul>
+</section>
+<section id="fixing-the-positional-encoding-across-resolution">
+<h3>Fixing the positional encoding across resolution<a class="headerlink" href="#fixing-the-positional-encoding-across-resolution" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>transformer를 효율적으로 학습시키는 방법은 low resolution으로 학습한 뒤 high resolution으로 fine-tuning 하는 전략을 사용하였습니다.</p></li>
+<li><p>또한 transformer 구조 특성 상 patch size를 동일하게 사용한다고 했을 때, high resolution에서는 patch 개수가 늘어나게 되지만 patch size만 동일하다면 patch 개수가 늘어난다고 해서 아키텍처를 수정할 필요가 없습니다.</p>
+<ul>
+<li><p>단, sequence 길이가 달라지면 위치 정보에 대한 interpolation이 필요합니다.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="distillation-through-attention">
+<h2>4. Distillation through attention<a class="headerlink" href="#distillation-through-attention" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>일반적으로 knowledge distillation은 distillation loss에 smoothing을 적용하느냐에 따라 soft distillation, hard distillation으로 나뉩니다.</p></li>
+</ul>
+<section id="soft-distillation">
+<h3>Soft distillation<a class="headerlink" href="#soft-distillation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>teacher, student 모델의 softmax output에 대한 Cross entropy, KL divergence를 최소화하도록 하는 학습 전략입니다. 이 때 logit 값을 tau라는 값으로 나눠준 뒤 softmax를 계산하게 되는데 이 과정을 smoothing으로 볼 수 있으며 tau 값이 클수록 smoothing 세기가 강해집니다. soft distillation을 통해 계산된 label을 soft label이라 하며 만약 tau 값이 1이면 smoothing을 안하는 것과 같고 이 경우 hard label이라 부릅니다.</p>
+<p><img alt="Untitled" src="../../_images/04_1.png" /></p>
+</li>
+<li><p>first term : student 모델의 softmax output과 true label간의 CE loss 계산</p></li>
+<li><p>second term : student 모델의 output을 tau로 나눠준 뒤 softmax로 입력, 마찬가지로 teacher 모델의 output을 tau로 나눠준 뒤 softmax로 입력하여 KL loss를 계산</p></li>
+<li><p><span class="math notranslate nohighlight">\(Z_s\)</span> = logits of student</p></li>
+<li><p><span class="math notranslate nohighlight">\(Z_t\)</span> = logits of teacher</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau\)</span> = temperature for distillation</p></li>
+</ul>
+</section>
+<section id="hard-label-distillation">
+<h3>Hard-label distillation<a class="headerlink" href="#hard-label-distillation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>본 논문에서는 hard label에 미세하게 smoothing을 가하는 전략을 사용하였습니다. 즉 argmax로 나온 확률 값에서 가장 크게 나온 class에 대해 one-hot vector를 사용하는 것이 아니라 가장 높게 나온 확률 값을 0.9로 사용하고, 나머지 class들의 합이 0.1이 되도록 합니다.</p>
+<p><img alt="Untitled" src="../../_images/04_2.png" /></p>
+</li>
+<li><p>first term : student softmax output과 true label 간의 CE loss 계산</p></li>
+<li><p>second term : teacher의 prediction 결과를 true label 놓고 CE loss 계산</p></li>
+</ul>
+</section>
+<section id="distillation-token">
+<h3>Distillation token<a class="headerlink" href="#distillation-token" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>본 논문에서는 main contribution이라 할 수 있는 distillation token을 제안하였습니다. distillation token은 초기 embedding 과정에서 class token과 같이 사용되며 self attention을 통해 다른 patch들과 interact하게 됩니다.</p></li>
+<li><p>class token은 student model의 예측값을 의미하고 이는 GT와 비교하여 loss를 계산합니다. distillation token 또한 student model의 예측 값을 의미하지만 이 token은 GT가 아닌 teacher model의 예측 값과 비교하여 loss를 계산합니다. distillation token을 통해서 student model이 teacher model의 output을 잘 학습할 수 있으며 class embedding에 대한 complementary가 가능해집니다.</p></li>
+<li><p>학습된 class token과 distillation token의 cosine 유사도를 계산해보면 0.06정도로 서로 다르지만 class embedding, distillation embedding으로 계산했을 때는 0.93 정도로 유사도가 굉장히 높게 나옵니다. 이는, 두 token이 여러 레이어를 거치면서 embedding 되었을 때 서로 유사하지만 유사도가 1보다 작은 값을 갖는 것은 다른 목적의 target으로 생성되기 때문입니다.</p></li>
+<li><p>teacher pseudo-label 대신 class token 2개를 사용해봤을 때, 두 embedding은 cos 유사도 0.99인 동일한 vector로 수렴하는 결과를 보였습니다. class token을 2개 사용하는 것은 동일한 목적의 target 값을 두개 생성하는 것이고 성능 또한 개선되지 않습니다. 따라서 class 예측과 knowledge distillation이라는 목적에 맞는 두 token을 사용해야 하며 실제로 class token과 distillation token을 함께 써야 성능이 개선됨을 실험에서도 밝힙니다.</p>
+<p><img alt="Untitled" src="../../_images/04_3.png" /></p>
+</li>
+</ul>
+</section>
+<section id="fine-tuning-with-distillation">
+<h3>Fine-tuning with distillation<a class="headerlink" href="#fine-tuning-with-distillation" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>pre-training시에 low-resolution으로 학습하고 fine-tuning시에 high-resolution으로 학습하는 전략을 사용하였습니다.</p></li>
+</ul>
+</section>
+<section id="classification-with-our-approach-joint-classifiers">
+<h3>Classification with our approach: joint classifiers<a class="headerlink" href="#classification-with-our-approach-joint-classifiers" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>test 시 class token, distillation token 두개를 사용할 수 있는데 여기선 두 개의 separate head로부터 late fusion을 통한 최종 output을 생성합니다. 즉, 두 head로부터 나온 prediction 결과에 softmax를 취한 후, 이를 결합하는 방식을 사용하였습니다.</p>
+<p><img alt="Untitled" src="../../_images/04_4.png" /></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="experiments">
+<h2>5. Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">#</a></h2>
+<section id="transformer-models">
+<h3>5.1 Transformer models<a class="headerlink" href="#transformer-models" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>ViT와 동일한 아키텍처 디자인을 사용하였으며 차이점은 학습 시 distillation token이 추가된다는 것 말고는 없습니다.</p></li>
+<li><p>아키텍처가 ViT와 동일하기 때문에 논문에서 혼동을 방지하고자 knowledge distillation을 쓰는 경우 DeiT라고 합니다.</p>
+<ul class="simple">
+<li><p>DeiT는 DeiT-B (Base)를 의미합니다. DeiT-B는 ViT-B와 동일합니다.</p></li>
+</ul>
+</li>
+<li><p>fine-tuning시 high-resolution에 대한 정보를 표기하기 위해 DeiT-B↑384로 resolution을 표기합니다. distillation token을 사용하는 경우 alembic sign을 추가하여 DeiT⚗로 표기합니다.</p></li>
+<li><p>DeiT-S, DeiT-Ti 모델에서 depth는 동일하게 사용하고 head 개수만 변경하였습니다.</p>
+<p><img alt="Untitled" src="../../_images/04_5.png" /></p>
+</li>
+</ul>
+</section>
+<section id="distillation">
+<h3>5.2 Distillation<a class="headerlink" href="#distillation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>제안하는 distillation method를 통해 vision transformer를 best CNN과 유사한 성능(accuracy, throughput 측면에서)을 내는 결과를 보여주었으며 distilled model이 teacher model 보다 outperform한 결과가 나오기도 합니다.</p>
+<p><img alt="Untitled" src="../../_images/04_6.png" /></p>
+</li>
+</ul>
+</section>
+<section id="convnets-teachers">
+<h3>Convnets teachers<a class="headerlink" href="#convnets-teachers" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>teacher model로 transformer와 CNN 중 CNN 썼을 때 더 높은 성능이 나오게 되는데 이는 CNN이 가지고 있는 inductive bias가 distillation을 통해 student model로 주입되어 성능이 개선되었다고 볼 수 있습니다.</p>
+<ul class="simple">
+<li><p>이후 실험에선 RegNetY-16GF 모델을 default teacher로 사용함</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/04_7.png" /></p>
+</li>
+</ul>
+</section>
+<section id="comparison-of-distillation-methods">
+<h3>Comparison of distillation methods<a class="headerlink" href="#comparison-of-distillation-methods" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>distillation 전략을 다르게 하여 실험한 결과입니다. 먼저, distillation 유형에 따른 결과를 보면 soft distillation 보다 논문에서 사용하는 hard distillation이 outperform한 결과를 보여줍니다. hard distillation을 기반으로 해서 여기에 distillation token까지 추가했을 때, 성능이 더 개선되는 결과가 나오게 됩니다.</p></li>
+<li><p>이러한 결과가 나오게 되는 이유는 classification task에서 class token과 distillation token이 서로 complementary useful information을 만들어내고 이로 인해 성능이 더 개선된다고 볼 수 있습니다.</p>
+<p><img alt="Untitled" src="../../_images/04_8.png" /></p>
+</li>
+</ul>
+</section>
+<section id="agreement-with-teacher-inductive-bias">
+<h3>Agreement with teacher &amp; inductive bias?<a class="headerlink" href="#agreement-with-teacher-inductive-bias" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>각 모델간의 disagreement를 비교한 결과로 error rate 값으로 봐도 무방합니다.</p></li>
+<li><p>논문에서 제안하는 방식으로 학습된 모델을 no distillation CNN과 no distillation DeiT와 비교해봤을 때 CNN과 좀 더 상관관계가 있음을 보입니다. 이는 CNN의 inductive bias가 잘 전달되었기 때문에 CNN과 좀 더 유사한 결과가 나온 것으로 볼 수 있습니다.</p></li>
+<li><p>또한, 모델에 존재하는 class embedding classifier, distillation embedding classifier인 두 classifier와 CNN을 비교했을 때 distillation embedding classifier보다 CNN에 더 close한 결과가 나오게 되고  반대로 class embedding classifier는 no distillation DeiT(=ViT)과 비슷한 결과를 보입니다.</p></li>
+<li><p>이는, distillation embedding은 teacher (CNN)의 knowledge를 잘 전달받기 때문에 CNN에 더 가까운 결과를 보이고 class embedding은 구조적으로 ViT와 같기 때문에 no distillation DeiT와 더 가까운 것으로 볼 수 있습니다.</p>
+<p><img alt="Untitled" src="../../_images/04_9.png" /></p>
+</li>
+</ul>
+</section>
+<section id="number-of-epochs">
+<h3>Number of epochs<a class="headerlink" href="#number-of-epochs" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>300 epochs만 학습했을 때도 이미 DeiT-B⚗가 DeiT-B보다 성능이 더 잘 나오지만 여기서 더 epochs 수를 증가시켜 학습을 더 진행했더니 distillation token 기반 모델의 성능이 개선되는 현상을 보였습니다. 또한 DeiT-B는 금방 saturation되나 DeiT-B⚗는 saturation이 더 늦게 나타나거나 fine-tuning까지 적용하는 경우 100 epoch까지도 성능이 지속적으로 증가하는 결과를 보입니다.</p>
+<p><img alt="Untitled" src="../../_images/04_10.png" /></p>
+</li>
+</ul>
+</section>
+<section id="efficiency-vs-accuracy-a-comparative-study-with-convets">
+<h3>5.3 Efficiency vs accuracy: a comparative study with convets<a class="headerlink" href="#efficiency-vs-accuracy-a-comparative-study-with-convets" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>throughput과 accuracy간의 trade-off를 고려하여 성능을 비교한 결과이며 제안하는 DeiT-⚗가 ViT는 물론 EfficientNet보다 성능이 훨씬 잘 나오는 결과를 보였습니다.</p>
+<p><img alt="Untitled" src="../../_images/04_11.png" /></p>
+</li>
+</ul>
+</section>
+<section id="transfer-learning-performance-on-downstream-tasks">
+<h3>5.4 Transfer learning: Performance on downstream tasks<a class="headerlink" href="#transfer-learning-performance-on-downstream-tasks" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>ImageNet으로 사전학습 후 다른 downstream task에서 평가한 결과입니다.</p></li>
+<li><p>DeiT는 대체적으로 CNN 모델과 비슷한 성능을 내며, ViT 보다는 확실히 성능이 많이 증가한 결과를 보입니다.</p>
+<p><img alt="Untitled" src="../../_images/04_12.png" /></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="training-details-ablation">
+<h2>6. Training details &amp; ablation<a class="headerlink" href="#training-details-ablation" title="Permalink to this headline">#</a></h2>
+<section id="data-augmentation">
+<h3>Data-Augmentation<a class="headerlink" href="#data-augmentation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>transformer가 larger amount dataset을 필요로 하기 때문에 DeiT 역시 data augmentation을 strong하게 적용합니다. 적용된 대부분의 augmentation이 useful했으나, dropout의 경우 썼을 때 성능이 감소하는 결과가 있어서 학습에서 제외하였습니다.</p>
+<p><img alt="Untitled" src="../../_images/04_13.png" /></p>
+</li>
+</ul>
+</section>
+<section id="training-time">
+<h3>Training time<a class="headerlink" href="#training-time" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>2 node(16 GPUs)로 300 epoch 학습시킬 시 약 37시간 정도가 소요됐고 single node(8 GPUs)로 학습시 약 53시간 정도 소요되었습니다. 비슷한 크기의 CNN 모델인 RegNetY-16GF (84M parameters)와 비교했을 때보다 20% 빠르게 학습시킬 수 있습니다.</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusion">
+<h2>7. Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>본 논문에서 image transformer 모델을 학습시키기 위해 large amount dataset이 필요하다는 문제를 효율적으로 해결하였습니다.  DeiT는 distillation token 기반의 distillation procedure를 통해 효율적으로 transformer를 학습시킬 수 있었습니다.</p></li>
+<li><p>distillation token뿐만 아니라 CNN에서 적용되었던 다양한 data augmentation, regularization method를 DeiT에 적용함으로써 별다른 아키텍처 수정 없이도 최적화된 CNN과 비교했을 때 competitive한 성능을 낼 수 있었습니다. 또한, image transformer는 throughput 측면에서 CNN보다 더 효율적인 선택이 될 수 있음을 여러 실험을 통해 보여주었습니다.</p></li>
+</ul>
+<hr class="docutils" />
+<p>Author by <code class="docutils literal notranslate"><span class="pre">이명오</span></code><br />
+Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="04_List.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">DeiT</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="04_code.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">DeiT</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
