@@ -34,3 +34,11 @@ parts:
     - file: docs/ch4/DeiT
     - file: docs/ch4/04_code
     - file: docs/ch4/04_qa
+- caption: Tokens-to-Token ViT
+  numbered: False
+  chapters:
+  - file: docs/ch5/05_List
+    sections:
+    - file: docs/ch5/T2T-ViT
+    - file: docs/ch5/05_code
+    - file: docs/ch5/05_qa
