@@ -1,0 +1,1502 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>SepViT: Separable Vison Transformer &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SepViT: Separable Vison Transformer Code" href="07_code.html" />
+    <link rel="prev" title="SepViT: Separable Vison Transformer" href="07_List.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch3/03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  DeiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch4/04_List.html">
+   DeiT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/DeiT.html">
+     DeiT: Training data-efficient image transformers &amp; distillation through attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_code.html">
+     DeiT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tokens-to-Token ViT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch5/05_List.html">
+   Tokens-to-Token ViT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/T2T-ViT.html">
+     Tokens-to-Token ViT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_code.html">
+     Tokens-to-Token ViT Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  BEiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch6/06_List.html">
+   BEiT: BERT Pre-Training of Image Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/BEiT.html">
+     BEiT: BERT Pre-Training of Image Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/06_code.html">
+     BEiT: BERT Pre-Training of Image Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/06_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SepViT
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="07_List.html">
+   SepViT: Separable Vison Transformer
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     SepViT: Separable Vison Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="07_code.html">
+     SepViT: Separable Vison Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="07_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch7/SepViT.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch7/SepViT.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#citation">
+   Citation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#related-work">
+   Related Work
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vision-transformer">
+     1. Vision Transformer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lightweight-convolutions">
+     2. Lightweight Convolutions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methodology-sepvit">
+   Methodology: SepViT
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overview">
+     1. Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#depthwise-separable-self-attention">
+     2. Depthwise Separable Self-Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#grouped-self-attention">
+     3. Grouped Self-Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sepvit-block">
+     4. SepViT Block
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#architecture-configuration">
+     5. Architecture Configuration
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experimental-results">
+   Experimental Results
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imagenet-1k-classification">
+     1. ImageNet-1K Classification
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ade20k-semantic-segmentation">
+     2. ADE20K Semantic Segmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#coco-object-detection-and-instance-segmentation">
+     3. COCO Object Detection and Instance Segmentation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>SepViT: Separable Vison Transformer</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#citation">
+   Citation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#related-work">
+   Related Work
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vision-transformer">
+     1. Vision Transformer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lightweight-convolutions">
+     2. Lightweight Convolutions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methodology-sepvit">
+   Methodology: SepViT
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overview">
+     1. Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#depthwise-separable-self-attention">
+     2. Depthwise Separable Self-Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#grouped-self-attention">
+     3. Grouped Self-Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sepvit-block">
+     4. SepViT Block
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#architecture-configuration">
+     5. Architecture Configuration
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experimental-results">
+   Experimental Results
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imagenet-1k-classification">
+     1. ImageNet-1K Classification
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ade20k-semantic-segmentation">
+     2. ADE20K Semantic Segmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#coco-object-detection-and-instance-segmentation">
+     3. COCO Object Detection and Instance Segmentation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="sepvit-separable-vison-transformer">
+<h1>SepViT: Separable Vison Transformer<a class="headerlink" href="#sepvit-separable-vison-transformer" title="Permalink to this headline">#</a></h1>
+<p><img alt="논문 본문" src="../../_images/07_0.png" /></p>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">#</a></h2>
+<p>Li W, Wang X, Xia X, et al. Sepvit: Separable vision transformer[J]. arXiv preprint arXiv:2203.15380, 2022</p>
+<p><a class="reference external" href="https://ar5iv.labs.arxiv.org/html/2203.15380">SepViT: Separable Vision Transformer</a></p>
+</section>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>ViT: 자원 제약이 있는 디바이스에 부담스러운 높은 계산량</p></li>
+<li><p>이를 다루기 위해 depthwise separable convolution으로부터 영감을 받아 SepViT를 설계</p>
+<ul>
+<li><p>window 내, window 간 정보 상호작용 가능</p></li>
+</ul>
+</li>
+<li><p>novel window token embedding / grouped self-attention</p>
+<ul>
+<li><p>아주 적은 계산 비용으로 window 간 attention 관계를 모델링</p></li>
+<li><p>여러 window의 장거리 시각적 의존성을 각각 포착</p></li>
+</ul>
+</li>
+<li><p>정확성과 지연 시간 사이의 trade-off 면에서 SOTA 달성하는 등 여러 downstream task에서 높은 성능 달성</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>image recognition을 위한 ViT는 장거리 의존성을 모델링하는데엔 좋지만, 계산복잡성이 매우 높음</p></li>
+<li><p>Swin - window-based self-attention</p>
+<ul class="simple">
+<li><p>non-overlapping sub-windows에서의 self-attention 계산을 제한</p></li>
+<li><p>복잡성을 줄여주기는 하지만, window 간의 building connection을 위한 shifted operator는 <strong>ONNX나 TensorRT 개발에 적합하지 않음</strong></p></li>
+</ul>
+</li>
+<li><p>Twins - window-based self-attention + PVT + separable self-attention</p>
+<ul class="simple">
+<li><p>배치 친화적이고 성능이 뛰어나지만 <strong>계산 효율이 좋지 않음</strong></p></li>
+</ul>
+</li>
+<li><p>CSWin - cross-shaped window self-attention</p>
+<ul class="simple">
+<li><p>성능은 높지만 throughput이 낮음 → <strong>오래 걸림</strong></p></li>
+</ul>
+</li>
+<li><p>위와 같은 문제를 보완하기 위해 Separable Vision Transformer(SepViT)를 설계하여 입력 데이터 지역적 전역적 의존성을 모두 포착</p></li>
+<li><p>MobileNet의 depthwise separable convolution 구조를 차용하여 depthwise separable self-attention 구조를 설계</p>
+<ul>
+<li><p>General Convolution</p>
+<p><img alt="General Convolution" src="../../_images/07_1.png" /></p>
+<p>General Convolution</p>
+<p><img alt="Complexity of General Convolution" src="../../_images/07_2.png" /></p>
+<p>Complexity of General Convolution</p>
+</li>
+<li><p>depthwise separable convolution</p>
+<p><img alt="Depthwise Separable Convolution" src="../../_images/07_3.png" /></p>
+<p>Depthwise Separable Convolution</p>
+<p><img alt="Depthwise Separable Convolution &amp; Complexity" src="../../_images/07_4.png" /></p>
+<p>Depthwise Separable Convolution &amp; Complexity</p>
+<p><img alt="Comparison Standard vs. Depthwise" src="../../_images/07_5.png" /></p>
+<p>Comparison Standard vs. Depthwise</p>
+<ul class="simple">
+<li><p>Xception</p></li>
+</ul>
+<p><img alt="Xception Architecture" src="../../_images/07_6.png" /></p>
+<p>Xception Architecture</p>
+<ul class="simple">
+<li><p>MobileNet</p></li>
+</ul>
+<p><img alt="Comparision of Depthwise Separable and Full Convolution MobileNet" src="../../_images/07_7.png" /></p>
+<p>Comparision of Depthwise Separable and Full Convolution MobileNet</p>
+</li>
+<li><p>Depthwise Sep. Conv. reduces computation time, parameters</p></li>
+<li><p>Dpethwise Sep. Conv. = Depthwise Conv + Pointwise Conv</p></li>
+<li><p>Used in recent architectures(MultiModel Nets, Xception, MobileNets)</p>
+<p><a class="reference external" href="https://gaussian37.github.io/dl-concept-dwsconv/">Depthwise separable convolution 연산</a></p>
+<p><a class="reference external" href="https://youtu.be/T7o3xvJLuHk">Depthwise Separable Convolution - A FASTER CONVOLUTION!</a></p>
+</li>
+</ul>
+</li>
+<li><p>각 window 내부의 지역적 특징을 잡아내면서 window 간의 연결을 만들고 표현적 능력을 향상시킴</p></li>
+<li><p>지역적 특성을 가진 window의 전역적 표현력을 얻기 위해 window token embedding을 적용</p>
+<ul class="simple">
+<li><p>window 간 attention 관계를 매우 적은 비용으로 모델링</p></li>
+</ul>
+</li>
+<li><p>AlexNet의 grouped convolution을 차용한 grouped self-attention 구조를 설계</p>
+<ul>
+<li><p>Grouped Convolution</p>
+<p><img alt="Comparision of Standard Convolution and Grouped Convolution" src="../../_images/07_8.png" /></p>
+<p>Comparision of Standard Convolution and Grouped Convolution</p>
+</li>
+<li><p>채널을 여러 group으로 나누어 독립적으로 convolution 연산을 수행</p></li>
+<li><p>group 수에 따라 파라미터 수를 줄일 수 있고, 병렬 처리가 가능</p></li>
+<li><p>직접 group 수를 정해야 하며, group 수가 너무 많으면 오히려 성능이 하락할 수 있음</p>
+<p><a class="reference external" href="https://supermemi.tistory.com/116">[ CNN ] 2. Grouped convolution - PyTorch Code</a></p>
+</li>
+</ul>
+</li>
+<li><p>ImageNet-1K 분류. ADE20K 의미론적 분할, COCO 객체 탐지 및 객체 영역 분할 실험 수행하여 성능과 지연시간 간의 trade-off를 개선</p>
+<p><img alt="Comparison of throughput and latency on ImageNet-1K classification" src="../../_images/07_9.png" /></p>
+<p>Comparison of throughput and latency on ImageNet-1K classification</p>
+<ol class="simple">
+<li><p>Separable Vision Transformer</p>
+<ol class="simple">
+<li><p>단일 transformer block에서 window 간 지역적 정보 소통과 전역적 정보 교환이 가능</p></li>
+</ol>
+</li>
+<li><p>Window token embedding</p>
+<ol class="simple">
+<li><p>각 window의 전역적 특징 표현을 학습</p></li>
+<li><p>매우 적은 계산 비용</p></li>
+</ol>
+</li>
+<li><p>Grouped self-attention</p>
+<ol class="simple">
+<li><p>다중 window 간 문맥적 개념을 포착하고 성능 개선</p></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="related-work">
+<h2>Related Work<a class="headerlink" href="#related-work" title="Permalink to this headline">#</a></h2>
+<section id="vision-transformer">
+<h3>1. Vision Transformer<a class="headerlink" href="#vision-transformer" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>CNN</p>
+<ul class="simple">
+<li><p>spatial inductive bias(locality inductive bias)</p></li>
+</ul>
+</li>
+<li><p>ViT</p>
+<ul class="simple">
+<li><p>global dependency(global inductive bias)</p></li>
+</ul>
+</li>
+<li><p>DeiT</p>
+<ul class="simple">
+<li><p>knowledge distillation and data-efficient ViT</p></li>
+</ul>
+</li>
+<li><p>T2T-ViT</p>
+<ul class="simple">
+<li><p>structurize the image to token</p></li>
+</ul>
+</li>
+<li><p>TNT</p>
+<ul class="simple">
+<li><p>단어 임베딩과 문장 임베딩 간 관계를 모델링 하기 위해 Inner(pixel embedding)와 Outer(patch embedding) transformer 구조를 사용</p></li>
+</ul>
+</li>
+<li><p>CPVT</p>
+<ul>
+<li><p>Conditional Positional Embedding(CPE)와 Positional Encoding Generator(PEG) 사용</p>
+<p><a class="reference external" href="https://youtu.be/HWna2c5VXDg">Transformer in Transformer: Paper explained and visualized | TNT</a></p>
+</li>
+<li><p>입력 토큰의 local neighbors에 따라 위치 임베딩이 조건화되며 가변적 입력 크기에 적용 가능함</p>
+<p><a class="reference external" href="https://sh-tsang.medium.com/review-cpvt-conditional-positional-encodings-for-vision-transformers-533e5997ec7d">Review - CPVT: Conditional Positional Encodings for Vision Transformers</a></p>
+</li>
+</ul>
+</li>
+<li><p>PVT</p>
+<ul class="simple">
+<li><p>hierarchical architecture for dense prediction tasks</p></li>
+<li><p>object detection, semantic &amp; instance segmentation</p></li>
+<li><p>hierarchical architecture</p></li>
+</ul>
+</li>
+<li><p>Swin</p>
+<ul>
+<li><p>window-based self-attention for local window</p>
+<p><a class="reference external" href="https://deep-learning-study.tistory.com/728">[논문 읽기] Swin Transforemr(2021), Hierarchical Vision Transformer using Shifted Windows</a></p>
+</li>
+</ul>
+</li>
+<li><p>Twins &amp; CSWin</p>
+<ul>
+<li><p>spatial separable self-attention</p></li>
+<li><p>cross-shaped window self-attention(hierarchical architecture)</p>
+<p><a class="reference external" href="https://sh-tsang.medium.com/review-twins-revisiting-the-design-of-spatial-attention-in-vision-transformers-b454b659523a">Review - Twins: Revisiting the Design of Spatial Attention in Vision Transformers</a></p>
+<p><a class="reference external" href="https://ar5iv.labs.arxiv.org/html/2107.00652">CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows</a></p>
+</li>
+</ul>
+</li>
+<li><p>CoaT &amp; CVT &amp; LeViT</p>
+<ul>
+<li><p>convolutions before or after self-attention for spatial inductive biases of CNNs</p>
+<p><a class="reference external" href="https://ar5iv.labs.arxiv.org/html/2104.06399">Co-Scale Conv-Attentional Image Transformers</a></p>
+<p><a class="reference external" href="https://sh-tsang.medium.com/review-cvt-introducing-convolutions-to-vision-transformers-170c227da606">Review - CvT: Introducing Convolutions to Vision Transformers</a></p>
+<p><a class="reference external" href="https://ar5iv.labs.arxiv.org/html/2104.01136">LeViT: a Vision Transformer in ConvNet’s Clothing for Faster Inference</a></p>
+</li>
+</ul>
+</li>
+<li><p>MobileViT</p>
+<ul>
+<li><p>Transformer blocks with the inverted bottleneck blocks in MobileNet-V2</p>
+<p><a class="reference external" href="https://bigwaveai.tistory.com/25">SOTA 알고리즘 리뷰 5 - MobileViT</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="lightweight-convolutions">
+<h3>2. Lightweight Convolutions<a class="headerlink" href="#lightweight-convolutions" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>MobileNet</p>
+<ul>
+<li><p>depthwise separable convolution</p></li>
+<li><p>공간적 정보 소통과 채널 전반의 정보 교환을 위한 pointwise convolution 수행</p></li>
+</ul>
+</li>
+<li><p>AlexNet</p>
+<ul>
+<li><p>grouped convolution</p></li>
+<li><p>feature map을 묶고 분산 훈련 수행</p></li>
+</ul>
+</li>
+<li><p>성능의 손실 없이 transformer의 계산량을 줄이고자 <strong>depthwise separable convilution</strong> 이론을 적용</p></li>
+</ul>
+</section>
+</section>
+<section id="methodology-sepvit">
+<h2>Methodology: SepViT<a class="headerlink" href="#methodology-sepvit" title="Permalink to this headline">#</a></h2>
+<section id="overview">
+<h3>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h3>
+<p><img alt="Separable Vision Transformer (SepViT)" src="../../_images/07_10.png" /></p>
+<p>Separable Vision Transformer (SepViT)</p>
+<ul class="simple">
+<li><p>hierarchical architecture + window-based self-attention + conditional position encoding</p></li>
+<li><p>overlapping patch merging layer → feature map downsampling</p></li>
+<li><p>공간적 해상도는 4 or 2 stride로 1/32까지 점진적으로 감소</p></li>
+<li><p>채널 차원 두 배씩 증가</p></li>
+<li><p>depthwise self-attention(DWA): local information communication</p></li>
+<li><p>pointwise self-attention(PWA): global information exchange</p></li>
+</ul>
+</section>
+<section id="depthwise-separable-self-attention">
+<h3>2. Depthwise Separable Self-Attention<a class="headerlink" href="#depthwise-separable-self-attention" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p><strong>Depthwise Self-Attention (DWA)</strong></p>
+<p><img alt="Separable Vision Transformer (SepViT) - Depthwise self-attention" src="../../_images/07_11.png" /></p>
+<p>Separable Vision Transformer (SepViT) - Depthwise self-attention</p>
+<ul>
+<li><p>input feature map에 window partition 형성</p>
+<ul class="simple">
+<li><p>feature map의 channel 역할을 하며 다양한 정보를 포함</p></li>
+</ul>
+</li>
+<li><p>각 window마다 window token을 생성</p>
+<ul class="simple">
+<li><p>global representation</p></li>
+<li><p>이후에 나오는 pointwise self-attention에서 각 attention 간 관계를 모델링</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        \text{DWA}(z)=\text{Attention}(z\cdot W_{Q},z\cdot W_{K},z\cdot W_{V})\;
+        \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(z\)</span> : feature token(pixcel and window tokens)</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_Q, W_K, W_V\)</span> : regular self-attention computation</p></li>
+<li><p><span class="math notranslate nohighlight">\(Attention\)</span> : a standard self-attention for local windows</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Window Token Embedding</strong></p>
+<ul class="simple">
+<li><p>window token: single token을 이용해 sub-window에 대한 핵심 정보를 encapsulate</p></li>
+<li><p>window token은 0 또는 학습 가능한 벡터로 구성</p></li>
+<li><p>DWA를 통과하면서 정보 상호작용이 일어나 각 window에 대한 전역적 표현을 학습</p>
+<ul>
+<li><p>pixel별로 token을 구성하는 것보다 훨씬 비용이 적게 듦</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Pointwise Self-Attention (PWA)</strong></p>
+<p><img alt="Separable Vision Transformer (SepViT) - Poinwise self-attention" src="../../_images/07_12.png" /></p>
+<p>Separable Vision Transformer (SepViT) - Poinwise self-attention</p>
+<ul class="simple">
+<li><p>pointwise convolution은 서로 다른 채널 간 정보를 융합</p></li>
+<li><p>이를 차용해 window 간 정보를 융합하고 input feature map의 최종적인 표현을 획득할 수 있는 PWA 설계</p></li>
+<li><p>window token으로부터 window 간 attention relationship을 획득하고 LN(LayerNormalization)과 Gelu activation을 통해 attention map 형성</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \text{PWA}(z,wt)=\text{Attention}(\text{Gelu}(\text{LN}(wt))\cdot W_{Q},\text{%
+    Gelu}(\text{LN}(wt))\cdot W_{K},z)\;
+    \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(wt\)</span>는 window token을, <span class="math notranslate nohighlight">\(Attention\)</span>은 window <span class="math notranslate nohighlight">\(z\)</span>에 적용되는 standard self-attention</p></li>
+</ul>
+</li>
+<li><p><strong>Complexity Analysis</strong></p>
+<ul class="simple">
+<li><p>multi-head self-attention(MSA)</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(4HWC^2 + 2H^2W^2C\)</span></p></li>
+</ul>
+</li>
+<li><p>Swin(window based self-attention)</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(4HWC^2 + 2M^2HWC\)</span> (<span class="math notranslate nohighlight">\(M * M\)</span> window size)</p></li>
+</ul>
+</li>
+<li><p>DWA</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\varOmega(\text{DWA})=3HWC^{2}+3NC^{2}+2N(M^{2}+1)^{2}C\;\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> : number of windows</p></li>
+<li><p><span class="math notranslate nohighlight">\(3NC^{2}\)</span> : Linear layers에 window token을 encoding 하는 complexity</p></li>
+<li><p><span class="math notranslate nohighlight">\(2N(M^{2}+1)^{2}C\)</span> : N개 window에서 발생하는 self-attention 행렬곱 complexity</p></li>
+<li><p><span class="math notranslate nohighlight">\(M^{2}+1\)</span> : pixel token + window token</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span>은 <span class="math notranslate nohighlight">\(H\)</span> 또는 <span class="math notranslate nohighlight">\(W\)</span>보다 훨씬 작기 때문에 계산량이 적음</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>PWA</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\varOmega(\text{PWA})=HWC^{2}+2NC^{2}+N^{2}C+NHWC\;\)</span></p>
+<ul>
+<li><p>window token이 지역적 window의 전역적 정보를 요약하므로 pixel level 보다는 window level에서 window 간 정보 교환이 PWA를 통해 효율적으로 발생</p></li>
+<li><p><span class="math notranslate nohighlight">\(2NC^{2}\)</span> : <span class="math notranslate nohighlight">\(N\)</span> window와 query, key 연산</p></li>
+<li><p><span class="math notranslate nohighlight">\(N^2C\)</span> : attention map 생성 연산량</p></li>
+<li><p><span class="math notranslate nohighlight">\(NHWC\)</span> : attention map과 feature map 간의 행렬곱 연산</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="grouped-self-attention">
+<h3>3. Grouped Self-Attention<a class="headerlink" href="#grouped-self-attention" title="Permalink to this headline">#</a></h3>
+<p><img alt="depthwise separable self-attention과 group self-attention의 차이" src="../../_images/07_13.png" /></p>
+<p>depthwise separable self-attention과 group self-attention의 차이</p>
+<ul class="simple">
+<li><p>window를 group으로 나눠주고 sub-window를 만들어 depthwise self-attention</p></li>
+<li><p>window들의 장거리 시각적 의존성을 포착(적어도 group 내에서)</p></li>
+<li><p>약간의 비용이 상승하나 성능을 높일 수 있었음</p></li>
+<li><p>window token이 group self-attention layer에서 어떻게 이루어지는지 언급되지는 않음</p></li>
+</ul>
+</section>
+<section id="sepvit-block">
+<h3>4. SepViT Block<a class="headerlink" href="#sepvit-block" title="Permalink to this headline">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\displaystyle\tilde{z}^{l}=\text{Concat}(z^{l-1},wt)\;
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\displaystyle\ddot{z}^{l}=\text{DWA}(\text{LN}(\tilde{z}^{l}))\; 
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\displaystyle\dot{z}^{l},\dot{wt}=\text{Slice}(\ddot{z}^{l})\; 
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\displaystyle\hat{z}^{l}=\text{PWA}(\dot{z}^{l},\dot{wt})+z^{l-1}\; 
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\displaystyle z^{l}=\text{MLP}(\text{LN}(\hat{z}^{l}))+\hat{z}^{l}\;
+\]</div>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\ddot{z}^{l}\)</span> : Depthwise Self-Attention</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{z}^{l}\)</span> : Pointwise Self-Attention</p></li>
+<li><p><span class="math notranslate nohighlight">\(z^{l}\)</span> : SepViT block <span class="math notranslate nohighlight">\(l\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\dot{z}^{l}\)</span> : feature maps</p></li>
+<li><p><span class="math notranslate nohighlight">\(\dot{wt}\)</span> : learned window tokens</p></li>
+<li><p><strong>Comparison of Complexity</strong></p>
+<p><img alt="Complexity comparison of an information interaction within and among windows in a single SepViT block with those two-block pattern works in each stage" src="../../_images/07_14.png" /></p>
+<p>Complexity comparison of an information interaction within and among windows in a single SepViT block with those two-block pattern works in each stage</p>
+<ul class="simple">
+<li><p>window 내, window 간 정보 상호작용은 SepViT에서 하나의 block에서 일어나는데 반해, Swin과 Twins는 두개의 연속적인 block이 필요</p>
+<ul>
+<li><p>거의 절반 수준의 MACs(메모리 접근 비용(시간))</p></li>
+<li><p>이는 SepViT가 좀 더 경량화 되었으며, 불필요한 layer를 제거했다는 의미</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="architecture-configuration">
+<h3>5. Architecture Configuration<a class="headerlink" href="#architecture-configuration" title="Permalink to this headline">#</a></h3>
+<p><img alt="Detailed configurations of SepViT variants in different stages" src="../../_images/07_15.png" /></p>
+<p>Detailed configurations of SepViT variants in different stages</p>
+<ul class="simple">
+<li><p>window size : 7 * 7 / 14 * 14</p></li>
+</ul>
+</section>
+</section>
+<section id="experimental-results">
+<h2>Experimental Results<a class="headerlink" href="#experimental-results" title="Permalink to this headline">#</a></h2>
+<section id="imagenet-1k-classification">
+<h3>1. ImageNet-1K Classification<a class="headerlink" href="#imagenet-1k-classification" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p><strong>Settings</strong></p>
+<ul>
+<li><p>ImgaeNet-1K</p>
+<ul class="simple">
+<li><p>1.28M train / 50K validation / 1K categories</p></li>
+</ul>
+</li>
+<li><p>Setting</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Epochs</p></th>
+<th class="head"><p>Batch size</p></th>
+<th class="head"><p>GPU</p></th>
+<th class="head"><p>Resolution</p></th>
+<th class="head"><p>Optimizer</p></th>
+<th class="head"><p>Weight decay</p></th>
+<th class="head"><p>Warm-up</p></th>
+<th class="head"><p>Depth aug.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SepViT-B</p></td>
+<td><p>300</p></td>
+<td><p>1024</p></td>
+<td><p>V100 * 8</p></td>
+<td><p>224*224</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.1</p></td>
+<td><p>20</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SepViT-S</p></td>
+<td><p>300</p></td>
+<td><p>1024</p></td>
+<td><p>V100 * 8</p></td>
+<td><p>224*224</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.05</p></td>
+<td><p>5</p></td>
+<td><p>0.3</p></td>
+</tr>
+<tr class="row-even"><td><p>SepViT-T</p></td>
+<td><p>300</p></td>
+<td><p>1024</p></td>
+<td><p>V100 * 8</p></td>
+<td><p>224*224</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.05</p></td>
+<td><p>5</p></td>
+<td><p>0.5</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><p><strong>Results</strong></p>
+<p><img alt="Comparison of different state-of-the-art methods on ImageNet-1K classification" src="../../_images/07_16.png" /></p>
+<p>Comparison of different state-of-the-art methods on ImageNet-1K classification</p>
+<ul>
+<li><p>RegNet : 2020년 Facebook AI Research</p>
+<ul class="simple">
+<li><p>Degine space에서 quantized linear function을 통해 최적의 width와 height를 얻어냄</p></li>
+<li><p>EfficientNet보다 5배 빠르며 일반화 성능이 높음</p></li>
+<li><p>적은 FLOPs로 효율이 좋음</p></li>
+</ul>
+<p><a class="reference external" href="https://ar5iv.labs.arxiv.org/html/2003.13678v1">Designing Network Design Spaces</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="ade20k-semantic-segmentation">
+<h3>2. ADE20K Semantic Segmentation<a class="headerlink" href="#ade20k-semantic-segmentation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p><strong>Settings</strong></p>
+<ul>
+<li><p>ADE20K</p>
+<ul>
+<li><p>20K train / 2K validation / 150 categories</p></li>
+<li><p>Semantic FPN backbone</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>batch size</p></th>
+<th class="head"><p>pre-train</p></th>
+<th class="head"><p>fine-tuning</p></th>
+<th class="head"><p>learning rate</p></th>
+<th class="head"><p>Resolution</p></th>
+<th class="head"><p>Optimizer</p></th>
+<th class="head"><p>Weight decay</p></th>
+<th class="head"><p>Depth aug.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SepViT-B</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>ADE20K</p></td>
+<td><p>0.0001</p></td>
+<td><p>512*512</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.0001</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SepViT-S</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>ADE20K</p></td>
+<td><p>0.0001</p></td>
+<td><p>512*512</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.0001</p></td>
+<td><p>0.3</p></td>
+</tr>
+<tr class="row-even"><td><p>SepViT-T</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>ADE20K</p></td>
+<td><p>0.0001</p></td>
+<td><p>512*512</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.0001</p></td>
+<td><p>0.4</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>UperNet backbone</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>batch size</p></th>
+<th class="head"><p>pre-train</p></th>
+<th class="head"><p>fine-tuning</p></th>
+<th class="head"><p>learning rate</p></th>
+<th class="head"><p>Resolution</p></th>
+<th class="head"><p>Optimizer</p></th>
+<th class="head"><p>Weight decay</p></th>
+<th class="head"><p>Depth aug.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SepViT-B</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>ADE20K</p></td>
+<td><p>0.00001</p></td>
+<td><p>512*512</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.01</p></td>
+<td><p>0.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>SepViT-S</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>ADE20K</p></td>
+<td><p>0.00001</p></td>
+<td><p>512*512</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.01</p></td>
+<td><p>0.3</p></td>
+</tr>
+<tr class="row-even"><td><p>SepViT-T</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>ADE20K</p></td>
+<td><p>0.00001</p></td>
+<td><p>512*512</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.03</p></td>
+<td><p>0.5</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Results</strong></p>
+<p><img alt="Comparison of different backbones on ADE20K semantic segmentation task" src="../../_images/07_17.png" /></p>
+<p>Comparison of different backbones on ADE20K semantic segmentation task</p>
+</li>
+</ul>
+</section>
+<section id="coco-object-detection-and-instance-segmentation">
+<h3>3. COCO Object Detection and Instance Segmentation<a class="headerlink" href="#coco-object-detection-and-instance-segmentation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>image size : 800 * 1280</p></li>
+<li><p>12 epochs (1 x) / 36 epochs (3 x) + Multi-scale</p>
+<ul class="simple">
+<li><p>Multi-scale : scale specific context-regions(chips)를 생성하고 proposal 분류</p></li>
+<li><p>Fast R-CNN보다 연산량을 줄이고 속도를 개선</p></li>
+</ul>
+</li>
+<li><p><strong>Settings</strong></p>
+<ul>
+<li><p>RetinaNet / Mask R-CNN backbone</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>batch size</p></th>
+<th class="head"><p>pre-train</p></th>
+<th class="head"><p>fine-tuning</p></th>
+<th class="head"><p>learning rate</p></th>
+<th class="head"><p>Optimizer</p></th>
+<th class="head"><p>Weight decay</p></th>
+<th class="head"><p>Depth aug.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SepViT-S</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>COCO</p></td>
+<td><p>0.00001</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.001</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SepViT-T</p></td>
+<td><p>16</p></td>
+<td><p>ImgaeNet-1K</p></td>
+<td><p>COCO</p></td>
+<td><p>0.00001</p></td>
+<td><p>AdamW</p></td>
+<td><p>0.0001</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><p><strong>Results</strong></p>
+<p><img alt="Comparison of different backbones on RetinaNet-based object detection task" src="../../_images/07_18.png" /></p>
+<p>Comparison of different backbones on RetinaNet-based object detection task</p>
+<p><img alt="Comparison of different backbones on Mask R-CNN-based object detection and instance segmentation tasks" src="../../_images/07_19.png" /></p>
+<p>Comparison of different backbones on Mask R-CNN-based object detection and instance segmentation tasks</p>
+</li>
+<li><p><strong>Ablation Study</strong></p>
+<p><img alt="Ablation studies of the key components in our SepViT" src="../../_images/07_20.png" /></p>
+<p>Ablation studies of the key components in our SepViT</p>
+</li>
+<li><p><strong>Efficient Components</strong></p>
+<ul class="simple">
+<li><p>SepViT-T<span class="math notranslate nohighlight">\(\dagger\)</span> : with CPE but without OPE</p></li>
+</ul>
+</li>
+<li><p><strong>Window Token Embedding</strong></p>
+<ul>
+<li><p>LWT : Learnable Window Token Embedding(not fixed zero vector)</p></li>
+<li><p>global representation을 직접적으로 얻는 average pooling과 depthwise convolution을 window token embedding을 대체해 사용</p></li>
+<li><p>계산 비용이 거의 차이가 없음에도 불구하고 성능 차이가 존재</p>
+<p><img alt="Comparison of different approaches of getting the global representation of each window in SepViT" src="../../_images/07_21.png" /></p>
+<p>Comparison of different approaches of getting the global representation of each window in SepViT</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Comparison with Lite Models</strong></p>
+<p><img alt="Comparison of lite models on ImageNet-1K classification" src="../../_images/07_22.png" /></p>
+<p>Comparison of lite models on ImageNet-1K classification</p>
+<ul class="simple">
+<li><p>비슷한 model size에도 불구하고 성능 차이가 존재</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>depthwise separable self-attention은 single block에서 window 내, window 간 정보 상호작용을 하게 함</p></li>
+<li><p>window token embedding은 매우 적은 계산 비용으로 window 간 attention relationship을 모델링하도록 해줌</p></li>
+<li><p>grouped self-attention은 더 나은 성능으로 여러 window에 걸친 장거리 시각적 의존성을 잡아낼 수 있게 해줌</p></li>
+<li><p>따라서 performance와 latency 간의 trade-off를 개선</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch7"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="07_List.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">SepViT: Separable Vison Transformer</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="07_code.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SepViT: Separable Vison Transformer Code</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
