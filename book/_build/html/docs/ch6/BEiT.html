@@ -1,0 +1,1371 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>BEiT: BERT Pre-Training of Image Transformers &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="BEiT: BERT Pre-Training of Image Transformers" href="06_code.html" />
+    <link rel="prev" title="BEiT: BERT Pre-Training of Image Transformers" href="06_List.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch3/03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  DeiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch4/04_List.html">
+   DeiT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/DeiT.html">
+     DeiT: Training data-efficient image transformers &amp; distillation through attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_code.html">
+     DeiT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tokens-to-Token ViT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch5/05_List.html">
+   Tokens-to-Token ViT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/T2T-ViT.html">
+     Tokens-to-Token ViT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_code.html">
+     Tokens-to-Token ViT Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  BEiT
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="06_List.html">
+   BEiT: BERT Pre-Training of Image Transformers
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     BEiT: BERT Pre-Training of Image Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="06_code.html">
+     BEiT: BERT Pre-Training of Image Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="06_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch6/BEiT.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch6/BEiT.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   1. Introduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#contibutions">
+     Contibutions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methods">
+   2. Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-representations-image-patch">
+     2.1.1 Image Representations : Image patch
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visual-tokens">
+     2.1.2  Visual Tokens
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#variational-auto-encoder">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       [배경지식]
+      </span>
+      <span class="pre">
+       :
+      </span>
+      <span class="pre">
+       Variational
+      </span>
+      <span class="pre">
+       Auto
+      </span>
+      <span class="pre">
+       Encoder
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vq-vae-vector-quantised-variational-autoencoder">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       [배경지식]
+      </span>
+      <span class="pre">
+       :
+      </span>
+      <span class="pre">
+       VQ-VAE(Vector
+      </span>
+      <span class="pre">
+       Quantised-Variational
+      </span>
+      <span class="pre">
+       AutoEncoder)
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gumbel-softmax-relaxation">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       [배경지식]
+      </span>
+      <span class="pre">
+       :
+      </span>
+      <span class="pre">
+       Gumbel
+      </span>
+      <span class="pre">
+       softmax
+      </span>
+      <span class="pre">
+       relaxation
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gumbel-softmax-z-log-pi-k-g-k-k">
+   Gumbel Softmax 값 Z는
+   <span class="math notranslate nohighlight">
+    \(log\pi_k+G_k\)
+   </span>
+   값을 최대로 하는 k값을 가지게됨
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#backbone-network-image-transformer">
+     2.2 Backbone Network: Image Transformer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-training-beit-masked-image-modeling">
+     2.3 Pre-Training BEIT: Masked Image Modeling
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#patch">
+   이미지에서 약 40%의 patch를 랜덤하게 마스킹 하고
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vision-transformer-softmax-classifier-masked-image-input-visual-token">
+   Vision Transformer + softmax classifier 를 통해 masked image input 에 대한 visual token 을 예측함
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#blockwise-masking">
+   Blockwise Masking
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#from-the-perspective-of-variational-autoencoder">
+     2.4 From the Perspective of Variational Autoencoder
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-training-setup">
+     2.5 Pre-Training Setup
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   3. Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-classification">
+     3.1 Image classification
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#semantic-segmentation">
+     3.2 Semantic Segmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ablation-study-on-classification-segmentation">
+     3.3 Ablation study on classification, segmentation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   4. Conclusion
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>BEiT: BERT Pre-Training of Image Transformers</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   1. Introduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#contibutions">
+     Contibutions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methods">
+   2. Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-representations-image-patch">
+     2.1.1 Image Representations : Image patch
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visual-tokens">
+     2.1.2  Visual Tokens
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#variational-auto-encoder">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       [배경지식]
+      </span>
+      <span class="pre">
+       :
+      </span>
+      <span class="pre">
+       Variational
+      </span>
+      <span class="pre">
+       Auto
+      </span>
+      <span class="pre">
+       Encoder
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vq-vae-vector-quantised-variational-autoencoder">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       [배경지식]
+      </span>
+      <span class="pre">
+       :
+      </span>
+      <span class="pre">
+       VQ-VAE(Vector
+      </span>
+      <span class="pre">
+       Quantised-Variational
+      </span>
+      <span class="pre">
+       AutoEncoder)
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gumbel-softmax-relaxation">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       [배경지식]
+      </span>
+      <span class="pre">
+       :
+      </span>
+      <span class="pre">
+       Gumbel
+      </span>
+      <span class="pre">
+       softmax
+      </span>
+      <span class="pre">
+       relaxation
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gumbel-softmax-z-log-pi-k-g-k-k">
+   Gumbel Softmax 값 Z는
+   <span class="math notranslate nohighlight">
+    \(log\pi_k+G_k\)
+   </span>
+   값을 최대로 하는 k값을 가지게됨
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#backbone-network-image-transformer">
+     2.2 Backbone Network: Image Transformer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-training-beit-masked-image-modeling">
+     2.3 Pre-Training BEIT: Masked Image Modeling
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#patch">
+   이미지에서 약 40%의 patch를 랜덤하게 마스킹 하고
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vision-transformer-softmax-classifier-masked-image-input-visual-token">
+   Vision Transformer + softmax classifier 를 통해 masked image input 에 대한 visual token 을 예측함
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#blockwise-masking">
+   Blockwise Masking
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#from-the-perspective-of-variational-autoencoder">
+     2.4 From the Perspective of Variational Autoencoder
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-training-setup">
+     2.5 Pre-Training Setup
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   3. Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-classification">
+     3.1 Image classification
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#semantic-segmentation">
+     3.2 Semantic Segmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ablation-study-on-classification-segmentation">
+     3.3 Ablation study on classification, segmentation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   4. Conclusion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="beit-bert-pre-training-of-image-transformers">
+<h1>BEiT: BERT Pre-Training of Image Transformers<a class="headerlink" href="#beit-bert-pre-training-of-image-transformers" title="Permalink to this headline">#</a></h1>
+<p>Hangbo Bao, Li Dong, Songhao Piao, Furu Wei</p>
+<p><a class="reference external" href="https://github.com/microsoft/unilm/tree/master/beit">https://github.com/microsoft/unilm/tree/master/beit</a></p>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>논문의 제목인 BEIT (Bidirectional Encoder representation from Image Transformers)는 BERT 모델에서 차용한 것</p></li>
+<li><p>입력 이미지를 2가지 방법을 통해 masked image modeling(MIM) 학습</p>
+<ol class="simple">
+<li><p>VIT + Blockwise Masking : image patches (such as 16 x 16 pixles)</p></li>
+<li><p>DALL-E Tokenizer : visual toekns (i.e., discrete tokens)</p></li>
+</ol>
+</li>
+<li><p>전체중의 일부 이미지 패치들을 mask 처리한 것이 VIT 모델에 들어감</p></li>
+<li><p>사전 학습된 MIM objective를 통해 원본 visual tokens를 mask 처리가 된 이미지 패치로 부터 복원을 함</p></li>
+<li><p>BEIT 를 사전 학습한 후, 사전학습된 모델에 downstream task를 붙여서 image classification, semantic segmentation을 했을 때 좋은 성능을 보임</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>트랜스포머(Attention is all you need [VSP+ 17]) 모델이 컴퓨터 비전에서도 좋은 성능을 보이게 됨</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">[DBK+20]</span> <span class="pre">An</span> <span class="pre">image</span> <span class="pre">is</span> <span class="pre">worth</span> <span class="pre">16x16</span> <span class="pre">words:</span> <span class="pre">Transformers</span> <span class="pre">for</span> <span class="pre">image</span> <span class="pre">recognition</span> <span class="pre">at</span> <span class="pre">scale.</span></code></p></li>
+<li><p>[TCD+20] Training data-efficient image transformers &amp; distilation through attention.</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_0.png" /></p>
+<ul class="simple">
+<li><p>그러나, 이전 결과들에서 비전 트랜스포머는 Convolutional neural netwroks보다 많은 트레이닝 데이터가 필요함</p></li>
+<li><p>데이터 부족 문제를 해결하기 위해서, Vision Transformer에서 self-supervised pre-training 방법을 통해 large-scale image data문제를 해결하고자 함</p>
+<ul>
+<li><p>[LSB+21] Efficient training of visual transformers with small datasets.</p></li>
+<li><p>contrastive learning</p>
+<ul>
+<li><p>[CXH 21] An empricial study of training self-supervised vision transformers.</p></li>
+<li><p>[XLY+21] Self-supervised learning with swin transformers.</p></li>
+</ul>
+</li>
+<li><p>self-distillation</p>
+<ul>
+<li><p>[CTM+21] Emerging properties in self-supervised vision transformers.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<ul class="simple">
+<li><p>자연어 처리에서는 BERT 모델이 큰 성공을 거두게 됨</p>
+<ul>
+<li><p>[DCLT19] BERT : pre-training of deep bidirectional transformers for language understanding.</p></li>
+</ul>
+</li>
+<li><p>masked language modeling 을 통해 일정 텍스트들을 랜덤하게 mask 처리한 뒤에, 트랜스포머 인코딩을 통하여 오염된 텍스트들의 masked tokens 를 복원함</p></li>
+<li><p>BERT에 동기부여를 받아서, denoising auto-encoding 아이디어에 착안하여 VIT를 사전학습 하는 방법을 고안함(Vision Community에서는 연구가 많이 되지 않았음)</p></li>
+<li><p>BERT 스타일로 이미지 데이터를 사전학습 하는 것은 매우 챌린지 함</p>
+<ul>
+<li><p>VIT 입력으로 사용할 사전에 존재하는 vocabulary(i.e, image patchs)가 없음</p></li>
+<li><p>그래서 간단하게 가능한 masked patches에 대해서 softmax classifier 예측을 할 수가 없음</p></li>
+</ul>
+</li>
+<li><p>대조적으로, 단어나 BPE(<a class="reference external" href="https://ratsgo.github.io/nlpbook/docs/preprocess/bpe/">https://ratsgo.github.io/nlpbook/docs/preprocess/bpe/</a>)와 같은, 언어 vocabulary는 잘 정의되어 있고 auto-encoding 예측에 사용하기 쉬움</p>
+<ul>
+<li><p>[SHB16; BPE] Neural machine translation of rare words with subword units.</p></li>
+</ul>
+</li>
+<li><p>직관적인 대안 방법으로는 task를 regression problem으로 보고, masked patches의 raw pixels을 예측하는 것</p>
+<ul>
+<li><p>하지만 pixel-level 복원 task는 short-range dependencies &amp; high-frequency details 를 사전 학습 할 때 모델링 기능을 낭비하게 됨</p>
+<ul>
+<li><p>[RPG+21] Zero-shot text-to-image generation.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>우리의 목표는, Vision Transformers 사전학습에서 발생되는 위에서 언급한 issue들을 극복하는 것</p></li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p>a self-supervised vision representation model <code class="docutils literal notranslate"><span class="pre">BEIT(Bidirectional</span> <span class="pre">Encoder</span> <span class="pre">representation</span> <span class="pre">from</span> <span class="pre">Image</span> <span class="pre">Transformers)</span></code> 를 소개함</p></li>
+<li><p>BERT에 영감을 받아서, <code class="docutils literal notranslate"><span class="pre">masked</span> <span class="pre">image</span> <span class="pre">modeling</span> <span class="pre">(MIM)</span></code> 을 제안함</p></li>
+<li><p>Figure 1과 같이, MIM에서는 이미지를 두가지 관점에서 바라봄</p>
+<ol class="simple">
+<li><p>image patches</p></li>
+<li><p>visual tokens</p></li>
+</ol>
+</li>
+<li><p>Figure 1</p>
+<p><img alt="스크린샷 2022-10-16 오전 11.29.07.png" src="../../_images/06_00.png" /></p>
+<ul class="simple">
+<li><p>Figure 1 설명</p>
+<ul>
+<li><p>BEIT pre-training의 Overview</p></li>
+<li><p>사전 학습 전에 ‘image tokenizer’를 학습하여 auto encoding 스타일로 복원을 하는데, image는 discrete visual tokens로 tokenized됨(학습된 vocabulary에 따라서)</p></li>
+<li><p>이미지를 1. image patches 2. visual tokens 두 가지 관점으로 봄</p></li>
+<li><p>랜덤하게 몇몇 이미지 패치에 대해서 special mask embedding[M] (회색 처리 한 것) 를 함</p></li>
+<li><p>패치들이 backbone vision Transformer에 들어감</p></li>
+<li><p>사전학습의 목표는 오염된 이미지의 인코딩 벡터에 기반하여, 원본 이미지의 visual tokens를 예측하는 것</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>이미지를 쪼개어 grid of patches로 만들고 backbone Transformer에 넣음</p></li>
+<li><p>이미지를 tokenize하여 discrete visual tokens로 만들었는데, discrete VAE 에서 사용하는 latent codes를 포함함</p>
+<ul class="simple">
+<li><p>[RPG+21] Zero-shot text-to image generation</p></li>
+</ul>
+</li>
+<li><p>사전 학습 동안 일부 이미지 패치를 mask 시키고, transformer의 입력값으로 사용한다.</p></li>
+<li><p>모델은 masked patches의 raw pixels 대신에, 원본 이미지의 visual tokens를 복원하는 것을 학습하게 된다.</p></li>
+</ul>
+<hr class="docutils" />
+<ul class="simple">
+<li><p>BEIT 모델을 self-supervised learning으로 학습하고 image classification, semantic segmentation에 사용하기 위해  fine-tuning 함</p></li>
+<li><p>처음부터 학습했을 때랑, self-supervised 로 학습했을 때 모두 좋은 성능을 보임</p></li>
+<li><p>ImageNet Labels로 중간에 fine-tuning을 했을 때 성능이 향상됨</p></li>
+<li><p>추가연구에서는, BERT  스타일로 이미지 데이터를 사전학습 한 것이 효율성이 좋다는 것을 입증하였음</p></li>
+<li><p>성능 외에, fine-tuning 할 때 수렴 속도 및 안정성 향상으로 training 비용이 감소 됨</p></li>
+<li><p>self-supervised BEIT가 semantic regions를 학습하는데 좋은 성능을 보임</p></li>
+</ul>
+<hr class="docutils" />
+<section id="contibutions">
+<h3>Contibutions<a class="headerlink" href="#contibutions" title="Permalink to this headline">#</a></h3>
+<ol class="simple">
+<li><p>Self-supervised 방식으로 Vision Transformer를 pretrain 하기 위한 Masked Image Modeling(MIM) Task 를 제안함. Variational Autoencoder의 관점에서 이론적 설명을 제공함</p></li>
+<li><p>BEIT를 pretrain 하고 image classification, semantic segmentation과 같은 downstream task를 다양한 설정으로 실험함</p></li>
+<li><p>Self-supervised BEIT의 self-attention mechanism이 사람의 annotation 없이도 의미 영역(semantic regions)와 물체의 경계(object boundaries)를 학습하는 것을 제시함</p></li>
+</ol>
+</section>
+</section>
+<section id="methods">
+<h2>2. Methods<a class="headerlink" href="#methods" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>input image <span class="math notranslate nohighlight">\(x\)</span> 가 주어지면, BEIT는 상황에 맞는 벡터 표현으로 인코딩 함 (BEIT encodes it to contextualized vector representations.)</p></li>
+<li><p>BEIT는 self-supervised learning을 사전학습 된 masked image modeling (MIM)을 통해서 함</p></li>
+<li><p>MIM의 목표는 encoding vectors에 기반하여 masked된 image patches들을 복원하는 것</p></li>
+<li><p>downstream tasks 는, task layers를 사전학습 된 BEIT에 붙이고 특정 데이터셋 에 대해서 fine-tuning을 수행함</p></li>
+</ul>
+<section id="image-representations-image-patch">
+<h3>2.1.1 Image Representations : Image patch<a class="headerlink" href="#image-representations-image-patch" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>2D image를 VIT(DBK+20) 처럼 일련의 패치로 쪼개어, 트랜스포머 모델에서 이미지 데이터를 받을수 있도록 함</p>
+<ul>
+<li><p>[DBK+20] An image is worth 16x16 words: Transformers for image recognition at scale.</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_1.png" /></p>
+<ul class="simple">
+<li><p>입력 이미지  <span class="math notranslate nohighlight">\(x ∈ R^{H\times W \times C}\)</span>  를    <span class="math notranslate nohighlight">\(x^p ∈ R^{N\times(P^2C)}\)</span> 으로 변환 시킴 / <span class="math notranslate nohighlight">\(N = HW/P^2\)</span> 이고, <span class="math notranslate nohighlight">\(C\)</span> 는 채널의 개수, (<span class="math notranslate nohighlight">\(H,W\)</span>) 는 이미지의 해상도, (<span class="math notranslate nohighlight">\(P, P\)</span>)는 각 패치의 해상도</p></li>
+<li><p>이미지 패치들 <span class="math notranslate nohighlight">\(\{x^p_i\}^N_{i=1}\)</span>  는 벡터로 flatten 되고, 선형 투영됨</p></li>
+<li><p>이미지 패치들은 raw pixels을 보존하고 있고, BEIT의 입력 features로 사용됨</p></li>
+<li><p>실험에서는 224 x 224 이미지를 16x16 패치를 사용하여 14x14 grid 이미지 패치들로 만들었음</p></li>
+</ul>
+</section>
+<section id="visual-tokens">
+<h3>2.1.2  Visual Tokens<a class="headerlink" href="#visual-tokens" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>자연어 처리와 유사하게, 원복 픽셀들 대신에 이미지 토크나이저를 사용하여 이산적인 이미지 토큰들을 얻음</p></li>
+<li><p>Dall-E 처럼, discrete variation autoencoder(dVAE)를 사용하여 이미지 토크나이저를 학습 시킴</p></li>
+<li><p>입력 이미지  <span class="math notranslate nohighlight">\(x ∈ R^{H\times W \times C}\)</span>  를 <span class="math notranslate nohighlight">\(z = [z_1, ... z_N] ∈ V^{h\times w}\)</span>  로 변경 (<span class="math notranslate nohighlight">\(V = \{1, ...|V|\}\)</span>)</p></li>
+<li><p>visutal token learning 에는 두 가지 모듈이 있음</p>
+<ol class="simple">
+<li><p>tokenizer : <span class="math notranslate nohighlight">\(q_\phi(z|x)\)</span> 토크나이저는 이미지 픽셀 <span class="math notranslate nohighlight">\(x\)</span> 를 visual codebook(vocabulary) 이산형 토큰 <span class="math notranslate nohighlight">\(z\)</span> 로 변환 시키는 함수</p></li>
+<li><p>decoder : <span class="math notranslate nohighlight">\(p_\psi(x|z)\)</span> 는 visual tokens <span class="math notranslate nohighlight">\(z\)</span> 를 입력 이미지 <span class="math notranslate nohighlight">\(x\)</span> 로 복원하는 함수</p>
+<ul>
+<li><p>reconstruction objective : <span class="math notranslate nohighlight">\(E_{z∼q_{\phi(z|x)}}[logp_\psi(x|z)]\)</span></p></li>
+<li><p>위에 처럼 나타낸 이유는 latent visual tokens가 이산적이어서, 모델 학습에서 미분이 불가능 하기 때문</p></li>
+<li><p>Gumbel-softmax relaxation 을 사용해 모델 parameters를 학습 시킴</p></li>
+<li><p><span class="math notranslate nohighlight">\(q_\phi\)</span> 는 uniform prior 가 할당됨</p></li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>이미지를 14 x 14 grid of visual tokens 로 tokenize 시킴</p></li>
+<li><p>하나의 이미지에 대한 visual tokens의 개수와 image patches의 개수는 동일하다.</p></li>
+<li><p>vocabulary size <span class="math notranslate nohighlight">\(|V|\)</span> 는 8192로 함</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_2.png" /></p>
+</section>
+<section id="variational-auto-encoder">
+<h3><code class="docutils literal notranslate"><span class="pre">[배경지식]</span> <span class="pre">:</span> <span class="pre">Variational</span> <span class="pre">Auto</span> <span class="pre">Encoder</span></code><a class="headerlink" href="#variational-auto-encoder" title="Permalink to this headline">#</a></h3>
+<p>출처 : <a class="reference external" href="https://www.youtube.com/watch?v=CQoM0r2kMvI">https://www.youtube.com/watch?v=CQoM0r2kMvI</a></p>
+<ul class="simple">
+<li><p>Variational Auto Encoder는 Autoencoder 모델에서 latent vector <span class="math notranslate nohighlight">\(z\)</span> 가 평균 <span class="math notranslate nohighlight">\(μ\)</span>와 분산 <span class="math notranslate nohighlight">\(σ^2\)</span> 를 따르는 정규분포로 가정한 모델</p></li>
+<li><p>목적함수의 하한경계인 ELBO (Evidence of Lower Bound)는 <span class="math notranslate nohighlight">\(logp(x)\)</span>가 최대가 되는 매개변수를 탐색하는 것이 목적이고 1)Reconstruction Term 2)Regularization Term으로 나뉨</p>
+<ol class="simple">
+<li><p>Reconstruction Term : 주어진 입력 데이터 x로 부터 latent vector z를 샘플링하고, z를 통하여 x를 다시 복원</p></li>
+<li><p>Regularization Term : KL Divergence를 통해 주어진 입력 데이터 x로 부터 latent vector z를 샘플링하는 확률 분포 q(z|x)가 표준 정규 분포 p(z)와 유사하도록 만들어 줌</p></li>
+</ol>
+</li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_3.png" /></p>
+</section>
+<section id="vq-vae-vector-quantised-variational-autoencoder">
+<h3><code class="docutils literal notranslate"><span class="pre">[배경지식]</span> <span class="pre">:</span> <span class="pre">VQ-VAE(Vector</span> <span class="pre">Quantised-Variational</span> <span class="pre">AutoEncoder)</span></code><a class="headerlink" href="#vq-vae-vector-quantised-variational-autoencoder" title="Permalink to this headline">#</a></h3>
+<p>출처 : <a class="reference external" href="https://www.youtube.com/watch?v=CQoM0r2kMvI">https://www.youtube.com/watch?v=CQoM0r2kMvI</a></p>
+<ul class="simple">
+<li><p>latent vector가 VAE 처럼 Continuous하지 않고 Discrete 한 경우 사용할 수 있는 알고리즘</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_4.png" /></p>
+<ul>
+<li><p>Encoder는 Conv layer와 Residual block을 사용하고, Decoder는 Transposed convolution을 사용함</p></li>
+<li><p>Loss</p>
+<ol class="simple">
+<li><p>Reconstruction loss : 정답 이미지와 비교하여 생성된 이미지가 얼마나 차이나는지 비교</p></li>
+<li><p>VQ loss : 코드북의 embedding을 인코더 결과와 유사하게 만들어서 Codebook을 최적화</p></li>
+<li><p>Commitment loss : Regularization Term으로, Codebook의 벡터와 가까운 값을 출력하도록 Encoder를 최적화</p></li>
+</ol>
+</li>
+<li><p>Discrete vector를 저장하고 있는 Visual Codebook은 자연어처리의 vocabulary와 유사하게 비슷한 특징을 가지는 데이터들이 이산적으로 구분되어 있는 것 / 크기는 8,192</p>
+<ul class="simple">
+<li><p>코드북(Codebook)</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_5.png" /></p>
+</li>
+</ul>
+</section>
+<section id="gumbel-softmax-relaxation">
+<h3><code class="docutils literal notranslate"><span class="pre">[배경지식]</span> <span class="pre">:</span> <span class="pre">Gumbel</span> <span class="pre">softmax</span> <span class="pre">relaxation</span></code><a class="headerlink" href="#gumbel-softmax-relaxation" title="Permalink to this headline">#</a></h3>
+<p>출처1 : <a class="reference external" href="http://dsba.korea.ac.kr/seminar/?mod=document&amp;uid=1964">http://dsba.korea.ac.kr/seminar/?mod=document&amp;uid=1964</a></p>
+<p>출처2 : <a class="reference external" href="https://www.youtube.com/watch?v=SRcPE0-SGOM">https://www.youtube.com/watch?v=SRcPE0-SGOM</a></p>
+<p><img alt="Untitled" src="../../_images/06_6.png" /></p>
+<ul>
+<li><p>VQ-VAE에서 사용하는 loss term은 Codebook vector 사용시, Codebook vector가 이산적이기 때문에 미분이 불가능하여 모델을 학습할 수 없음. 이를 해결하기 위해 <strong>Gumbel softmax relaxation</strong>을 사용함</p></li>
+<li><p>Gumbel Softmax</p>
+<ul>
+<li><p>일반적인 소프트맥스의 관점의 경우, 아래의 케이스에서 1번의 실력 값이 10으로 가장 크기 때문에 one-hot encoding으로 [1,0,0,0]이 됨</p>
+<p><img alt="Untitled" src="../../_images/06_7.png" /></p>
+</li>
+<li><p>하지만 운이라는 확률적인 특징을 가진 변수를 같이 고려하는 경우에는, 2번의 실력+운 을 계산한 값이 9로 가장 크기 때문에 one-hot encoding으로 [0,1,0,0]으로 바뀌게 됨</p>
+<p><img alt="Untitled" src="../../_images/06_8.png" /></p>
+</li>
+<li><p>Softmax에서 랜덤한 요소를 반영할 때 Gumbel distribution을 사용하게 되고, Gumbel distribution은 다양한 분포의 여러 샘플의 최대 (또는 최소) 분포를 모델링하는 데 사용되는 확률분포임</p>
+<p><img alt="Untitled" src="../../_images/06_9.png" /></p>
+<p><img alt="Untitled" src="../../_images/06_10.png" /></p>
+</li>
+<li><p>확률변수 <span class="math notranslate nohighlight">\(\pi\)</span> 는 Categorical Distribution를 따르고 확률변수 값들을 모두 더하면 1</p></li>
+<li><p>Gumbel 확률변수 G는 0~1사이의 값을 가짐</p></li>
+<li></li>
+</ul>
+</li>
+<li><p>Gumbel softmax relaxation을 사용하여 Codebook vector가 이산적인 것을 Gumbel Softmax를 통해 연속형으로 변환하고 Codebook Vector와 곱한 뒤에 가중합을 하여 이미지를 복원함</p>
+<ul class="simple">
+<li><p>출처 : <a class="reference external" href="https://ml.berkeley.edu/blog/posts/dalle2/">https://ml.berkeley.edu/blog/posts/dalle2/</a></p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_13.png" /></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="gumbel-softmax-z-log-pi-k-g-k-k">
+<h2>Gumbel Softmax 값 Z는 <span class="math notranslate nohighlight">\(log\pi_k+G_k\)</span> 값을 최대로 하는 k값을 가지게됨<a class="headerlink" href="#gumbel-softmax-z-log-pi-k-g-k-k" title="Permalink to this headline">#</a></h2>
+<p><img alt="Untitled" src="../../_images/06_11.png" /></p>
+<ul class="simple">
+<li><p>Temperature 값 <span class="math notranslate nohighlight">\(\tau\)</span> 를 조절함에 따라서 결과값이 달라지는데</p>
+<ul>
+<li><p>일반적인 Categorical Distribution에서는 argmax인 sample의 index를 선택하는데</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau\)</span>값이 커지면서 다른 sample의 index가 선택될수 있는 확률이 생기고</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau\)</span>값이 10이 되면 sample이 선택될 확률분포가 uniform distribution에 가까워짐</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_12.png" /></p>
+<section id="backbone-network-image-transformer">
+<h3>2.2 Backbone Network: Image Transformer<a class="headerlink" href="#backbone-network-image-transformer" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>일반적인 Transformer 구조를 Backbone Network로 사용함</p></li>
+<li><p>Transformer의 input으로 들어가는 image patches는 <span class="math notranslate nohighlight">\(\{x^p_i\}^N_{i=1}\)</span></p></li>
+<li><p>패치들은 linear projected가 되어서 임베딩 패치 <span class="math notranslate nohighlight">\(Ex^p_i\)</span> ,    <span class="math notranslate nohighlight">\(E ∈ R^{(P^2C)\times D}\)</span></p></li>
+<li><p>Special token [S] 를 입력 시퀀스에 넣음</p></li>
+<li><p>학습 가능한 1D Position embeddings <span class="math notranslate nohighlight">\(E_{pos} ∈ R^{N \times D}\)</span> 를 패치 임베딩에 넣음</p></li>
+<li><p>input vectors <span class="math notranslate nohighlight">\(H_0 = [e_{[s]} , Ex^p_i , ... , Ex^p_N] + E_{pos}\)</span> 를 Transformer 입력으로 넣음</p></li>
+<li><p><span class="math notranslate nohighlight">\(H^l = Transformer(H^{l-1}), where l = 1, .... L\)</span></p></li>
+<li><p>output vectors의 마지막 layers <span class="math notranslate nohighlight">\(H^l = [H^L_{[S]} , H^L_{1} , ...., H^L_{N}]\)</span> 는 이미지 패치들의 인코딩된 표현으로 사용되고, <span class="math notranslate nohighlight">\(h^L_i\)</span> 는 i-th 이미지 패치의 벡터</p></li>
+</ul>
+</section>
+<section id="pre-training-beit-masked-image-modeling">
+<h3>2.3 Pre-Training BEIT: Masked Image Modeling<a class="headerlink" href="#pre-training-beit-masked-image-modeling" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/06_14.png" /></p>
+<ul>
+<li><p>2.1.2의 Discrete VAE를 통해 Image를 Visual Tokens로 변환한 뒤에</p></li>
+<li></li>
+<li></li>
+<li><p>Pre-training objective Function</p>
+<ul class="simple">
+<li><p>Masked/오염된 이미지로부터 정확한 visual tokens <span class="math notranslate nohighlight">\(z_i\)</span>를 최대로 하는 log-likelihood를 찾는 것</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_17.png" /></p>
+</li>
+<li></li>
+<li><p>전체 patch에서 patch단위로 아무 곳이나 랜덤하게 Masking 될 부분을 선택하는 것보다는, patch에서 인접한 patch들을 함께 masking 처리해주는 것이 이미지에서 주변정보를 파악하는데 도움이 되고 성능향상에도 도움이 된다고 함</p></li>
+</ul>
+</section>
+</section>
+<section id="patch">
+<h2>이미지에서 약 40%의 patch를 랜덤하게 마스킹 하고<a class="headerlink" href="#patch" title="Permalink to this headline">#</a></h2>
+<p><img alt="Untitled" src="../../_images/06_15.png" /></p>
+</section>
+<section id="vision-transformer-softmax-classifier-masked-image-input-visual-token">
+<h2>Vision Transformer + softmax classifier 를 통해 masked image input 에 대한 visual token 을 예측함<a class="headerlink" href="#vision-transformer-softmax-classifier-masked-image-input-visual-token" title="Permalink to this headline">#</a></h2>
+<p><img alt="Untitled" src="../../_images/06_16.png" /></p>
+</section>
+<section id="blockwise-masking">
+<h2>Blockwise Masking<a class="headerlink" href="#blockwise-masking" title="Permalink to this headline">#</a></h2>
+<p><img alt="Untitled" src="../../_images/06_18.png" /></p>
+<ul class="simple">
+<li><p>s : Masking size 샘플링 (최소 16개 이상의 patch 마스킹)</p></li>
+<li><p>r : Aspect ratio를 0.3 ~ 1/0.3의 범위에서 샘플링</p></li>
+<li><p>s,r에서 계산한 값으로 masking block의 높이(a), 넓이(b)를 계산</p></li>
+<li><p>Masking block의 좌상단 점 좌표(t, l) 샘플링</p></li>
+<li><p>이전 Masking 정보와 합친 뒤, Masking의 비율이 전체 patch 수의 40%를 넘어가면 종료함</p></li>
+<li><p>예시</p>
+<ul>
+<li><p>출처 : <a class="reference external" href="http://dsba.korea.ac.kr/seminar/?mod=document&amp;uid=1964">http://dsba.korea.ac.kr/seminar/?mod=document&amp;uid=1964</a></p></li>
+<li><p>아래 예시의 경우 3번의 Masking 영역을 찾았을 때, Masking 된 갯수가 전체 patch 수의 40%인 75를 넘었으므로 종료함
+<img alt="Untitled" src="../../_images/06_19.png" /></p></li>
+</ul>
+</li>
+</ul>
+<section id="from-the-perspective-of-variational-autoencoder">
+<h3>2.4 From the Perspective of Variational Autoencoder<a class="headerlink" href="#from-the-perspective-of-variational-autoencoder" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>BEIT 의 pre-training은 Variational Autoencoder 관점에서 설명할 수 있음</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_20.png" /></p>
+<ol class="simple">
+<li><p><span class="math notranslate nohighlight">\(q_\phi(z|x)\)</span> : 이미지 x가 주어졌을 때 visual token z를 구하는 분포</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_\psi(x|z)\)</span> : visual token z가 주어졌을 때, 이미지 x를 구하는 분포</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_\theta(z|\tilde x)\)</span> : masked image 가 주어졌을 때, visual token을 복원하는 분포</p></li>
+</ol>
+<ul class="simple">
+<li><p>위 수식은 아래와 같이 변형될 수 있음</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_21.png" /></p>
+<ol class="simple">
+<li><p>Stage 1 : dVAE에서 Image Tokenizer를 얻는 부분에 대한 Term</p></li>
+<li><p>Stage 2 : Masked Image가 주어졌을 때, Image Tokenizer를 얻는 것에 대한 Term</p></li>
+</ol>
+</section>
+<section id="pre-training-setup">
+<h3>2.5 Pre-Training Setup<a class="headerlink" href="#pre-training-setup" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>BEIT 모델의 Pre-Training은 아래와 같이 설정되고 진행됨</p></li>
+<li><p>VIT-B(Base) 모델 설정과 비슷하게 설정되어 있음</p>
+<ul>
+<li><p>12-layer Transformer with 768 hidden size</p></li>
+<li><p>12 attention heads</p></li>
+<li><p>16x16 patch size</p></li>
+</ul>
+</li>
+<li><p>Image Tokenizer는 Dall-E [RPG+21] 에서 학습된 것을 사용하였고, visual tokens의 vocabulary size는 8192</p></li>
+<li><p>Training 데이터로 1.2M(120만 장) 갯수가 있는 ImageNet-1K를 사용함</p>
+<ul>
+<li><p>Data Augmentation : Random resized cropping, horizontal flipping, color jittering</p></li>
+<li><p>해상도 및 패치 사이즈 : 224x224 resolution (14x14 image patches)</p></li>
+<li><p>Masking 패치의 개수는 전체 패치의 약 40%인 75개 까지</p></li>
+</ul>
+</li>
+<li><p>Hyperparameter 설정</p>
+<ul>
+<li><p>500k steps (=800 epochs)</p></li>
+<li><p>2k(2,000) batch size</p></li>
+<li><p>Nvidia Tesla V100 32GB GPU 16개로 5일동안 돌림</p></li>
+<li><p>Adam Optimizer를 사용하였고, <span class="math notranslate nohighlight">\(\beta_1 = 0.9, \beta_2 = 0.999\)</span></p></li>
+<li><p>learning rate = 1.5e-3, 10 epochs 동안 warmup, cosine learning rate decay</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="experiments">
+<h2>3. Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">#</a></h2>
+<section id="image-classification">
+<h3>3.1 Image classification<a class="headerlink" href="#image-classification" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/06_22.png" /></p>
+<ul class="simple">
+<li><p>기본 해상도 224x224 외에도 해상도를 384x384로 증가시킨 모델에 대해서도 실험</p></li>
+<li><p>ImageNet-1K로 Self-Supervised 사전 학습된 BEIT 모델이 다른 모델과 비교해서 비슷하거나 더 좋은 분류 성능을 보임</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_23.png" /></p>
+<ul class="simple">
+<li><p>scratch부터 학습하는 DeiT 모델과 비교했을 때, BEiT를 Fine Tuning 할 때 더 적은 Epochs에서 더 좋은 Top-1 Accuracy 결과가 나오는 것을 실험에서 확인함</p></li>
+</ul>
+</section>
+<section id="semantic-segmentation">
+<h3>3.2 Semantic Segmentation<a class="headerlink" href="#semantic-segmentation" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Transformer 모델에서 Image Segmentation을 수행하기 위해서 <code class="docutils literal notranslate"><span class="pre">SETR-PUP</span> <span class="pre">[ZLZ+20]</span> <span class="pre">Rethinking</span> <span class="pre">semantic</span> <span class="pre">segmentation</span> <span class="pre">from</span> <span class="pre">a</span> <span class="pre">sequence-to-sequence</span> <span class="pre">perspective</span> <span class="pre">with</span> <span class="pre">transformers</span></code> 에서 사용한 Downstream task layer를 사용함</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_24.png" /></p>
+<p><img alt="Untitled" src="../../_images/06_25.png" /></p>
+<ul class="simple">
+<li><p>다른 방법에 비해서 BEIT가 mIoU(Mean Intersection over Union) 성능이 더 좋음</p></li>
+<li><p>Intermediate Fine-Tuning은 Image Net으로 Fine-tuning을 하고, 다음에 ADE20K 로 한번 더 Fine-Tunign 한 것</p></li>
+</ul>
+<p><img alt="Untitled" src="../../_images/06_26.png" /></p>
+<ul class="simple">
+<li><p>BEiT 모델이 적용된 Self attention map을 확인하였을 때, 사람의 annotation 없이도 이미지 내에서 개별 물체의 구분이 잘 되는 것을 확인할 수 있음</p></li>
+</ul>
+</section>
+<section id="ablation-study-on-classification-segmentation">
+<h3>3.3 Ablation study on classification, segmentation<a class="headerlink" href="#ablation-study-on-classification-segmentation" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/06_27.png" /></p>
+<ul class="simple">
+<li><p>Visual token을 사용했을 때 classification, segmentation에서 성능이 좋음</p></li>
+<li><p>Blockwise Masking이 사용되었을 때 segmentation에서 성능이 좋아짐</p></li>
+<li><p>300Epochs 보다 800 Epochs로 학습이 더 많이 되었을 때 성능이 좋음</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusion">
+<h2>4. Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>이전 연구들(Contrastive learning, Self-distillation) 보다 BEIT 모델의 성능이 뛰어남</p></li>
+<li><p>Vision Transformer에서 BERT 모델과 같이 masked 처리 된 input을 사용하여 pre-training을 하였을 때 좋은 결과를 나오는 것을 보여줌</p></li>
+<li><p>사전 Annotation 없이 Vision Transformer 모델을 통해서 Semantic Segmentation Task를 잘 수행하는 것을 확인 함</p></li>
+</ul>
+<hr class="docutils" />
+<p>Author by <code class="docutils literal notranslate"><span class="pre">박민식</span></code><br />
+Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch6"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="06_List.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">BEiT: BERT Pre-Training of Image Transformers</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="06_code.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">BEiT: BERT Pre-Training of Image Transformers</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
