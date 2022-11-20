@@ -42,3 +42,11 @@ parts:
     - file: docs/ch5/T2T-ViT
     - file: docs/ch5/05_code
     - file: docs/ch5/05_qa
+- caption: BEiT
+  numbered: False
+  chapters:
+  - file: docs/ch6/06_List
+    sections:
+    - file: docs/ch6/BEiT
+    - file: docs/ch6/06_code
+    - file: docs/ch6/06_qa
