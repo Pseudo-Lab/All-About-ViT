@@ -50,3 +50,11 @@ parts:
     - file: docs/ch6/BEiT
     - file: docs/ch6/06_code
     - file: docs/ch6/06_qa
+- caption: SepViT
+  numbered: False
+  chapters:
+  - file: docs/ch7/07_List
+    sections:
+    - file: docs/ch7/SepViT
+    - file: docs/ch7/07_code
+    - file: docs/ch7/07_qa
