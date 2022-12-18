@@ -251,5 +251,5 @@
 
 ---
 
-Author by `박민식`
+Author by `박민식`  
 Edit by `김주영`
