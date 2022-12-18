@@ -433,3 +433,8 @@ Detailed configurations of SepViT variants in different stages
 - window token embedding은 매우 적은 계산 비용으로 window 간 attention relationship을 모델링하도록 해줌
 - grouped self-attention은 더 나은 성능으로 여러 window에 걸친 장거리 시각적 의존성을 잡아낼 수 있게 해줌
 - 따라서 performance와 latency 간의 trade-off를 개선
+
+---
+
+Author by `정영상`  
+Edit by `김주영`

@@ -58,3 +58,35 @@ parts:
     - file: docs/ch7/SepViT
     - file: docs/ch7/07_code
     - file: docs/ch7/07_qa
+- caption: Compact Convolutional Transformers
+  numbered: False
+  chapters:
+  - file: docs/ch8/08_List
+    sections:
+    - file: docs/ch8/CCT
+    - file: docs/ch8/08_code
+    - file: docs/ch8/08_qa
+- caption: Compact Vision Transformers
+  numbered: False
+  chapters:
+  - file: docs/ch9/09_List
+    sections:
+    - file: docs/ch9/CvT
+    - file: docs/ch9/09_code
+    - file: docs/ch9/09_qa
+- caption: Swin Transformer
+  numbered: False
+  chapters:
+  - file: docs/ch10/10_List
+    sections:
+    - file: docs/ch10/Swin_Transformer
+    - file: docs/ch10/10_code
+    - file: docs/ch10/10_qa
+- caption: Vision Transformer with Deformable Attention
+  numbered: False
+  chapters:
+  - file: docs/ch11/11_List
+    sections:
+    - file: docs/ch11/Vision_Transformer_with_Deformable_Attention
+    - file: docs/ch11/11_code
+    - file: docs/ch11/11_qa
