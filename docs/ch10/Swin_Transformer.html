@@ -1,0 +1,1312 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Swin Transformer &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Swin Transformer Code" href="10_code.html" />
+    <link rel="prev" title="Swin Transformer" href="10_List.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch3/03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  DeiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch4/04_List.html">
+   DeiT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/DeiT.html">
+     DeiT: Training data-efficient image transformers &amp; distillation through attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_code.html">
+     DeiT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tokens-to-Token ViT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch5/05_List.html">
+   Tokens-to-Token ViT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/T2T-ViT.html">
+     Tokens-to-Token ViT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_code.html">
+     Tokens-to-Token ViT Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  BEiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch6/06_List.html">
+   BEiT: BERT Pre-Training of Image Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/BEiT.html">
+     BEiT: BERT Pre-Training of Image Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/06_code.html">
+     BEiT: BERT Pre-Training of Image Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/06_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SepViT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch7/07_List.html">
+   SepViT: Separable Vison Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch7/SepViT.html">
+     SepViT: Separable Vison Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch7/07_code.html">
+     SepViT: Separable Vison Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch7/07_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Compact Convolutional Transformers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch8/08_List.html">
+   Compact Convolutional Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch8/CCT.html">
+     Compact Convolutional Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch8/08_code.html">
+     Compact Convolutional Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch8/08_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Compact Vision Transformers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch9/09_List.html">
+   Compact Vision Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch9/CvT.html">
+     Compact Vision Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch9/09_code.html">
+     Compact Vision Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch9/09_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Swin Transformer
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="10_List.html">
+   Swin Transformer
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Swin Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="10_code.html">
+     Swin Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="10_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer with Deformable Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch11/11_List.html">
+   Vision Transformer with Deformable Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch11/Vision_Transformer_with_Deformable_Attention.html">
+     Vision Transformer with Deformable Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch11/11_code.html">
+     Vision Transformer with Deformable Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch11/11_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch10/Swin_Transformer.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch10/Swin_Transformer.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#self-attention-transformer-to-complement-cnns">
+     Self-attention/Transformer to complement CNNs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-based-vision-backbone">
+     Transformer based Vision Backbone
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#method">
+   Method
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overall-architecture">
+     Overall Architecture
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#swin-transformer-block">
+     Swin Transformer Block
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shifted-window-based-self-attention">
+     Shifted Window Based Self-Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#self-attention-in-non-overlapped-windows">
+     Self-attention in Non-Overlapped Windows
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shifted-window-partitioning-in-successive-blocks">
+     Shifted Window Partitioning in Successive Blocks
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#efficient-batch-computation-for-shifted-configuration">
+     Efficient batch computation for shifted configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#relative-position-bias">
+     Relative Position Bias 사용
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#architecture-variants">
+     Architecture Variants
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-classification-on-imagenet-1k">
+     1. Image Classification on ImageNet-1K
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#object-detection-on-coco">
+     2. Object Detection on COCO
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#semantic-segmentation-on-ade20k">
+     3. Semantic Segmentation on ADE20K
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ablation-study">
+     4. Ablation Study
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Swin Transformer</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#abstract">
+   Abstract
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#self-attention-transformer-to-complement-cnns">
+     Self-attention/Transformer to complement CNNs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transformer-based-vision-backbone">
+     Transformer based Vision Backbone
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#method">
+   Method
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overall-architecture">
+     Overall Architecture
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#swin-transformer-block">
+     Swin Transformer Block
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shifted-window-based-self-attention">
+     Shifted Window Based Self-Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#self-attention-in-non-overlapped-windows">
+     Self-attention in Non-Overlapped Windows
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shifted-window-partitioning-in-successive-blocks">
+     Shifted Window Partitioning in Successive Blocks
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#efficient-batch-computation-for-shifted-configuration">
+     Efficient batch computation for shifted configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#relative-position-bias">
+     Relative Position Bias 사용
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#architecture-variants">
+     Architecture Variants
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-classification-on-imagenet-1k">
+     1. Image Classification on ImageNet-1K
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#object-detection-on-coco">
+     2. Object Detection on COCO
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#semantic-segmentation-on-ade20k">
+     3. Semantic Segmentation on ADE20K
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ablation-study">
+     4. Ablation Study
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="swin-transformer">
+<h1>Swin Transformer<a class="headerlink" href="#swin-transformer" title="Permalink to this headline">#</a></h1>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Shifted Window를 통해서 Representation을 계산하는 Hierarchical Transformer를 제안한 논문.</p></li>
+<li><p>이미지를 겹치지 않는 Window 단위로 쪼개고 각 Window 내부에서만 Self-attention을 진행.</p></li>
+<li><p>Window 내부에서만 Self-attention을 진행하기 때문에 매우 효율적임.</p></li>
+<li><p>Window를 이동시킴으로써 다른 Window가 가진 정보들과 섞어 줄 수 있음.</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>Transformer를 범용적으로 사용가능한 Backbone으로써 이용하려함.</p></li>
+<li><p>Transformer를 Vision Task에 잘 적용하기 위해서는 NLP와 Vision 간의 차이점을 알아야함</p></li>
+<li><p>NLP와 Vision의 다른점</p>
+<ol>
+<li><p>Obejct의 다양한 Scale</p>
+<ul class="simple">
+<li><p>NLP의 기초 요소인 Word token는 항상 동일한 크기를 가지는 것에 반해 Vision에서는 각 요소(object)의 크기가 다름</p></li>
+<li><p>기존의 Transformer는 Token의 Scale을 고정시키는데 이것은 Vision Task에 맞지 않음</p></li>
+</ul>
+ <aside>
+ 🔑 **해결책**
+<p><img alt="Untitled" src="../../_images/10_0.png" /></p>
+<ol class="simple">
+<li><p>Swin Transformer에서 작은 Patch로 시작해서 층이 깊어 질 수록 근처의 Patch를 합침</p>
+<ul class="simple">
+<li><p>각 Stage 별로 보면 Patch의 크기가 계층적 구조를 가짐</p></li>
+<li><p>계층적 구조를 사용하기 때문에 Dense Prediction에 좋음</p>
+<ul>
+<li><p>이런 계층적 FeatureMap은 Dense Task에서 FPN이나 U-Net과 같은 역할을 함</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+ </aside>
+</li>
+<li><p>Image의 다양한 Resolution</p>
+<ul class="simple">
+<li><p>문장의 길이와 다르게 Image의 Pixel은 더 큰 해상도를 가짐</p></li>
+<li><p>Image 해상도에 따라 Qudartic한 연산량을 가진 Transformer는 고해상도 일 수록 다루기 힘듬</p></li>
+</ul>
+ <aside>
+ 🔑 **해결책**
+<p><img alt="Untitled" src="../../_images/10_1.png" /></p>
+<ol class="simple">
+<li><p>이미지를 겹치지 않는 Window 단위로 쪼개고 Window 내부에서만 Self-attention을 진행함</p>
+<ul class="simple">
+<li><p>이미지 크기에 따라서 선형적으로 연상량을 늘릴 수 있음</p></li>
+</ul>
+</li>
+</ol>
+ </aside>
+</li>
+</ol>
+</li>
+<li><p>위 2가지 해결책을 통해서 Swin Transformer를 범용적 Backbone으로 사용하려고 함</p></li>
+<li><p><strong>Key Design</strong></p>
+<ul class="simple">
+<li><p>Self-attnetion이 적용됨에 따라 Window가 이동하는 것</p>
+<ul>
+<li><p>이동된 Window는 다른 Window와 연결되면서 Modeling Power를 높임</p></li>
+<li><p>Window 내부에 있는 모든 Query는 같은 Key 값을 가짐으로 메모리에 효율적임</p>
+<ul>
+<li><p>이전에 나왔던 Sliding Window는 Query 마다 Key가 다르기 때문에 Memory에 효율적이지 않음</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>이전에도 Self-attention을 Window내부에만 적용하는 시도가 있었지만 최적화를 시키지 못해서 메모리 접근속도가 CNN보다 느렸고, 성능은 ResNet보다 아주 조금 좋았음</p></li>
+</ul>
+<section id="self-attention-transformer-to-complement-cnns">
+<h3>Self-attention/Transformer to complement CNNs<a class="headerlink" href="#self-attention-transformer-to-complement-cnns" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Self-Attention은 Heterogeneous interaction과 distance dependency를 Encoding하기 때문에 backbone이나 head-network를 보완할 수 있음.</p>
+<ul>
+<li><p>Heterogeneous interaction은 다른 종류의 상호작용으로 해석할 수 있는데 정확한 의미는 모르겠음.</p></li>
+</ul>
+</li>
+<li><p>본 논문에선 Transformer를 Feature Extractor로서 사용하여 CNN Backbone을 대체함</p></li>
+</ul>
+</section>
+<section id="transformer-based-vision-backbone">
+<h3>Transformer based Vision Backbone<a class="headerlink" href="#transformer-based-vision-backbone" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Vanila VIT는 이미지 크기에 따라 연산량이 증가하는 것과 Low Resolution Feature map을 가지는 것 때문에 Dense Task에 좋지 않음</p></li>
+<li><p>Pyramid Vision Transformer가 Multi Scale Feature map을 만들어서 본 논문과 가장 유사하지만 연산량 증가는 여전히 Qudratic함</p></li>
+</ul>
+</section>
+</section>
+<section id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">#</a></h2>
+<section id="overall-architecture">
+<h3>Overall Architecture<a class="headerlink" href="#overall-architecture" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_2.png" /></p>
+<p><strong>Stage 1.</strong></p>
+<ul class="simple">
+<li><p>Input Image는 ViT와 같이 non-Overlapping으로 split 해주고 각 Patch를 Token으로 다룸</p>
+<ul>
+<li><p>Patch size는 4 x 4 이고, 각 Patch 의 Feature Dimension은 4 x 4 x 3 = 48 임</p></li>
+</ul>
+</li>
+<li><p>Linear Embedding을 통해서 Raw-Valued Feature를 임의의 Dimension으로 Projection함</p></li>
+<li><p>Projection된 값을 Swin Transformer Block에 입력으로 줌</p></li>
+</ul>
+<p><strong>Stage 2.</strong></p>
+<ul class="simple">
+<li><p>Patch Merging Layer에서 2x2 범위의 Patch들을 1개로 concat 해주고 linear layer를 통과시킴</p>
+<ul>
+<li><p>Patch dimension이 C에서 4C로 변경되고 linear layer를 통해서 2C로 다시 변경됨</p></li>
+<li><p>Patch Merging Layer 덕분에 원래 4C가 되어야 하지만 2C로 Token의 수가 줄어듬</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Stage 3.</strong></p>
+<ul class="simple">
+<li><p>Stage 2. 를 반복함</p></li>
+</ul>
+</section>
+<section id="swin-transformer-block">
+<h3>Swin Transformer Block<a class="headerlink" href="#swin-transformer-block" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_3.png" /></p>
+<ul>
+<li><p>기존의 Multi Head Attention 모듈 대신에 Shifted Window 기반의 Multi Head Attention을 사용함</p>
+<p><img alt="Untitled" src="../../_images/10_4.png" /></p>
+<ul class="simple">
+<li><p>W-MSA와 SW-MSA를 통해서 기존 문제점인 이미지 크기에 따른 Quadratic한 연산량 증가를 선형증가로 바꿔줌</p></li>
+</ul>
+</li>
+<li><p>MHA 이외의 다른 Layer는 모두 기존 Transformer Block과 동일함</p></li>
+</ul>
+</section>
+<section id="shifted-window-based-self-attention">
+<h3>Shifted Window Based Self-Attention<a class="headerlink" href="#shifted-window-based-self-attention" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>기존 Transformer 구조는 한개의 Token과 다른 모든 Token의 관계성을 계산하기 때문에 연산비용이 비싼데 이 점은 Dense Task에선 매우 불리하게 작용함.</p>
+<ul>
+<li><p>MSA <a class="reference external" href="https://towardsdatascience.com/a-comprehensive-guide-to-swin-transformer-64965f89d14c">참고 Gif 그림</a></p></li>
+<li><p>Window based MSA <a class="reference external" href="https://towardsdatascience.com/a-comprehensive-guide-to-swin-transformer-64965f89d14c">참고 Gif 그림</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="self-attention-in-non-overlapped-windows">
+<h3>Self-attention in Non-Overlapped Windows<a class="headerlink" href="#self-attention-in-non-overlapped-windows" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><strong>효율성을 위해 Window 내부에서만 Self -attention을 진행함</strong></p></li>
+<li><p>각 Window는 겹치지 않고 M x M Patch들을 포함함</p></li>
+</ul>
+</section>
+<section id="shifted-window-partitioning-in-successive-blocks">
+<h3>Shifted Window Partitioning in Successive Blocks<a class="headerlink" href="#shifted-window-partitioning-in-successive-blocks" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Window 내부에서만 Self-attention 연산을 하기 때문에 Window 간 정보 교환이 없어서 Modeling Power가 약함</p>
+<ul>
+<li><p><strong>Modeling Power를 높이기 위해 Window를 이동 시킨 후에 다시 한번 Self-attention을 진행함</strong></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="efficient-batch-computation-for-shifted-configuration">
+<h3>Efficient batch computation for shifted configuration<a class="headerlink" href="#efficient-batch-computation-for-shifted-configuration" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_5.png" /></p>
+<p><img alt="Untitled" src="../../_images/10_6.png" /></p>
+<ul class="simple">
+<li><p>Window를 왼쪽 상단 기준으로 2x2 만큼 움직이게 되면 2 x 2 Window가 3 x 3 Window로 개수가 증가함</p>
+<ul>
+<li><p>빈 공간을 새로운 Window로 채워야하기 때문에 개수가 증가함</p></li>
+<li><p>개수가 증가하면 Self-attention을 그만큼 더 해야 하기 때문에 비효율적</p></li>
+</ul>
+</li>
+<li><p><strong>효율적인 연산을 위해 <code class="docutils literal notranslate"><span class="pre">Cyclic</span> <span class="pre">shift</span></code> 사용</strong></p>
+<ul>
+<li><p><strong>원래 있던 Window를 쪼개서 붙여줌</strong></p>
+<ul>
+<li><p>Figure 4. 에서 이동으로 인해 밀려나간 왼쪽 상단 A, B, C 부분을 때서 이동으로 인해서 새로 생긴 공간에 넣어줌</p></li>
+<li><p>Window 간의 정보교환이 이루어져서 Modeling Power 증가</p></li>
+<li><p>Window 개수가 늘어나지 않기 때문에 연산량 보존 가능</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="relative-position-bias">
+<h3>Relative Position Bias 사용<a class="headerlink" href="#relative-position-bias" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>다른 Transformer와 다르게 Position Embedding 값을 더 해주지 않고 Relative Position Bias를 사용함</p>
+<ul class="simple">
+<li><p>Position Embedding은 patch에 절대 좌표를 더해주는 것, 본 논문에선 상대 좌표를 이용함</p></li>
+</ul>
+</li>
+<li><p>Relative Position Bias를 Self-attention 단계에 넣어서 상대적 위치를 추가해줌</p></li>
+<li><p>Relative Position 값의 범위는 [-M+1, M-1]</p></li>
+<li><p>각 축을 기준으로 만든 Matrix를 더해서 Relative Position Matrix를 완성함</p>
+<p><img alt="Untitled" src="../../_images/10_7.png" /></p>
+<ul class="simple">
+<li><p>x축 기준으로 보면 왼쪽 상단 행렬에서 1,2,3이 같은 축, 4,5,6이 같은 축, 7,8,9가 같은 축임</p>
+<ul>
+<li><p>따라서 x axis matrix에서 같은 축에 있는 값들 간의 거리는 0으로 봄</p></li>
+</ul>
+</li>
+<li><p>음수 값과 양수 값의 경우 어떤 값을 기준으로 잡는지에 따라 다름(상대적)</p>
+<ul>
+<li><p>1 → 4 로 진행하면 -1</p>
+<ul>
+<li><p>1은 (0, 0)의 위치고 4는(1,0)의 위치로 볼 수 있음</p>
+<ul>
+<li><p>축이 1만큼 차이 나기 때문</p></li>
+</ul>
+</li>
+<li><p>따라서 1을 기준으로 4까지의 거리를 구하면 0 - 1이 되서 -1이 됨</p></li>
+</ul>
+</li>
+<li><p>4 → 1 로 진행하면 +1</p>
+<ul>
+<li><p>4는 (0, 0)의 위치이고 1은 (0, 0)의 위치로 볼 수 있음</p>
+<ul>
+<li><p>축이 1만큼 차이 나기 때문</p></li>
+</ul>
+</li>
+<li><p>따라서 4를 기준으로 1까지의 거리를 구하면 1 - 0 이 되서 +1 이 됨</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Relative Position Bias의 크기 = <span class="math notranslate nohighlight">\(B \in \mathbb{R}^{M^2 \times M^2}\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(M\)</span>은 Patch size이기 때문에 1개의 Window를 <span class="math notranslate nohighlight">\(M^2 \times M^2\)</span>으로 표현 할 수 있음</p></li>
+</ul>
+</li>
+<li><p>Bias Index Matrix의 크기 = <span class="math notranslate nohighlight">\(\hat B \in \mathbb{R}^{(2M-1)\times (2M-1)}\)</span>오</p>
+<ul>
+<li><p>오른쪽 끝 Matrix를 보면 0 ~ 24 까지의 값을 가지고 있음</p></li>
+<li><p>M = 3 이기 때문에 <span class="math notranslate nohighlight">\(\hat B\)</span>는 5 x 5의 값을 가짐, 따라서 0 ~ 24 까지의 수를 표현할 수 있음</p>
+<ul>
+<li><p>5x5 행렬을 0부터 +1씩 되는 수로 채우면 총 0~ 24까지의 수만을 사용함</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>위의 방식으로 구한 값을 간단한 수식을 통해서 Relative Position Matrix로 변경할 수 있음</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">x_axis_matrix</span> <span class="o">+=</span> <span class="n">WINDOW_SIZE</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">y_axis_matrix</span> <span class="o">+=</span> <span class="n">WINDOW_SZIE</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="n">x_axis_matrix</span> <span class="o">*=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">WINDOW_SIZE</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">relative_position_matrix</span> <span class="o">=</span> <span class="n">x_axis_matrix</span> <span class="o">+</span> <span class="n">y_axis_matrix</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>이 수식을 통해서 각 값이 Index 값을 가지도록 해줌</p></li>
+</ul>
+</li>
+<li><p>최종적으로 구한 Bias 값을 SoftMax 연산 전에 더해줌</p>
+<div class="math notranslate nohighlight">
+\[
+    Attention(Q, K,V) = \mathbf{SoftMax}(QK^T/\sqrt{d} + B)V
+    \]</div>
+<ul class="simple">
+<li><p>Q와 K의 내적 값에 Scaling(<span class="math notranslate nohighlight">\(\sqrt d\)</span>)를 해준 후 Bias를 더해줌</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="architecture-variants">
+<h3>Architecture Variants<a class="headerlink" href="#architecture-variants" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_8.png" /></p>
+<ul class="simple">
+<li><p>Swin-B는 ViT-B, DeiT-B와 모델 크기가 비슷하고 연산 복잡도도 비슷함</p></li>
+<li><p>Swin-B를 기준으로 Swin-T/S/L은 각각 0.25배, 0.5배, 2배의 연산 복잡도를 가짐</p></li>
+</ul>
+</section>
+</section>
+<section id="experiments">
+<h2>Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">#</a></h2>
+<section id="image-classification-on-imagenet-1k">
+<h3>1. Image Classification on ImageNet-1K<a class="headerlink" href="#image-classification-on-imagenet-1k" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_9.png" /></p>
+<ul class="simple">
+<li><p>CNN과 비교했을 때 정확도 / 연산량 Trade Off는 Swin이 조금 더 좋음. 하지만 CNN 같은 경우 Architecture Search가 포함 되어 있는 단점이 있음</p></li>
+<li><p>Transformer(ViT, DeiT)와 비교 했을 때는 Swin이 더 좋은 성능을 가짐</p></li>
+<li><p>Swin-B를 ImageNet-22k로 pretraining 하면 1K를 scratch 학습 할 때보다 1.8% ~ 1.9% 더 잘 오른다고 함</p></li>
+</ul>
+</section>
+<section id="object-detection-on-coco">
+<h3>2. Object Detection on COCO<a class="headerlink" href="#object-detection-on-coco" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_10.png" /></p>
+<ul class="simple">
+<li><p>ResNet-50과 Swin-T를 비교하면 parameter 크기는 크게 차이나지 않지만 성능에선 꽤 차이가 나는 걸 볼 수 있음</p></li>
+<li><p>비슷한 크기인 DeiT-S와 Swin-T를 비교했을 때 Swin이 조금 더 빠르고 성능이 더 좋음</p></li>
+</ul>
+</section>
+<section id="semantic-segmentation-on-ade20k">
+<h3>3. Semantic Segmentation on ADE20K<a class="headerlink" href="#semantic-segmentation-on-ade20k" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_11.png" /></p>
+<ul class="simple">
+<li><p>Swin-S가 비슷한 크기를 가진 DeiT-S보다 5.3 정도 더 성느이 좋음 그리고 ResNet-101과 ResNetSt-101보다 더 성능이 좋음을 볼 수 있음</p></li>
+</ul>
+</section>
+<section id="ablation-study">
+<h3>4. Ablation Study<a class="headerlink" href="#ablation-study" title="Permalink to this headline">#</a></h3>
+<p><img alt="Untitled" src="../../_images/10_12.png" /></p>
+<p><img alt="Untitled" src="../../_images/10_13.png" /></p>
+<ul class="simple">
+<li><p>Stage 별로 Shifted Window를 적용 하는게 Shifting이 없는 것보다 모든 Task에서 성능이 더 좋음.</p>
+<ul>
+<li><p>Shifted Window를 통해서 Window간 정보 교환이 성능에 좋은 영향을 준다는 걸 나타냄</p></li>
+</ul>
+</li>
+<li><p>Relative Position에 Absolute Position(절대좌표)을 추가하면 분류에선 0.4 정도 성능 향상이 있지만 Detection과 segmentation에선 성능이 더 떨어짐</p></li>
+<li><p>Cyclic(Table 5. 초록색)과 Sliding(Table 5. 노란색)은 정확도는 비슷하지만  Stage가 깊어질 수록 Cyclic이 더 빠른 걸 볼 수 있음</p>
+<ul>
+<li><p>이것을 통해서 Cyclic이 하드웨어에 더욱 친화적이다는 걸 확인 할 수 있음</p></li>
+</ul>
+</li>
+<li><p>가장 빠른 모델인 Performer(Table 5. 파랑색)보다 Shifted Window(Table 5. 초록색)가 미세하게 조금 더 바른 것을 볼 수 있고 정확도는 Sifted Window(Table 6. 초록색)이 훨씬 더 좋은 것을 볼 수 있음</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>이미지 크기에 따라 선형적으로 연산 복잡도가 증가하는 Swin Transformer를 소개함</p></li>
+<li><p>Shifted Window Base의 Self-attention이 더 효율적이고 효과적임을 보여줌</p></li>
+<li><p>연산량을 크게 증가시키지 않고 Multi Scale Feature map을 만들어 Dense Task에서 좋은 성능을 냄</p></li>
+</ul>
+<hr class="docutils" />
+<p>Author by <code class="docutils literal notranslate"><span class="pre">임중섭</span></code>
+Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch10"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="10_List.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Swin Transformer</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="10_code.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Swin Transformer Code</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

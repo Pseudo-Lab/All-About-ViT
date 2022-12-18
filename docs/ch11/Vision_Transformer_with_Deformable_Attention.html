@@ -1,0 +1,1290 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Vision Transformer with Deformable Attention &#8212; Vision Transformer의 모든 것</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="shortcut icon" href="../../_static/PseudoLab_logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Vision Transformer with Deformable Attention Code" href="11_code.html" />
+    <link rel="prev" title="Vision Transformer with Deformable Attention" href="11_List.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/PseudoLab_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Vision Transformer의 모든 것</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Vision Transformer의 모든 것
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Inductive Bias와 Self-Attention
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch1/01_List.html">
+   Inductive Bias와 Self-Attention
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Inductive_Bias.html">
+     Inductive Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/Self-Attention.html">
+     Self-Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_code.html">
+     Self-Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch1/01_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch2/02_List.html">
+   Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/vit.html">
+     Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_code.html">
+     Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch2/02_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Pyramid Vision Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch3/03_List.html">
+   Pyramid Vision Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/Pyramid_Vision_Transformer.html">
+     Pyramid Vision Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_code.html">
+     Pyramid Vision Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch3/03_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  DeiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch4/04_List.html">
+   DeiT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/DeiT.html">
+     DeiT: Training data-efficient image transformers &amp; distillation through attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_code.html">
+     DeiT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch4/04_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tokens-to-Token ViT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch5/05_List.html">
+   Tokens-to-Token ViT
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/T2T-ViT.html">
+     Tokens-to-Token ViT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_code.html">
+     Tokens-to-Token ViT Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch5/05_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  BEiT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch6/06_List.html">
+   BEiT: BERT Pre-Training of Image Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/BEiT.html">
+     BEiT: BERT Pre-Training of Image Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/06_code.html">
+     BEiT: BERT Pre-Training of Image Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch6/06_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SepViT
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch7/07_List.html">
+   SepViT: Separable Vison Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch7/SepViT.html">
+     SepViT: Separable Vison Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch7/07_code.html">
+     SepViT: Separable Vison Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch7/07_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Compact Convolutional Transformers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch8/08_List.html">
+   Compact Convolutional Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch8/CCT.html">
+     Compact Convolutional Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch8/08_code.html">
+     Compact Convolutional Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch8/08_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Compact Vision Transformers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch9/09_List.html">
+   Compact Vision Transformers
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch9/CvT.html">
+     Compact Vision Transformers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch9/09_code.html">
+     Compact Vision Transformers Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch9/09_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Swin Transformer
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ch10/10_List.html">
+   Swin Transformer
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch10/Swin_Transformer.html">
+     Swin Transformer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch10/10_code.html">
+     Swin Transformer Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ch10/10_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision Transformer with Deformable Attention
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="11_List.html">
+   Vision Transformer with Deformable Attention
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Vision Transformer with Deformable Attention
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="11_code.html">
+     Vision Transformer with Deformable Attention Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="11_qa.html">
+     Q&amp;A
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/pseudo-lab/All-About-ViT/issues/new?title=Issue%20on%20page%20%2Fdocs/ch11/Vision_Transformer_with_Deformable_Attention.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/ch11/Vision_Transformer_with_Deformable_Attention.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deformable-attention-transformer">
+   Deformable Attention Transformer
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preliminaries">
+     1. Preliminaries
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deformable-attention">
+     2. Deformable Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deformable-attention-module">
+     3. Deformable attention module
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#offset-generation">
+     4. Offset generation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#offset-groups">
+     5. Offset groups
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deformable-relative-position-bias">
+     6. Deformable relative position bias
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#computational-complexity">
+     7. Computational complexity
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-architectures">
+   Model Architectures
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imagenet-1k-classification">
+     1. ImageNet-1K Classification
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#coco-object-detection">
+     2. COCO Object Detection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ade20k-semantic-segmentation">
+     3. ADE20K Semantic Segmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ablation-study">
+     4. Ablation Study
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualization">
+     5. Visualization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Vision Transformer with Deformable Attention</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deformable-attention-transformer">
+   Deformable Attention Transformer
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preliminaries">
+     1. Preliminaries
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deformable-attention">
+     2. Deformable Attention
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deformable-attention-module">
+     3. Deformable attention module
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#offset-generation">
+     4. Offset generation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#offset-groups">
+     5. Offset groups
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deformable-relative-position-bias">
+     6. Deformable relative position bias
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#computational-complexity">
+     7. Computational complexity
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-architectures">
+   Model Architectures
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imagenet-1k-classification">
+     1. ImageNet-1K Classification
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#coco-object-detection">
+     2. COCO Object Detection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ade20k-semantic-segmentation">
+     3. ADE20K Semantic Segmentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ablation-study">
+     4. Ablation Study
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualization">
+     5. Visualization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="vision-transformer-with-deformable-attention">
+<h1>Vision Transformer with Deformable Attention<a class="headerlink" href="#vision-transformer-with-deformable-attention" title="Permalink to this headline">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<p><img alt="[크기변환]x1.png" src="../../_images/11_0.png" /></p>
+<ul>
+<li><p>Vision Transformer는 Training Data와 Model parameters의 사이즈가 클 경우에, CNN 모델과 비교하여 성능이 더 뛰어난 것이 입증되었고 receptive field의 사이즈가 크고 long-range dependencies를 모델링하는데 뛰어남</p></li>
+<li><p><strong>(a)</strong> 하지만 ViT는 각 Query 별로 Attention이 필요한 패치의 수가 많기 때문에 컴퓨팅 비용이 증가하고, 수렴속도가 느려지고, overfitting의 위험이 발생할 수 있음</p></li>
+<li><p>ViT에서의 과도한 계산량을 줄이기 위해서 제안된 선행연구로 <strong>(b)</strong> Swin Transformer와 Pyramid Vision Transformer가 있음</p>
+<ul class="simple">
+<li><p><strong>(b)</strong> Swin Transformer : 전체 이미지가 windows로 분리되고, local-windows 내에서만 attention이 이루어짐</p></li>
+<li><p>Pyramid Vision Transformer : 계산량을 줄이기 위해서 key와 value의 feature maps을 downsample함</p></li>
+</ul>
+</li>
+<li><p><strong>(b)</strong> Swin Transformer와 Pyramid Vision Transformer 에서는 Attention 대상 영역이 줄어들어서 효과적이지만, attention patterns이 hand-crafted로 만든 것이고 데이터에 특성을 고려하지 않기 때문에 최적의 결과가 아닐 수 있음 (논문에서 관심대상과 연관있는 key와 value가 drop되고 덜 중요한 key와 value가 유지될 수 있다고 설명)</p>
+<p><img alt="Fig_31.png" src="../../_images/11_1.png" /></p>
+<ul>
+<li><p>W-MSA는 Local Window 내에서의 Self-attention이고, SW-MSA를 통해 Local Window를 이동시켜 가면서 Self-attetion을 수행함</p>
+<p><img alt="Fig_33.png" src="../../_images/11_2.png" /></p>
+<p><img alt="Fig_32.png" src="../../_images/11_3.png" /></p>
+</li>
+</ul>
+</li>
+<li><p>이상적으로는 주어진 쿼리에 대해서 후보 key의 value가 변형될 수 있고, 데이터의 특성을 고려하는 구조가 더욱 효과적인데 CNN 선행연구에서는 <strong>(c)</strong> Deformable Convolution Networks 연구가 있었음</p>
+<p><img alt="deformable_1.png" src="../../_images/11_4.png" /></p>
+<p><img alt="deformable_2.png" src="../../_images/11_5.png" /></p>
+<p><img alt="deformable_3.png" src="../../_images/11_6.png" /></p>
+</li>
+<li><p>하지만 해당 아이디어를 Vision Transformer에 그대로 적용시키기에는 메모리나 계산복잡도가 높은 문제가 있음</p></li>
+<li><p>본 연구에서는 image classification과 다양한 dense prediction tasks에서 효과적인 <strong>(d)</strong> Deformable Attention Transformer (DAT) 방법을 제안함</p>
+<ul>
+<li><p>DCN은 query별로 서로 다른 offset을 학습하지만 DAT는 query와 상관없이 동일한 offset이 학습됨</p>
+<p><img alt="20221130_175952.png" src="../../_images/11_7.png" /></p>
+</li>
+<li><p>reference points들이 처음에는 모든 입력 데이터에서 일정한 간격을 가진 uniform grids로 생성이 되고</p></li>
+<li><p>query feature를 입력으로 하여 데이터의 특성에 따른 offset이 생성이 되는데, 이러한 방식은 후보 key와 value가 중요한 영역으로 이동이 되어 기존의 self-attention module에 비해서 훨씬 유연하고 중요한 정보를 얻는데 더 효율적인 장점이 있다고 어필함</p></li>
+</ul>
+</li>
+<li><p>이미지 분류(ImageNet-1K Classification), 의미론적 이미지 분할(ADE20K Semantic Segmantation), 객체 인식(COCO Object Detection)에서 Swin Transformer와 비교해서 더 나은 성능을 보인다고 소개하고 있음</p></li>
+</ul>
+</section>
+<section id="deformable-attention-transformer">
+<h2>Deformable Attention Transformer<a class="headerlink" href="#deformable-attention-transformer" title="Permalink to this headline">#</a></h2>
+<p><img alt="x2.png" src="../../_images/11_8.png" /></p>
+<section id="preliminaries">
+<h3>1. Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">#</a></h3>
+<p><img alt="20221130_105344.png" src="../../_images/11_9.png" /></p>
+<ul class="simple">
+<li><p>ViT에서 flatten된 input feature map <span class="math notranslate nohighlight">\(x ∈ R^{N\times C}\)</span> 가 주어지면, M개의 heads를 가진 multi-head self-attention (MHSA) 블록은 아래와 같이 정의됨</p>
+<ul>
+<li><p>(1) <span class="math notranslate nohighlight">\(q = xW_q, k = xW_k, v = xW_v\)</span></p></li>
+<li><p>(2) <span class="math notranslate nohighlight">\(z^{(m)} = \sigma(q^{(m)}k^{(m)^T}/\sqrt{d})v^{(m)}, m = 1, ..., M,\)</span> → m-th embedding output</p></li>
+<li><p>(3) <span class="math notranslate nohighlight">\(z = Concat (z^{(1)}, ..., z^{(M)})W_o ,\)</span></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\(l\)</span>-th Transformer block은 아래와 같이 계산되고, LN은 Layer Normalization</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(z^{'}_{l} = MHSA(LN(z_{l-1})) + z_{l-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(z_l = MLP(LN(z^{'}_{l})) + z^{'}_{l}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="deformable-attention">
+<h3>2. Deformable Attention<a class="headerlink" href="#deformable-attention" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>기존의 계층 구조 Vision Transformer로 잘 알려진 PVT와 Swin Transformer가 있는데, 다음과 같은 한계가 있음</p>
+<ul class="simple">
+<li><p>PVT : downsampling 방법에서 정보 손실이 발생할 수 있음</p></li>
+<li><p>Swin Transformer : receptive fields가 커지는 것이 느려서 큰 물체에 대한 모델링에서 제한이 있음</p></li>
+</ul>
+</li>
+<li><p>데이터에 의존적인 attention을 수행하는 Deformable Convolution Networks 방법이 있긴한데, Vision Transformer에 그대로 적용시키면 공간복잡도가 4제곱(biquadratic) 까지 커지는 문제가 있다고 함</p></li>
+<li><p>Deformable DETR이라는 연구에서는 각 척도에서 Nk = 4로 더 적은 수의 키를 설정하여 오버헤드를 줄였지만, 정보 손실이 발생하는 문제가 있음</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[3]</span> <span class="pre">Gcnet:</span> <span class="pre">Non-local</span> <span class="pre">networks</span> <span class="pre">meet</span> <span class="pre">squeeze-excitation</span> <span class="pre">networks</span> <span class="pre">and</span> <span class="pre">beyond.</span></code> 와 <code class="docutils literal notranslate"><span class="pre">[52]</span> <span class="pre">Deepvit:</span> <span class="pre">Towards</span> <span class="pre">deeper</span> <span class="pre">vision</span> <span class="pre">transformer.</span></code> 연구에 따르면 visual attention models에서 서로 다른 쿼리가 비슷한 어텐션 맵을 가지고 있는 것이 확인되어서, 이것에 착안하여 서로 다른 쿼리에서 같은 이동가능한 key와 value값을 가지도록 하였다고 함</p></li>
+<li><p>feature maps에서 중요한 영역을 통해서 토큰간의 관계를 효과적으로 모델링하기 위해서 논문의 저자들은 <strong>deformable attention</strong> 방법을 제안함</p>
+<ul>
+<li><p>관심을 가지게 되는 초점 영역들은 offset network를 사용하여 query에서 학습된 변형된 샘플링 포인트의 여러 그룹에 의해 결정됨</p></li>
+<li><p>feature maps에서 샘플 features을 추출하기 위해서 이중 선형 보간(bilinear interpolation) 방법을 사용하였고, 샘플 features들은 key와 value에 투영되어 변형된 key와 value 값을 얻을 수 있음</p>
+<ul>
+<li><p>출처: <a class="reference external" href="https://cloud.tsinghua.edu.cn/f/9afe817efb504d32951b/">https://cloud.tsinghua.edu.cn/f/9afe817efb504d32951b/</a></p>
+<p><img alt="bilinear_interpolations.png" src="../../_images/11_10.png" /></p>
+</li>
+</ul>
+</li>
+<li><p>query 값과 샘플로 얻은 key값을, 일반적인 multi-head attention 모듈에 적용하여 변형된 값이 반영됨</p></li>
+<li><p>deformable attention 학습을 더 용이하게 하기 위해서 변형된 포인트의 위치에서 relative position bias를 제공함</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="x2.png" src="../../_images/11_8.png" /></p>
+</section>
+<section id="deformable-attention-module">
+<h3>3. Deformable attention module<a class="headerlink" href="#deformable-attention-module" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>입력 feature map <span class="math notranslate nohighlight">\(x ∈ R^{H\times W\times C}\)</span> 이 주어졌을 때, uniform grid of points <span class="math notranslate nohighlight">\(p ∈ R^{H_G \times W_G\times 2}\)</span> 가 생성됨</p></li>
+<li><p>grid size는 계수 <span class="math notranslate nohighlight">\(r\)</span> 값을 사용하여 downsample 됨, <span class="math notranslate nohighlight">\(H_G = H / r, W_G = W / r\)</span></p></li>
+<li><p>reference points의 값은 2차원 좌표 <span class="math notranslate nohighlight">\(\{ (0,0), ... (H_G -1, W_G -1)\}\)</span> 로 표현되는데 이것을 normalize하여 [-1, +1] 범위의 값을 가지도록 함. (-1, -1)은 왼쪽 상단 코너 값이고 (+1, +1) 값은 오른쪽 하단 코너 값</p></li>
+<li><p>reference points의 offset을 계산하기 위해 query tokens 값 <span class="math notranslate nohighlight">\(q = xW_q\)</span> 을 사용하고, offset network <span class="math notranslate nohighlight">\(\theta_{offset}(·)\)</span> 을 사용하여 offsets 값 <span class="math notranslate nohighlight">\(∆p = \theta_{offset}(q)\)</span> 을 계산함</p></li>
+<li><p>training 과정에서 안정화를 위해서,  사전에 정의한 factor값인 <span class="math notranslate nohighlight">\(s\)</span> 를 사용하여  <span class="math notranslate nohighlight">\(∆p\)</span> 의scale 값을 조정함</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(∆p ← s\ tanh(∆p)\)</span></p></li>
+</ul>
+</li>
+<li><p>deformed points의 위치를 사용하여 key와 value의 sample이 계산됨</p>
+<ul>
+<li><p>(6)  <span class="math notranslate nohighlight">\(q = xW_q, \tilde{k} = \tilde{x}W_k, \tilde{v} = \tilde{x}W_v\)</span></p></li>
+<li><p>(7) with <span class="math notranslate nohighlight">\(∆p = \theta_{offset}(q), \tilde{x} = \phi(x;p+∆p)\)</span></p></li>
+</ul>
+</li>
+<li><p>sampling function <span class="math notranslate nohighlight">\(\phi(·;·)\)</span>을 통해 이중 선형 보간(bilinear interpolation) 을 미분가능하도록 함</p>
+<ul>
+<li><p>(8) <span class="math notranslate nohighlight">\(\phi(z;(p_x, p_y)) = \sum_{(r_x, r_y)} g(p_x, r_x)g(p_y, r_y)z[r_y, r_x, :],\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(g(a,b) = max(0, 1 - |a - b|)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((r_x, r_y)\)</span>는 <span class="math notranslate nohighlight">\(z ∈ R^{H\times W\times C}\)</span> 에 있는 모든 위치를 indexing</p></li>
+<li><p>함수 <span class="math notranslate nohighlight">\(g\)</span> 값은 4개의 integral points가 <span class="math notranslate nohighlight">\((p_x, p_y)\)</span>에 가까울 때만 0이 아니기 때문에 Eq.(8)을 4개 위치의 가중 평균으로 단순화함</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>기존 방식과 유사하게 multi-head attention에서 q,k,v 를 사용하면서 relative position offsets 값인 R도 함께 사용함</p></li>
+<li><p>Attention head의 outptu값은 아래와 같이 계산됨</p>
+<ul>
+<li><p>(9) <span class="math notranslate nohighlight">\(z^{(m)} = \sigma(q^{(m)}\tilde{k}^{(m)^T}/\sqrt{d}+\phi(\hat{B};R))\tilde{v}^{(m)}\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\phi(\hat{B};R) ∈ R^{HW \times H_GW_G}\)</span> 는 Swin Transformer에서 사용한 position embedding이고, <span class="math notranslate nohighlight">\(\hat{B}\)</span>는 Relative Position Bias 값</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\(z^{(m)}\)</span> 값들은 Concat 된 뒤에 <span class="math notranslate nohighlight">\(W_o\)</span> 와 linear projected 되어서 Eq.(3)의 <span class="math notranslate nohighlight">\(z = Concat (z^{(1)}, ..., z^{(M)})W_o\)</span> 값이 계산됨</p></li>
+</ul>
+</section>
+<section id="offset-generation">
+<h3>4. Offset generation<a class="headerlink" href="#offset-generation" title="Permalink to this headline">#</a></h3>
+<p><img alt="" src="../../_images/11_11.png" />
+<img alt="" src="../../_images/11_12.png" /></p>
+<ul class="simple">
+<li><p>출처 : <a class="reference external" href="https://gaussian37.github.io/dl-concept-dwsconv/">https://gaussian37.github.io/dl-concept-dwsconv/</a></p></li>
+<li><p>Offset network는 query feature를 입력으로 각 reference point에 해당하는 offset value를 예측함</p></li>
+<li><p>Offset Network는 Depothwise Convolution, GELU, 1x1 Convolution으로 구성됨</p></li>
+<li><p>각 reference point는 local s x s region 안에서 shift됨</p></li>
+</ul>
+</section>
+<section id="offset-groups">
+<h3>5. Offset groups<a class="headerlink" href="#offset-groups" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>deformed points의 다양성을 위해서 MHSA 처럼 feature channel을 G개의 group으로 분리함</p></li>
+<li><p>각 group으로부터 나온 features들은 sub-network를 공유하고 각각 offsets을 생성함</p></li>
+<li><p>Attention module의 head 개수 M 값은 그룹 개수 G의 배수이고, 여러개의 multiple attention heads에서 하나의 그룹에 변형된 key와 value값들을 할당함</p></li>
+</ul>
+</section>
+<section id="deformable-relative-position-bias">
+<h3>6. Deformable relative position bias<a class="headerlink" href="#deformable-relative-position-bias" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>relative position bias는 모든 (query,key) 쌍의 상대적 위치를 encode하고 이를 사용하여 공간 정보를 attention에 반영함</p></li>
+<li><p>H x W의 feature map이 있으면 상대 좌표의 위치는 [-H, H], [-W, W] 범위에 있음</p></li>
+<li><p>Swin Transformer에서는 relative position bias table <span class="math notranslate nohighlight">\(\hat{B} ∈ R ^{(2H-1)\times(2W-1)}\)</span> 를 사용하여 relative position bias <span class="math notranslate nohighlight">\(B\)</span> 값을 계산함</p></li>
+<li><p>이 연구에서는 deformable attention의 key값들이 연속적인 위치를 가지고 있어서 [-1, +1] 범위로 normalize 하였고, 가능한 모든 offset values를 다루기 위해서 parameterized bias table <span class="math notranslate nohighlight">\(\hat{B} ∈ R ^{(2H-1)\times(2W-1)}\)</span> 에서 <span class="math notranslate nohighlight">\(\phi(\hat{B};R)\)</span> 를 continous한 relative displacements로 보간함</p>
+<ul>
+<li><p>출처: <a class="reference external" href="https://www.youtube.com/watch?v=hU7gP3u-tLQ">https://www.youtube.com/watch?v=hU7gP3u-tLQ</a></p>
+<ul>
+<li><p>Reference points에서 Deformed points의 빼주어 차이를 구해준 뒤에 /2 연산을 해주면 Displacement가 생성이 됨</p></li>
+<li><p>Displacement에서 Bilinear Interpolation을 수행해주면 Relative Position bias값을 얻을 수 있음</p>
+<p><img alt="Attention with relative position.png" src="../../_images/11_27.png" /></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="computational-complexity">
+<h3>7. Computational complexity<a class="headerlink" href="#computational-complexity" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Deformable multi-head attention (DMHA)는 PVT나 Swin Transformer와 비슷한 computation cost를 가지는데, offset network 에 대한 computation cost이 추가 됨</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(Ω(DMHA) = 2HWN_sC+2HWC^2+2N_sC^2 + (k^2+2)N_sC\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(N_s = H_GW_G = HW/r^2\)</span> 는 sampled points의 개수</p></li>
+<li><p>offset network의 computational cost는 channel size (C)에 대해서 linear complexity하기 때문에 attention computation에 비해서는 작음</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Swin Transformer 모델에서 image classification을 할 때, <span class="math notranslate nohighlight">\(H=W=14, N_s=49, C = 384\)</span> 일 때 1개의 attention module block의 computational cost는 79.63M FLOPs 인데, k=5로 설정한 deformable module의 computation cost는 5.08M Flops로 전체 모듈의 6% 정도 밖에 되지 않음</p></li>
+<li><p>값이 큰 downsample factor r 값을 사용하면 complexity가 감소하여 고해상도 이미지에서의 object detection이나 instance segmentation에서도 적합함</p></li>
+</ul>
+</section>
+</section>
+<section id="model-architectures">
+<h2>Model Architectures<a class="headerlink" href="#model-architectures" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>vanilla MHSA에 deformable attention을 적용하여 deformable vision transformer block을 구축</p></li>
+<li><p><strong>Deformable Attention Transformer</strong> 는 아래 선행 연구들과 유사한 pyramid structure를 사용하여 multiscale feature maps이 필요한 다양한 visoin task에서 적용될 수 있음</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">[7]</span> <span class="pre">Dpt:</span> <span class="pre">Deformable</span> <span class="pre">patch-based</span> <span class="pre">transformer</span> <span class="pre">for</span> <span class="pre">visual</span> <span class="pre">recognition.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[26]</span> <span class="pre">Swin</span> <span class="pre">transformer:</span> <span class="pre">Hierarchical</span> <span class="pre">vision</span> <span class="pre">transformer</span> <span class="pre">using</span> <span class="pre">shifted</span> <span class="pre">windows.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[31]</span> <span class="pre">Bottleneck</span> <span class="pre">transformers</span> <span class="pre">for</span> <span class="pre">visual</span> <span class="pre">recognition.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[36]</span> <span class="pre">Pyramid</span> <span class="pre">vision</span> <span class="pre">transformer:</span> <span class="pre">A</span> <span class="pre">versatile</span> <span class="pre">backbone</span> <span class="pre">for</span> <span class="pre">dense</span> <span class="pre">prediction</span> <span class="pre">without</span> <span class="pre">convolutions.</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="x3.png" src="../../_images/11_13.png" /></p>
+<ul class="simple">
+<li><p>입력 이미지의 shape는 H x W x 3이고</p></li>
+<li><p>stage1 이전에 stride가 4인 4x4의 non-overlapped convolution을 이용하여 H/4 x W/4 x C shape의 patch embedding을 얻음</p></li>
+<li><p>다음 단계의 stage 이전에 stride가 2이고 2x2의 non-overlapped convolution을 이용하여 feature map의 spatial size를 절반으로 줄이고 channels 수가 2배로 증가함</p></li>
+<li><p><strong>Classification Task</strong> 에서는 마지막 stage의 feature maps을 정규화 하고, linear classifier를 사용하여 pooled features에서 logits을 계산함</p></li>
+<li><p><strong>Object detection , Instance segmentation, semantic segmentation tasks</strong> 에서는 DAT 모델이 multiscale features를 추출하기 위한 backbone 역할을 함. Object Detection에서 사용하는 FPN이나 Semantic segmentation에서 사용하는 decoders에 입력으로 넣어주기 전에 DAT의 각각의 Stage에서 구한 features에 대해서 normalizatoin layer를 추가함</p></li>
+<li><p>모델 용량(model capacity)와 계산 부담(computational burden)을 줄이기 위해서, 처음의 Stage 1,2에서는 Swin-Transformer의 Shift-Window Attention을 사용하고, Stage 3,4에서 Deformable Attention(앞에서 구한 local augemnted tokens의 global relations를 모델링)을 사용함</p>
+<ul>
+<li><p>처음 두 단계(Stage 1,2)에서는 local features들이 학습되기 때문에 deformable attention이 선호되지 않음</p></li>
+<li><p>처음 두 단계(Stage 1,2)에서는 key와 value의 spatial size가 크기 때문에 deformable attention을 사용했을 때 dot products에서의 overhead 계산량과 bilinear interpolations 계산량이 많아짐</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="DAT Architectures.png" src="../../_images/11_14.png" /></p>
+<ul class="simple">
+<li><p>다른 모델과의 비교를 위해서 3가지의 DAT Architecture를 구축하였음</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(N_i\)</span> : stage <span class="math notranslate nohighlight">\(i\)</span> 에서의 block의 개수</p></li>
+<li><p><span class="math notranslate nohighlight">\(C\)</span>  : Channel의 dimension</p></li>
+<li><p><span class="math notranslate nohighlight">\(window\ size\)</span> : Region size in local attention module</p></li>
+<li><p><span class="math notranslate nohighlight">\(heads\)</span> : Number of heads in DMHA</p></li>
+<li><p><span class="math notranslate nohighlight">\(groups\)</span>  : Offset groups in DMHA</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="experiments">
+<h2>Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">#</a></h2>
+<section id="imagenet-1k-classification">
+<h3>1. ImageNet-1K Classification<a class="headerlink" href="#imagenet-1k-classification" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Training 1.28M images, Validation 50K images</p>
+<ul class="simple">
+<li><p>AdamW, 300epochs with cosine learning rate decay</p></li>
+<li><p>DeiT의 augmentation setting 사용 (RandAugment, Mixup, CutMix)</p></li>
+<li><p>DAT-T, DAT-S : 224 x 224 resolution, DAT-B : 384 x 384 resolution</p></li>
+</ul>
+</li>
+<li><p>Result</p>
+<p><img alt="classification.png" src="../../_images/11_15.png" /></p>
+<ul class="simple">
+<li><p>모델 Size가 Tiny(T), Small(S), Base(B)일 때 DeiT, PVT, GLiT, DPT, Swin Transformer들과 성능을 비교하면 FLOPs는 소폭 증가하지만 Top-1 ACC.에서 다른 모델들에 비해 좋은 성능을 보임</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="coco-object-detection">
+<h3>2. COCO Object Detection<a class="headerlink" href="#coco-object-detection" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Training  118K images, Validation 5K images</p>
+<ul class="simple">
+<li><p>Pretrained model : Model trained ImageNet-1K</p></li>
+<li><p>DAT를 backbone으로 RetinaNet, Mask R-CNN, Casecade Mask R-CNN 구조와 성능 비교</p></li>
+<li><p>ImageNet pretrained(300 epoch) model 사용</p></li>
+</ul>
+</li>
+<li><p>Results : DAT를 Backbone으로 하고 아래 모델들을 통해 Object Detion Task에 수행함</p>
+<ul>
+<li><p>RetinaNet</p>
+<p><img alt="retina_od.png" src="../../_images/11_16.png" /></p>
+</li>
+<li><p>Mask R-CNN</p>
+<p><img alt="mask_r_od.png" src="../../_images/11_17.png" /></p>
+</li>
+<li><p>Casecade Mask R-CNN</p>
+<p><img alt="cascade_mask_r_od.png" src="../../_images/11_18.png" /></p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="ade20k-semantic-segmentation">
+<h3>3. ADE20K Semantic Segmentation<a class="headerlink" href="#ade20k-semantic-segmentation" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Training 20K images, Validation 2K images</p>
+<ul class="simple">
+<li><p>Pretrained model : Model trained ImageNet-1K</p></li>
+<li><p>DAT를 backbone으로 SemanticFPN, UperNet 구조에서 성능비교</p></li>
+<li><p>Learning rate schedules와 training epochs는 Swin Transformer, PVT와 동일</p></li>
+</ul>
+</li>
+<li><p>Result</p>
+<p><img alt="semantic ade20k.png" src="../../_images/11_19.png" /></p>
+</li>
+</ul>
+</section>
+<section id="ablation-study">
+<h3>4. Ablation Study<a class="headerlink" href="#ablation-study" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Ablation Study는 <strong>DAT-T 일 때</strong> 의 추가 실험 결과</p></li>
+<li><p>Offset, relative position embedding 사용 효과 확인</p>
+<p><img alt="table 6.png" src="../../_images/11_20.png" /></p>
+</li>
+<li><p>Deformable attention 위치(stage)에 따른 비교</p>
+<p><img alt="table 7.png" src="../../_images/11_21.png" /></p>
+</li>
+<li><p>Maximum offset size(s)에 따른 비교</p>
+<ul>
+<li><p>offset을 계산할 때 각 reference point는 s x s region 안에서 shift 될 수 있음</p></li>
+<li><p>Training의 안정화를 위해서, offset을 계산할 때 <span class="math notranslate nohighlight">\(∆p ← s\ tanh(∆p)\)</span>  와 같이 s(Maximum offset size)라는 hyperparameter를 곱해주게 되는데, s값의 변화에 따른 성능비교</p></li>
+<li><p>값이 2일 때가 성능이 좋고</p>
+<p><img alt="table 8.png" src="../../_images/11_22.png" /></p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="visualization">
+<h3>5. Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>COCO Validation set에 대해서 Attention Weight 스코어가 높은 point들을 시각화 한것</p>
+<p><img alt="figure_vid.png" src="../../_images/11_23.png" /></p>
+</li>
+<li><p>Stage3(첫번째 행), Stage 4(두번째 행)에서의 deformed points 이고 타겟 대상에 가까울 수록 deformed points들이 뭉쳐있는 것을 확인할 수 있음
+<img alt="stage_3_stage_4.png" src="../../_images/11_24.png" /></p></li>
+<li><p>DAT(위쪽)과 Swin Transformer(아래쪽)을 비교한 것으로, DAT는 타겟 대상에 대해서 전반적으로 Attention 이 global하게 퍼져있는데, Swin Transformer는 대상의 local한 부분만 보거나 다른 영역이 Attention으로 잡히는 한계가 있음</p>
+<p><img alt="compare_swin_1.png" src="../../_images/11_25.png" /></p>
+<p><img alt="compare_swin_2.png" src="../../_images/11_26.png" /></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>제안하는 Deformable attention transformer(DAT)는 image classification이나 dense prediction tasks에 잘 적용될 수 있다.</p></li>
+<li><p>DAT는 sparse한 attention 패턴을 data-dependent한 방법으로 배울 수 있다.</p></li>
+<li><p>Image Classification에서는 top-1 accuracy에서 동일한 baseline의 Swin Transformer와 비교했을 때 0.7만큼의 차이</p></li>
+<li><p>Object Detection에서는 box AP와 mask AP에서 1.1만큼의 차이</p></li>
+<li><p>Semantic Segmentation에서 1.2 mIoU만큼의 성능 차이가 나는 것을 실험을 통해 확인함</p></li>
+</ul>
+<hr class="docutils" />
+<p>Author by <code class="docutils literal notranslate"><span class="pre">박민식</span></code>
+Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/ch11"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="11_List.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Vision Transformer with Deformable Attention</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="11_code.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Vision Transformer with Deformable Attention Code</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By PseudoLab<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
