@@ -73,7 +73,6 @@ parts:
     sections:
     - file: docs/ch9/CvT
     - file: docs/ch9/09_code
-    - file: docs/ch9/09_qa
 - caption: Swin Transformer
   numbered: False
   chapters:
@@ -89,4 +88,3 @@ parts:
     sections:
     - file: docs/ch11/Vision_Transformer_with_Deformable_Attention
     - file: docs/ch11/11_code
-    - file: docs/ch11/11_qa

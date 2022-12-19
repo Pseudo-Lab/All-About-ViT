@@ -418,11 +418,6 @@ const thebe_selector_output = ".output, .cell_output"
      Compact Vision Transformers Code
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch9/09_qa.html">
-     Q&amp;A
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -484,11 +479,6 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="../ch11/11_code.html">
      Vision Transformer with Deformable Attention Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch11/11_qa.html">
-     Q&amp;A
     </a>
    </li>
   </ul>
@@ -648,12 +638,46 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#m-window">
+   2/M 크기의 window 의미?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cyclic-shift">
+   cyclic shift?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#register-buffer">
+   register_buffer?
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -665,6 +689,29 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#m-window">
+   2/M 크기의 window 의미?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cyclic-shift">
+   cyclic shift?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#register-buffer">
+   register_buffer?
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -674,6 +721,31 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="q-a">
 <h1>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">#</a></h1>
+<section id="m-window">
+<h2>2/M 크기의 window 의미?<a class="headerlink" href="#m-window" title="Permalink to this headline">#</a></h2>
+<p>3.2. Shifted window partitioning in successive blocks에서 2/M 크기의 window를 가진다는 것은 top-left 시작 부분만 말하는 걸까요?</p>
+<p><img alt="" src="../../_images/10_qa_0.png" /></p>
+<blockquote>
+<div><p>넵 제가 이해한 바로는 top-left를 기준으로  2/m x 2/m 만큼 이동하는 것입니다</p>
+</div></blockquote>
+</section>
+<section id="cyclic-shift">
+<h2>cyclic shift?<a class="headerlink" href="#cyclic-shift" title="Permalink to this headline">#</a></h2>
+<p>cyclic shift가 이해가 잘 안되요;;</p>
+<blockquote>
+<div><p><a class="reference external" href="https://towardsdatascience.com/a-comprehensive-guide-to-swin-transformer-64965f89d14c">https://towardsdatascience.com/a-comprehensive-guide-to-swin-transformer-64965f89d14c</a>
+이 링크에 gif로 표현되어 있어서 이해하는데 도움이 되실겁니다!</p>
+</div></blockquote>
+</section>
+<section id="register-buffer">
+<h2>register_buffer?<a class="headerlink" href="#register-buffer" title="Permalink to this headline">#</a></h2>
+<p>register_buffer가 뭔가요?</p>
+<blockquote>
+<div><p>register_buffer가 간단하게 생각하면 학습이 되지 않도록 만들어주는 것 같습니다. 음… 대표적으로 batch normalization을 예로 들수가 있는데 BN의 경우에도 학습이 되지 않는 대신 모델을 저장할때 state_dict에 eps와 같은 값이 저장됩니다. 이렇듯 relative bias도 학습이 일어나지는 않지만 state_dict에 그 값을 저장하기위해서 register_buffer를 사용한 것 같습니다. timm 코드를 다시보니 register_buffer에 들어가는 값은 get_relative_position_index함수를 통해서 단순히 0으로 채워진 값이 아닌 relative_coords 값이 들어가네요.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p>Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

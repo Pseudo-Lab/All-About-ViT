@@ -418,11 +418,6 @@ const thebe_selector_output = ".output, .cell_output"
      Compact Vision Transformers Code
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch9/09_qa.html">
-     Q&amp;A
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -484,11 +479,6 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="../ch11/11_code.html">
      Vision Transformer with Deformable Attention Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch11/11_qa.html">
-     Q&amp;A
     </a>
    </li>
   </ul>
@@ -648,12 +638,36 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#window-partition">
+   window partition 코드
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -665,6 +679,19 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#window-partition">
+   window partition 코드
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -674,6 +701,28 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="q-a">
 <h1>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">#</a></h1>
+<section id="window-partition">
+<h2>window partition 코드<a class="headerlink" href="#window-partition" title="Permalink to this headline">#</a></h2>
+<p>sepvit 코드에서 window partition을 수행하는 부분이 어디일까요…?</p>
+<blockquote>
+<div><p>팀페이지 SepViT 페이지에 있는 SepViT Code 보시면 Transformer Module 중 DSSA라는 class가 있습니다.
+def forward의 x = rearrange(x, ‘b c (h w1) (w w2) -&gt; (b h w) c (w1 w2)’, w1 = wsz, w2 = wsz) 부분에서 wsz가 window size이고 x를 rearrange해서 마지막 shape을 windowsize^2로 만들어주고 거기에 random initialize한 window_tokens를 concat합니다.
+명확히 window partition 부분이 어디냐고 한다면 rearrange하는 부분이 아닐까 싶네요. 🙂</p>
+</div></blockquote>
+<p>감사합니다. 😄  window partition이라는게 patch split과 어떤 부분이 다른 건지 모르겠습니다;; 굳이 window라고 명명한 이유가 혹시 뭐라고 생각하시나요?</p>
+<blockquote>
+<div><p>본 논문에서 다른 종류의 ViT 모델과 patch split에 대해 자세히 설명하거나 window partition 개념과 비교하는 부분이 없어서 저도 이해하는데 좀 힘들었습니다 ㅠ
+개인적으로 생각했을 때, feature map을 window로 나눠주고 각 window마다 learnable window token을 부여함으로써 within window, among window information interaction을 동시에 나타내기 위함이지 않을까 싶습니다.</p>
+</div></blockquote>
+<p>흠… feature map 을 뽑아서 나누느냐 나누고나서 feature map을 뽑느내의 차이라고 해야할까요…?</p>
+<blockquote>
+<div><p>window partition의 경우 overlapping patch embedding과 positional encoding generator를 거친 후 feature map을 형성시킨 상태에서 window를 나누게 됩니다. 이 상태에서 window token을 부여하고 feature map을 뽑아내는 작업을 반복합니다.
+patch split의 경우엔 input 자체를 patch로 나눠주고 patch 간의 self-attention을 통해 feature map을 뽑아내게 되죠. 이 차이가 아닐까요?
+제가 이해한게 맞는지도 의구심이 드네요 ㅋㅋ</p>
+</div></blockquote>
+<hr class="docutils" />
+<p>Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
