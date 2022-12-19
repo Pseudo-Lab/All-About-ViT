@@ -418,11 +418,6 @@ const thebe_selector_output = ".output, .cell_output"
      Compact Vision Transformers Code
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch9/09_qa.html">
-     Q&amp;A
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -484,11 +479,6 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="../ch11/11_code.html">
      Vision Transformer with Deformable Attention Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ch11/11_qa.html">
-     Q&amp;A
     </a>
    </li>
   </ul>
@@ -648,12 +638,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#t2t-vit-14-dn-structure-t2t-vit-14">
+   T2T-ViT-14랑 DN Structure에 있는 T2T-ViT-14를 동일한 모델로 봐야하나요?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#soft-split-locality-inductive-bias">
+   Soft Split을 할 때 locality inductive bias를 부여한다고 봐도 될까요?
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -665,6 +684,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#t2t-vit-14-dn-structure-t2t-vit-14">
+   T2T-ViT-14랑 DN Structure에 있는 T2T-ViT-14를 동일한 모델로 봐야하나요?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#soft-split-locality-inductive-bias">
+   Soft Split을 할 때 locality inductive bias를 부여한다고 봐도 될까요?
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -674,6 +711,41 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="q-a">
 <h1>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">#</a></h1>
+<section id="t2t-vit-14-dn-structure-t2t-vit-14">
+<h2>T2T-ViT-14랑 DN Structure에 있는 T2T-ViT-14를 동일한 모델로 봐야하나요?<a class="headerlink" href="#t2t-vit-14-dn-structure-t2t-vit-14" title="Permalink to this headline">#</a></h2>
+<p>Tokens-to-Token 논문의 Table 7에서  Ablation type에 따라 실험한 결과를 보여주는데요. T2T module에 있는 T2T-ViT-14랑 DN Structure에 있는 T2T-ViT-14를 동일한 모델로 봐야하나요? DN structure에 있는 T2T-ViT-14는 deep-narrow 구조가 적용돼서 params, MACs가 좀 달라질 거 같은데 T2T module에 있는 T2T-ViT-14랑 정확히 일치해서 같은 모델인건지 다른 모델인건지 헷갈리네요..</p>
+<blockquote>
+<div><p>제 생각에는 T2T module과 DN structure에 있는 T2T-ViT-14은 같은 모델이고 deep-narrow 구조이기 때문에 shallow-wide 구조를 적용한 T2T-ViT-d768-4와 비교한 내용같습니다.</p>
+</div></blockquote>
+</section>
+<section id="soft-split-locality-inductive-bias">
+<h2>Soft Split을 할 때 locality inductive bias를 부여한다고 봐도 될까요?<a class="headerlink" href="#soft-split-locality-inductive-bias" title="Permalink to this headline">#</a></h2>
+<p>T2T module에서 SS를 할 때 정보손실을 막기 위해 patch를 overlapping 하면서 unfold 한다고 했는데 token 정보 수준에서 correlation을 높여주면서 locality inductive bias를 부여한다고 봐도 될까요? 전체적으로 CNN을 많이 차용하는게 단순히 정보손실을 피하기 위함이 아닌 것 같은 느낌이 드네요.</p>
+<blockquote>
+<div><p>아 저도 introduction에서 말한 vit 문제점(데이터가 많아야한다, local structure를 못본다)을 해결하기위해  locality inductive bias를 부여하는 방향으로 개선했다고 이해했어요</p>
+</div></blockquote>
+<p>[Reference]</p>
+<ul class="simple">
+<li><p>Unfold 관련</p>
+<ul>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/53972159/how-does-pytorchs-fold-and-unfold-work">https://stackoverflow.com/questions/53972159/how-does-pytorchs-fold-and-unfold-work</a>
+<a class="reference external" href="https://www.facebook.com/groups/PyTorchKR/posts/1685133764959631/">https://www.facebook.com/groups/PyTorchKR/posts/1685133764959631/</a></p></li>
+</ul>
+</li>
+<li><p>SE module 관련</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/yitu-opensource/T2T-ViT/blob/0f63dc9558f4d192de926504dbddfa1b3f5db6ca/models/t2t_vit_se.py">https://github.com/yitu-opensource/T2T-ViT/blob/0f63dc9558f4d192de926504dbddfa1b3f5db6ca/models/t2t_vit_se.py</a></p></li>
+</ul>
+</li>
+<li><p>performer 관련</p>
+<ul>
+<li><p><a class="reference external" href="https://ai.googleblog.com/2020/10/rethinking-attention-with-performers.html">https://ai.googleblog.com/2020/10/rethinking-attention-with-performers.html</a></p></li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Edit by <code class="docutils literal notranslate"><span class="pre">김주영</span></code></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
