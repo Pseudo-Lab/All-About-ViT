@@ -88,3 +88,14 @@ parts:
     sections:
     - file: docs/ch11/Vision_Transformer_with_Deformable_Attention
     - file: docs/ch11/11_code
+- caption: Mobile Vision Transformer
+  numbered: False
+  chapters:
+  - file: docs/ch12/12_List
+    sections:
+    - file: docs/ch12/MobileViT_v1
+    - file: docs/ch12/12_v1_code
+    - file: docs/ch12/MobileViT_v2
+    - file: docs/ch12/12_v2_code
+    - file: docs/ch12/MobileViT_v3
+    - file: docs/ch12/12_v3_code
